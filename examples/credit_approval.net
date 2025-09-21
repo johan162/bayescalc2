@@ -1,0 +1,84 @@
+# Simple Credit Approval Bayesian Network
+# Models factors involved in credit approval decisions
+#
+# Network Structure:
+#
+#  Income     CreditHistory
+#     \           /
+#      \         /
+#       v       v
+#      CreditRisk
+#          |
+#          v
+#    ApprovalChance
+#
+# Characteristics:
+# - Mix of binary and multi-valued variables
+# - Models financial decision process
+# - Demonstrates practical application of Bayesian networks
+# - Good for sensitivity analysis (how changes in income/credit history affect approval)
+# - Simple structure suitable for explaining to non-technical stakeholders
+
+variable Income {Low, Medium, High}
+variable CreditHistory {Bad, Fair, Good}
+variable CreditRisk {High, Medium, Low}
+variable ApprovalChance {True, False}
+
+Income {
+    P(Low) = 0.3
+    P(Medium) = 0.5
+    P(High) = 0.2
+}
+
+CreditHistory {
+    P(Bad) = 0.2
+    P(Fair) = 0.4
+    P(Good) = 0.4
+}
+
+CreditRisk | Income, CreditHistory {
+    # Low income scenarios
+    P(High | Low, Bad) = 0.9
+    P(Medium | Low, Bad) = 0.09
+    P(Low | Low, Bad) = 0.01
+    
+    P(High | Low, Fair) = 0.7
+    P(Medium | Low, Fair) = 0.25
+    P(Low | Low, Fair) = 0.05
+    
+    P(High | Low, Good) = 0.5
+    P(Medium | Low, Good) = 0.4
+    P(Low | Low, Good) = 0.1
+    
+    # Medium income scenarios
+    P(High | Medium, Bad) = 0.7
+    P(Medium | Medium, Bad) = 0.25
+    P(Low | Medium, Bad) = 0.05
+    
+    P(High | Medium, Fair) = 0.3
+    P(Medium | Medium, Fair) = 0.6
+    P(Low | Medium, Fair) = 0.1
+    
+    P(High | Medium, Good) = 0.1
+    P(Medium | Medium, Good) = 0.6
+    P(Low | Medium, Good) = 0.3
+    
+    # High income scenarios
+    P(High | High, Bad) = 0.5
+    P(Medium | High, Bad) = 0.4
+    P(Low | High, Bad) = 0.1
+    
+    P(High | High, Fair) = 0.1
+    P(Medium | High, Fair) = 0.3
+    P(Low | High, Fair) = 0.6
+    
+    P(High | High, Good) = 0.01
+    P(Medium | High, Good) = 0.09
+    P(Low | High, Good) = 0.9
+}
+
+ApprovalChance | CreditRisk {
+    P(True | High) = 0.1
+    P(True | Medium) = 0.6
+    P(True | Low) = 0.95
+}

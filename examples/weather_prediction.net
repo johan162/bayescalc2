@@ -1,0 +1,103 @@
+# Weather Prediction Network
+# Simple model for weather forecasting
+#
+# Network Structure:
+#
+#  Pressure      Season
+#      \          /
+#       \        /
+#        v      v
+#      Temperature
+#           |
+#           v
+#      Precipitation
+#
+# Characteristics:
+# - 4-variable weather prediction network
+# - Multi-valued variables
+# - Shows seasonal dependencies
+# - Good for demonstrating forward and backward inference
+# - Models common sequential causal relationships
+# - Practical application of Bayesian networks
+
+variable Season {Spring, Summer, Fall, Winter}
+variable Pressure {Low, Medium, High}
+variable Temperature {Cold, Mild, Hot}
+variable Precipitation {None, Rain, Snow}
+
+Season {
+    P(Spring) = 0.25
+    P(Summer) = 0.25
+    P(Fall) = 0.25
+    P(Winter) = 0.25
+}
+
+Pressure {
+    P(Low) = 0.3
+    P(Medium) = 0.5
+    P(High) = 0.2
+}
+
+Temperature | Season, Pressure {
+    P(Cold | Spring, Low) = 0.4
+    P(Mild | Spring, Low) = 0.5
+    P(Hot | Spring, Low) = 0.1
+    
+    P(Cold | Spring, Medium) = 0.2
+    P(Mild | Spring, Medium) = 0.6
+    P(Hot | Spring, Medium) = 0.2
+    
+    P(Cold | Spring, High) = 0.1
+    P(Mild | Spring, High) = 0.5
+    P(Hot | Spring, High) = 0.4
+    
+    P(Cold | Summer, Low) = 0.1
+    P(Mild | Summer, Low) = 0.3
+    P(Hot | Summer, Low) = 0.6
+    
+    P(Cold | Summer, Medium) = 0.05
+    P(Mild | Summer, Medium) = 0.25
+    P(Hot | Summer, Medium) = 0.7
+    
+    P(Cold | Summer, High) = 0.01
+    P(Mild | Summer, High) = 0.19
+    P(Hot | Summer, High) = 0.8
+    
+    P(Cold | Fall, Low) = 0.3
+    P(Mild | Fall, Low) = 0.6
+    P(Hot | Fall, Low) = 0.1
+    
+    P(Cold | Fall, Medium) = 0.2
+    P(Mild | Fall, Medium) = 0.7
+    P(Hot | Fall, Medium) = 0.1
+    
+    P(Cold | Fall, High) = 0.1
+    P(Mild | Fall, High) = 0.6
+    P(Hot | Fall, High) = 0.3
+    
+    P(Cold | Winter, Low) = 0.7
+    P(Mild | Winter, Low) = 0.3
+    P(Hot | Winter, Low) = 0.0
+    
+    P(Cold | Winter, Medium) = 0.8
+    P(Mild | Winter, Medium) = 0.2
+    P(Hot | Winter, Medium) = 0.0
+    
+    P(Cold | Winter, High) = 0.9
+    P(Mild | Winter, High) = 0.1
+    P(Hot | Winter, High) = 0.0
+}
+
+Precipitation | Temperature {
+    P(None | Cold) = 0.4
+    P(Rain | Cold) = 0.1
+    P(Snow | Cold) = 0.5
+    
+    P(None | Mild) = 0.6
+    P(Rain | Mild) = 0.39
+    P(Snow | Mild) = 0.01
+    
+    P(None | Hot) = 0.8
+    P(Rain | Hot) = 0.2
+    P(Snow | Hot) = 0.0
+}

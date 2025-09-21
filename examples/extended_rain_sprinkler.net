@@ -1,0 +1,47 @@
+# Extended Rain-Sprinkler-Grass Bayesian Network
+# Extension of the classic example with additional causal factor
+#
+# Network Structure:
+#
+#     Cloudy
+#     /    \
+#    v      v
+#  Rain    Sprinkler
+#    \      /
+#     \    /
+#      v  v
+#    GrassWet
+#
+# Characteristics:
+# - All Boolean variables
+# - Simple yet powerful causal model
+# - Demonstrates common cause (Cloudy affects both Rain and Sprinkler)
+# - Shows common effect (both Rain and Sprinkler affect GrassWet)
+# - Good for explaining d-separation concepts
+# - Perfect for introducing conditional independence
+
+variable Cloudy {True, False}
+variable Rain {True, False}
+variable Sprinkler {True, False}
+variable GrassWet {True, False}
+
+Cloudy {
+    P(True) = 0.5
+}
+
+Rain | Cloudy {
+    P(True | True) = 0.8
+    P(True | False) = 0.2
+}
+
+Sprinkler | Cloudy {
+    P(True | True) = 0.1
+    P(True | False) = 0.5
+}
+
+GrassWet | Rain, Sprinkler {
+    P(True | True, True) = 0.99
+    P(True | True, False) = 0.9
+    P(True | False, True) = 0.9
+    P(True | False, False) = 0
+}

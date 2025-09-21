@@ -1,0 +1,54 @@
+# Earthquake-Burglar-Alarm with Sensors Bayesian Network
+# Extended version of the alarm network with reliability sensors
+#
+# Network Structure:
+#
+#   Burglary    Earthquake
+#     \            /
+#      \          /
+#       v        v
+#        Alarm
+#       /     \
+#      v       v
+#   Sensor1   Sensor2
+#
+# Characteristics:
+# - All Boolean variables 
+# - Models noisy sensors (allows false positives/negatives)
+# - Shows how multiple sensors increase detection reliability
+# - Good for explaining sensor fusion concepts
+# - Demonstrates reliability through redundancy
+# - Simple enough for manual probability calculations
+
+variable Burglary {True, False}
+variable Earthquake {True, False}
+variable Alarm {True, False}
+variable Sensor1 {True, False}
+variable Sensor2 {True, False}
+
+Burglary {
+    P(True) = 0.001
+}
+
+Earthquake {
+    P(True) = 0.002
+}
+
+Alarm | Burglary, Earthquake {
+    P(True | True, True) = 0.95
+    P(True | True, False) = 0.94
+    P(True | False, True) = 0.29
+    P(True | False, False) = 0.001
+}
+
+# Sensor1 has 98% accuracy (2% false positive, 2% false negative)
+Sensor1 | Alarm {
+    P(True | True) = 0.98
+    P(True | False) = 0.02
+}
+
+# Sensor2 has 95% accuracy (5% false positive, 5% false negative)
+Sensor2 | Alarm {
+    P(True | True) = 0.95
+    P(True | False) = 0.05
+}

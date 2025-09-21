@@ -1,0 +1,51 @@
+# Classic Alarm Bayesian Network (Simplified)
+# A canonical example often taught in introductory Bayesian network courses
+#
+# Network Structure:
+#
+#    Burglary     Earthquake
+#       \             /
+#        \           /
+#         v         v
+#          Alarm
+#         /    \
+#        v      v
+#    JohnCalls  MaryCalls
+#
+# Characteristics:
+# - All Boolean variables 
+# - Demonstrates causal inference (causes -> effects)
+# - Shows explaining away: observing Alarm makes Burglary and Earthquake dependent
+# - Models noisy relationships between events
+# - Common introductory example with intuitive scenario
+
+variable Burglary {True, False}
+variable Earthquake {True, False}
+variable Alarm {True, False}
+variable JohnCalls {True, False}
+variable MaryCalls {True, False}
+
+Burglary {
+    P(True) = 0.001
+}
+
+Earthquake {
+    P(True) = 0.002
+}
+
+Alarm | Burglary, Earthquake {
+    P(True | True, True) = 0.95
+    P(True | True, False) = 0.94
+    P(True | False, True) = 0.29
+    P(True | False, False) = 0.001
+}
+
+JohnCalls | Alarm {
+    P(True | True) = 0.9
+    P(True | False) = 0.05
+}
+
+MaryCalls | Alarm {
+    P(True | True) = 0.7
+    P(True | False) = 0.01
+}

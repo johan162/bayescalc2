@@ -1,0 +1,71 @@
+# Plant Growth Network
+# Simple model of factors influencing plant growth
+#
+# Network Structure:
+#
+#   Sunlight     Water
+#       \         /
+#        \       /
+#         v     v
+#     Plant Growth
+#
+# Characteristics:
+# - Very simple 3-variable network with multi-valued variables
+# - Good example for beginners to understand basic Bayesian networks
+# - Demonstrates converging connections
+# - Multi-valued variables show more complex relationships
+# - Perfect for explaining joint probability distributions
+
+variable Sunlight {Low, Medium, High}
+variable Water {Insufficient, Adequate, Excessive}
+variable PlantGrowth {Poor, Moderate, Vigorous}
+
+Sunlight {
+    P(Low) = 0.2
+    P(Medium) = 0.5
+    P(High) = 0.3
+}
+
+Water {
+    P(Insufficient) = 0.3
+    P(Adequate) = 0.5
+    P(Excessive) = 0.2
+}
+
+PlantGrowth | Sunlight, Water {
+    P(Poor | Low, Insufficient) = 0.9
+    P(Moderate | Low, Insufficient) = 0.1
+    P(Vigorous | Low, Insufficient) = 0.0
+    
+    P(Poor | Low, Adequate) = 0.6
+    P(Moderate | Low, Adequate) = 0.3
+    P(Vigorous | Low, Adequate) = 0.1
+    
+    P(Poor | Low, Excessive) = 0.7
+    P(Moderate | Low, Excessive) = 0.2
+    P(Vigorous | Low, Excessive) = 0.1
+    
+    P(Poor | Medium, Insufficient) = 0.7
+    P(Moderate | Medium, Insufficient) = 0.2
+    P(Vigorous | Medium, Insufficient) = 0.1
+    
+    P(Poor | Medium, Adequate) = 0.1
+    P(Moderate | Medium, Adequate) = 0.6
+    P(Vigorous | Medium, Adequate) = 0.3
+    
+    P(Poor | Medium, Excessive) = 0.3
+    P(Moderate | Medium, Excessive) = 0.5
+    P(Vigorous | Medium, Excessive) = 0.2
+    
+    P(Poor | High, Insufficient) = 0.8
+    P(Moderate | High, Insufficient) = 0.2
+    P(Vigorous | High, Insufficient) = 0.0
+    
+    P(Poor | High, Adequate) = 0.1
+    P(Moderate | High, Adequate) = 0.3
+    P(Vigorous | High, Adequate) = 0.6
+    
+    P(Poor | High, Excessive) = 0.2
+    P(Moderate | High, Excessive) = 0.3
+    P(Vigorous | High, Excessive) = 0.5
+}

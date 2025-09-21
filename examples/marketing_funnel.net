@@ -1,0 +1,37 @@
+# Simple Marketing Conversion Network
+# Models customer journey from ad exposure to purchase
+#
+# Network Structure:
+#
+#   AdExposure
+#       |
+#       v
+#   SiteVisit
+#       |
+#       v
+#   Conversion
+#
+# Characteristics:
+# - Simple 3-variable sequential Bayesian network
+# - All Boolean variables
+# - Perfect for beginners to understand simple causal chains
+# - Models marketing funnel process
+# - Good for demonstrating basic forward inference
+
+variable AdExposure {True, False}
+variable SiteVisit {True, False}
+variable Conversion {True, False}
+
+AdExposure {
+    P(True) = 0.3
+}
+
+SiteVisit | AdExposure {
+    P(True | True) = 0.2
+    P(True | False) = 0.05
+}
+
+Conversion | SiteVisit {
+    P(True | True) = 0.1
+    P(True | False) = 0.001
+}

@@ -1,0 +1,3 @@
+P(Rain | GrassWet=Yes)
+showGraph()
+entropy(Sprinkler)

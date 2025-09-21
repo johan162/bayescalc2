@@ -1,0 +1,47 @@
+# Naive Bayes Text Classification Network
+# Models document classification based on word presence
+#
+# Network Structure:
+#
+#           Document Class
+#        /       |       \
+#       /        |        \
+#      v         v         v
+#   Word1      Word2     Word3
+#
+# Characteristics:
+# - Classic naive Bayes structure
+# - All Boolean variables
+# - Demonstrates conditional independence assumptions
+# - Good for explaining text classification
+# - Shows how naive Bayes models work in practice
+# - Simple enough for manual calculations
+
+variable DocumentClass {Sports, Politics, Technology}
+variable Word1 {True, False}  # "team"
+variable Word2 {True, False}  # "election"
+variable Word3 {True, False}  # "device"
+
+DocumentClass {
+    P(Sports) = 0.33
+    P(Politics) = 0.33
+    P(Technology) = 0.34
+}
+
+Word1 | DocumentClass {
+    P(True | Sports) = 0.8
+    P(True | Politics) = 0.2
+    P(True | Technology) = 0.1
+}
+
+Word2 | DocumentClass {
+    P(True | Sports) = 0.1
+    P(True | Politics) = 0.8
+    P(True | Technology) = 0.1
+}
+
+Word3 | DocumentClass {
+    P(True | Sports) = 0.1
+    P(True | Politics) = 0.1
+    P(True | Technology) = 0.8
+}

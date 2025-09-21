@@ -1,0 +1,12 @@
+# Medical test model using T/F shorthand notation
+variable Sick
+variable Test
+
+Sick {
+    P(T) = 0.01
+}
+
+Test | Sick {
+    P(T|T) = 0.95
+    P(T|F) = 0.06
+}

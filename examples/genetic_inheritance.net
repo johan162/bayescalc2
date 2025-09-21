@@ -1,0 +1,90 @@
+# Simple Genetic Inheritance Bayesian Network
+# Models genetic trait inheritance through generations
+#
+# Network Structure:
+#
+#    FatherGenotype    MotherGenotype
+#         \                 /
+#          \               /
+#           v             v
+#         ChildGenotype
+#              |
+#              v
+#       ChildPhenotype
+#
+# Characteristics:
+# - Multi-valued variables for genotypes
+# - Models Mendelian inheritance patterns
+# - Shows genotype-phenotype relationship
+# - Demonstrates how dominant and recessive traits manifest
+# - Good for teaching probabilistic relationships in genetics
+
+variable FatherGenotype {AA, Aa, aa}
+variable MotherGenotype {AA, Aa, aa}
+variable ChildGenotype {AA, Aa, aa}
+variable ChildPhenotype {Dominant, Recessive}
+
+FatherGenotype {
+    P(AA) = 0.25
+    P(Aa) = 0.5
+    P(aa) = 0.25
+}
+
+MotherGenotype {
+    P(AA) = 0.25
+    P(Aa) = 0.5
+    P(aa) = 0.25
+}
+
+ChildGenotype | FatherGenotype, MotherGenotype {
+    # Father has AA
+    P(AA | AA, AA) = 1.0
+    P(Aa | AA, AA) = 0.0
+    P(aa | AA, AA) = 0.0
+    
+    P(AA | AA, Aa) = 0.5
+    P(Aa | AA, Aa) = 0.5
+    P(aa | AA, Aa) = 0.0
+    
+    P(AA | AA, aa) = 0.0
+    P(Aa | AA, aa) = 1.0
+    P(aa | AA, aa) = 0.0
+    
+    # Father has Aa
+    P(AA | Aa, AA) = 0.5
+    P(Aa | Aa, AA) = 0.5
+    P(aa | Aa, AA) = 0.0
+    
+    P(AA | Aa, Aa) = 0.25
+    P(Aa | Aa, Aa) = 0.5
+    P(aa | Aa, Aa) = 0.25
+    
+    P(AA | Aa, aa) = 0.0
+    P(Aa | Aa, aa) = 0.5
+    P(aa | Aa, aa) = 0.5
+    
+    # Father has aa
+    P(AA | aa, AA) = 0.0
+    P(Aa | aa, AA) = 1.0
+    P(aa | aa, AA) = 0.0
+    
+    P(AA | aa, Aa) = 0.0
+    P(Aa | aa, Aa) = 0.5
+    P(aa | aa, Aa) = 0.5
+    
+    P(AA | aa, aa) = 0.0
+    P(Aa | aa, aa) = 0.0
+    P(aa | aa, aa) = 1.0
+}
+
+ChildPhenotype | ChildGenotype {
+    # For a recessive trait (like blue eyes)
+    P(Dominant | AA) = 1.0
+    P(Recessive | AA) = 0.0
+    
+    P(Dominant | Aa) = 1.0
+    P(Recessive | Aa) = 0.0
+    
+    P(Dominant | aa) = 0.0
+    P(Recessive | aa) = 1.0
+}

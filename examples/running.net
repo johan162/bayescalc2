@@ -1,0 +1,48 @@
+# A common example in courses where the impact of temperature on whether 
+# John and Mary goes running or not.
+# If they both go running there is also a chance they can meet.
+#
+#                 Temp {high,low}
+#                /    \
+#               /      \
+#   {yes,no} John        Mary {yes,no}
+#              \        /
+#               \      /
+#                \    /
+#                 Meet {yes,no}
+#
+#
+variable Temp {low,high}
+variable JohnRun
+variable MaryRun
+variable Meet
+
+Temp {
+    P(low) = 0.4
+    P(high) = 0.6
+}
+
+JohnRun | Temp {
+    P(True|high) = 0.7
+    P(True|low) = 0.5
+    P(False|high) = 0.3
+    P(False|low) = 0.5
+}
+
+MaryRun | Temp {
+    P(True|high) = 0.75
+    P(True|low) = 0.4
+    P(False|high) = 0.25
+    P(False|low) = 0.6
+}
+
+Meet | JohnRun, MaryRun {
+    P(True  | True, True) = 0.5
+    P(True  | True, False) = 0.0
+    P(True  | False, True) = 0.0
+    P(True  | False, False) = 0.0
+    P(False | False, True) = 1.0
+    P(False | True, False) = 1.0
+    P(False | False, False) = 1.0
+    P(False | True, True) = 0.5
+}

@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bayescalc2"
+version = "2.0.0"
+description = "Bayesian network calculator v2"
+authors = [ { name = "ljp" } ]
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "prompt_toolkit>=3.0.0",
+    "numpy>=2.3.3",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Education",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "black>=25.9.0",
+    "flake8>=7.3.0",
+    "mypy>=1.0.0",
+    "build>=1.3.0",
+    "twine>=6.2.0",
+]
+
+[project.scripts]
+bayescalc = "bayescalc.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["bayescalc*"]
+

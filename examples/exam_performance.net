@@ -1,0 +1,81 @@
+# Exam Performance Network
+# Models factors affecting student exam performance
+#
+# Network Structure:
+#
+#  Difficulty    Preparation
+#      \            /
+#       \          /
+#        v        v
+#      Performance
+#
+# Characteristics:
+# - Simple 3-variable network
+# - All multi-valued variables
+# - Models educational outcomes
+# - Good for demonstrating combined influence factors
+# - Excellent for beginner inference examples
+# - Shows converging connections pattern
+
+variable Difficulty {Easy, Medium, Hard}
+variable Preparation {Poor, Adequate, Thorough}
+variable Performance {Fail, Pass, Good, Excellent}
+
+Difficulty {
+    P(Easy) = 0.25
+    P(Medium) = 0.5
+    P(Hard) = 0.25
+}
+
+Preparation {
+    P(Poor) = 0.2
+    P(Adequate) = 0.6
+    P(Thorough) = 0.2
+}
+
+Performance | Difficulty, Preparation {
+    P(Fail | Easy, Poor) = 0.3
+    P(Pass | Easy, Poor) = 0.5
+    P(Good | Easy, Poor) = 0.15
+    P(Excellent | Easy, Poor) = 0.05
+    
+    P(Fail | Easy, Adequate) = 0.05
+    P(Pass | Easy, Adequate) = 0.3
+    P(Good | Easy, Adequate) = 0.5
+    P(Excellent | Easy, Adequate) = 0.15
+    
+    P(Fail | Easy, Thorough) = 0.01
+    P(Pass | Easy, Thorough) = 0.09
+    P(Good | Easy, Thorough) = 0.4
+    P(Excellent | Easy, Thorough) = 0.5
+    
+    P(Fail | Medium, Poor) = 0.7
+    P(Pass | Medium, Poor) = 0.25
+    P(Good | Medium, Poor) = 0.04
+    P(Excellent | Medium, Poor) = 0.01
+    
+    P(Fail | Medium, Adequate) = 0.2
+    P(Pass | Medium, Adequate) = 0.6
+    P(Good | Medium, Adequate) = 0.15
+    P(Excellent | Medium, Adequate) = 0.05
+    
+    P(Fail | Medium, Thorough) = 0.05
+    P(Pass | Medium, Thorough) = 0.3
+    P(Good | Medium, Thorough) = 0.5
+    P(Excellent | Medium, Thorough) = 0.15
+    
+    P(Fail | Hard, Poor) = 0.9
+    P(Pass | Hard, Poor) = 0.08
+    P(Good | Hard, Poor) = 0.015
+    P(Excellent | Hard, Poor) = 0.005
+    
+    P(Fail | Hard, Adequate) = 0.5
+    P(Pass | Hard, Adequate) = 0.3
+    P(Good | Hard, Adequate) = 0.18
+    P(Excellent | Hard, Adequate) = 0.02
+    
+    P(Fail | Hard, Thorough) = 0.2
+    P(Pass | Hard, Thorough) = 0.4
+    P(Good | Hard, Thorough) = 0.3
+    P(Excellent | Hard, Thorough) = 0.1
+}

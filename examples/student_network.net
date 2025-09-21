@@ -1,0 +1,61 @@
+# Student Example Bayesian Network
+# Classic example used in teaching Bayesian networks
+# 
+# Network Structure:
+#
+#         Difficulty      Intelligence
+#            |  \            /  \
+#            |   \          /    \
+#            |    v        v      v
+#            |   Grade     SAT    Letter
+#            |
+#
+# Characteristics:
+# - Demonstrates converging connection (D,I -> G)
+# - Shows how letter recommendation depends on grade
+# - Contains mix of direct causal relationships
+# - Good for explaining explaining away: observing G makes D and I dependent
+# - Shows value of multi-valued variables in modeling academic scenarios
+
+variable Difficulty {Hard, Easy}
+variable Intelligence {High, Low}
+variable Grade {A, B, C}
+variable SAT {High, Low}
+variable Letter {Good, Bad}
+
+Difficulty {
+    P(Hard) = 0.4
+}
+
+Intelligence {
+    P(High) = 0.7
+}
+
+Grade | Difficulty, Intelligence {
+    P(A | Hard, High) = 0.5
+    P(B | Hard, High) = 0.3
+    P(C | Hard, High) = 0.2
+    
+    P(A | Hard, Low) = 0.2
+    P(B | Hard, Low) = 0.4
+    P(C | Hard, Low) = 0.4
+    
+    P(A | Easy, High) = 0.8
+    P(B | Easy, High) = 0.15
+    P(C | Easy, High) = 0.05
+    
+    P(A | Easy, Low) = 0.5
+    P(B | Easy, Low) = 0.3
+    P(C | Easy, Low) = 0.2
+}
+
+SAT | Intelligence {
+    P(High | High) = 0.9
+    P(High | Low) = 0.4
+}
+
+Letter | Grade {
+    P(Good | A) = 0.9
+    P(Good | B) = 0.6
+    P(Good | C) = 0.1
+}

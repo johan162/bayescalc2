@@ -1,0 +1,78 @@
+# Asia (Chest Clinic) Bayesian Network
+# A small expert system for medical diagnosis
+#
+# Network Structure:
+#
+#      Visit to Asia    Smoking
+#          |               |
+#          v               v
+#    Tuberculosis      Cancer
+#          |             /
+#          v            /
+#     TuberOrCancer    /
+#               \     /
+#                v   v
+#          X-ray  Dyspnoea
+#                /
+#         Bronchitis
+#        /
+#   Smoking
+#
+# Characteristics:
+# - All variables are Boolean
+# - Medical diagnosis scenario
+# - Contains a hidden variable (TuberOrCancer) representing unobserved state
+# - Models both disease causation and symptom manifestation
+# - Good for understanding diagnostic reasoning (from symptoms to causes)
+# - Small but representative expert system example
+
+variable VisitToAsia {True, False}
+variable Smoking {True, False}
+variable Tuberculosis {True, False}
+variable Cancer {True, False}
+variable TuberOrCancer {True, False}
+variable XRay {True, False}
+variable Dyspnoea {True, False}
+variable Bronchitis {True, False}
+
+VisitToAsia {
+    P(True) = 0.01
+}
+
+Smoking {
+    P(True) = 0.5
+}
+
+Tuberculosis | VisitToAsia {
+    P(True | True) = 0.05
+    P(True | False) = 0.01
+}
+
+Cancer | Smoking {
+    P(True | True) = 0.1
+    P(True | False) = 0.01
+}
+
+Bronchitis | Smoking {
+    P(True | True) = 0.6
+    P(True | False) = 0.3
+}
+
+TuberOrCancer | Tuberculosis, Cancer {
+    P(True | True, True) = 1.0
+    P(True | True, False) = 1.0
+    P(True | False, True) = 1.0
+    P(True | False, False) = 0.0
+}
+
+XRay | TuberOrCancer {
+    P(True | True) = 0.98
+    P(True | False) = 0.05
+}
+
+Dyspnoea | TuberOrCancer, Bronchitis {
+    P(True | True, True) = 0.9
+    P(True | True, False) = 0.7
+    P(True | False, True) = 0.8
+    P(True | False, False) = 0.1
+}

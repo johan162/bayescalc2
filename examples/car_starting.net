@@ -1,0 +1,61 @@
+# Car Starting Problem Bayesian Network
+# A diagnostic network for automobile starting issues
+#
+# Network Structure:
+#
+#          Battery           FuelSystem
+#           /  \                 |
+#          /    \                |
+#         v      v               v
+#     Lights    Radio         Engine
+#                   \         /
+#                    \       /
+#                     v     v
+#                     CarStarts
+#
+# Characteristics:
+# - All Boolean variables
+# - Simple diagnostic reasoning structure
+# - Models common real-world troubleshooting scenario
+# - Shows how multiple causes (battery & fuel) affect common outcome
+# - Useful for teaching how to work backward from observations to causes
+# - Good for explaining diagnostic inference
+
+variable Battery {True, False}
+variable FuelSystem {True, False}
+variable Lights {True, False}
+variable Radio {True, False}
+variable Engine {True, False}
+variable CarStarts {True, False}
+
+# True means component is working properly, False means it is faulty
+
+Battery {
+    P(True) = 0.95
+}
+
+FuelSystem {
+    P(True) = 0.98
+}
+
+Lights | Battery {
+    P(True | True) = 0.98
+    P(True | False) = 0.05
+}
+
+Radio | Battery {
+    P(True | True) = 0.97
+    P(True | False) = 0.01
+}
+
+Engine | FuelSystem {
+    P(True | True) = 0.98
+    P(True | False) = 0.2
+}
+
+CarStarts | Radio, Engine {
+    P(True | True, True) = 0.99
+    P(True | True, False) = 0.01
+    P(True | False, True) = 0.02
+    P(True | False, False) = 0.001
+}

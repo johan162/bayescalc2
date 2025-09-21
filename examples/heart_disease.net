@@ -1,0 +1,85 @@
+# Heart Disease Risk Network
+# Models risk factors and symptoms for heart disease
+#
+# Network Structure:
+#
+#    Age    Smoking    Obesity
+#     \        |        /
+#      \       |       /
+#       \      |      /
+#        v     v     v
+#     High Blood Pressure
+#           |
+#           v
+#     Heart Disease
+#      /        \
+#     v          v
+#  Chest Pain   Fatigue
+#
+# Characteristics:
+# - 6-variable network with multiple value states
+# - Mix of binary and multi-valued variables
+# - Multiple risk factors contributing to disease
+# - Good for demonstrating combined causes
+# - Models symptoms caused by disease (diagnostic reasoning)
+# - Excellent for explaining inference in medical contexts
+
+variable Age {Young, Middle, Old}
+variable Smoking {True, False}
+variable Obesity {True, False}
+variable HighBP {True, False}
+variable HeartDisease {True, False}
+variable ChestPain {None, Mild, Severe}
+variable Fatigue {None, Mild, Severe}
+
+Age {
+    P(Young) = 0.3
+    P(Middle) = 0.5
+    P(Old) = 0.2
+}
+
+Smoking {
+    P(True) = 0.25
+}
+
+Obesity {
+    P(True) = 0.3
+}
+
+HighBP | Age, Smoking, Obesity {
+    P(True | Young, True, True) = 0.5
+    P(True | Young, True, False) = 0.3
+    P(True | Young, False, True) = 0.2
+    P(True | Young, False, False) = 0.1
+    P(True | Middle, True, True) = 0.7
+    P(True | Middle, True, False) = 0.4
+    P(True | Middle, False, True) = 0.3
+    P(True | Middle, False, False) = 0.2
+    P(True | Old, True, True) = 0.9
+    P(True | Old, True, False) = 0.7
+    P(True | Old, False, True) = 0.6
+    P(True | Old, False, False) = 0.4
+}
+
+HeartDisease | HighBP {
+    P(True | True) = 0.3
+    P(True | False) = 0.05
+}
+
+ChestPain | HeartDisease {
+    P(None | True) = 0.1
+    P(Mild | True) = 0.3
+    P(Severe | True) = 0.6
+    P(None | False) = 0.8
+    P(Mild | False) = 0.15
+    P(Severe | False) = 0.05
+}
+
+Fatigue | HeartDisease {
+    P(None | True) = 0.05
+    P(Mild | True) = 0.3
+    P(Severe | True) = 0.65
+    P(None | False) = 0.6
+    P(Mild | False) = 0.3
+    P(Severe | False) = 0.1
+}

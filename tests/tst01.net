@@ -1,0 +1,7 @@
+variable A {T, F}
+        variable B {T, F}
+        A { P(T) = 0.5 }
+        B | A {
+            P(T | T) = 0.5
+            P(T | F) = 0.5
+        }

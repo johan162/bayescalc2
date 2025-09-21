@@ -1,0 +1,20 @@
+variable Rain 
+variable GrassWet 
+variable Sprinkler 
+
+
+Rain {
+    P(True) = 0.2
+}
+
+Sprinkler | Rain {
+    P(True | True) = 0.01
+    P(True | False) = 0.4
+}
+
+GrassWet | Rain, Sprinkler {
+    P(True | True, True) = 0.99
+    P(True | True, False) = 0.8
+    P(True | False, True) = 0.9
+    P(True | False, False) = 0.1
+}

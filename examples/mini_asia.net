@@ -1,0 +1,40 @@
+# Chest Clinic (Visit Asia) Mini Network
+# A simplified version of the Asia network with just 4 key variables
+#
+# Network Structure:
+#
+#    VisitAsia     Smoking
+#       |             |
+#       v             v
+#  Tuberculosis    Cancer
+#
+# Characteristics:
+# - Small 4-variable network (good for beginners)
+# - All Boolean variables
+# - Models risk factors for lung diseases
+# - Simple causal relationships
+# - Good for demonstrating basic inference
+# - Independent causes leading to different diseases
+
+variable VisitAsia {True, False}
+variable Smoking {True, False}
+variable Tuberculosis {True, False}
+variable Cancer {True, False}
+
+VisitAsia {
+    P(True) = 0.01
+}
+
+Smoking {
+    P(True) = 0.5
+}
+
+Tuberculosis | VisitAsia {
+    P(True | True) = 0.05
+    P(True | False) = 0.01
+}
+
+Cancer | Smoking {
+    P(True | True) = 0.1
+    P(True | False) = 0.01
+}
