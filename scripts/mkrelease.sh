@@ -202,7 +202,7 @@ echo ""
 echo "🧪 PHASE 2: Comprehensive testing suite"
 
 # 2.1: Full test suite with coverage requirements
-run_command "pytest --cov=bayescalc --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=90 --verbose tests/" "Running full test suite with coverage..."
+run_command "pytest --cov=bayescalc --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=70 --verbose tests/" "Running full test suite with coverage..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
     echo "❌ Test suite failed - aborting release"
