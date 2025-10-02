@@ -450,7 +450,7 @@ if __name__ == "__main__":
     inference = Inference(network)
 
     # Test query: P(Rain | GrassWet=Yes)
-    query_vars : Dict[str, str | None] = {"Rain": None}
+    query_vars: Dict[str, str | None] = {"Rain": None}
     evidence = {"GrassWet": "Yes"}
     result = inference.variable_elimination(query_vars, evidence)
 

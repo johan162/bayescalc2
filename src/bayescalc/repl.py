@@ -5,6 +5,7 @@ This module implements the interactive REPL for the Bayesian Network calculator.
 import sys
 import os
 
+from typing import Optional, Any
 from .parser import Parser
 from .queries import QueryParser
 from .commands import CommandHandler
@@ -20,11 +21,11 @@ if "pytest" not in sys.modules and not os.environ.get("PYTEST_RUNNING"):
 
     PROMPT_TOOLKIT_AVAILABLE = True
 else:
-    # Dummy imports for testing
-    PromptSession = None
-    FileHistory = None
-    AutoSuggestFromHistory = None
-    PromptToolkitCompleter = None
+    # Dummy imports for testing - use type: ignore to suppress type checker warnings
+    PromptSession = None  # type: ignore
+    FileHistory = None  # type: ignore
+    AutoSuggestFromHistory = None  # type: ignore
+    PromptToolkitCompleter = None  # type: ignore
     PROMPT_TOOLKIT_AVAILABLE = False
 
 
@@ -34,11 +35,17 @@ class REPL:
         self.query_parser = QueryParser(network)
         self.command_handler = CommandHandler(network)
         self.expression_parser = ExpressionParser(self.query_parser)
+
+        # Type annotation to allow both PromptToolkitCompleter and None
+        self.completer: Optional[object] = None
         if PROMPT_TOOLKIT_AVAILABLE:
             self.completer = PromptToolkitCompleter(network)
         else:
             self.completer = None
         self.history_file = ".bayescalc_history"
+
+        # Type annotation to allow both PromptSession and None
+        self.session: Optional[Any] = None
         if PROMPT_TOOLKIT_AVAILABLE:
             self.session = PromptSession(
                 history=FileHistory(self.history_file),

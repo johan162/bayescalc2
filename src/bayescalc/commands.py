@@ -570,7 +570,9 @@ class CommandHandler:
         # P(A, B) == P(A) * P(B)
         p_a = self.inference.variable_elimination({var1_name: None}, {})
         p_b = self.inference.variable_elimination({var2_name: None}, {})
-        p_ab = self.inference.variable_elimination({var1_name: None, var2_name: None}, {})
+        p_ab = self.inference.variable_elimination(
+            {var1_name: None, var2_name: None}, {}
+        )
 
         var1 = self.network.variables[var1_name]
         var2 = self.network.variables[var2_name]
@@ -601,8 +603,12 @@ class CommandHandler:
         for cond_values in product(*cond_evidence_domains):
             evidence = dict(zip(cond_vars, cond_values))
 
-            p_a_given_c = self.inference.variable_elimination({var1_name: None}, evidence)
-            p_b_given_c = self.inference.variable_elimination({var2_name: None}, evidence)
+            p_a_given_c = self.inference.variable_elimination(
+                {var1_name: None}, evidence
+            )
+            p_b_given_c = self.inference.variable_elimination(
+                {var2_name: None}, evidence
+            )
             p_ab_given_c = self.inference.variable_elimination(
                 {var1_name: None, var2_name: None}, evidence
             )
@@ -632,7 +638,9 @@ class CommandHandler:
 
     def conditional_entropy(self, var_x_name: str, var_y_name: str) -> float:
         """Computes the conditional entropy H(X|Y)."""
-        p_xy = self.inference.variable_elimination({var_x_name: None, var_y_name: None}, {})
+        p_xy = self.inference.variable_elimination(
+            {var_x_name: None, var_y_name: None}, {}
+        )
         p_y = self.inference.variable_elimination({var_y_name: None}, {})
 
         var_x = self.network.variables[var_x_name]
