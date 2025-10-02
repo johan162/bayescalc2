@@ -1,11 +1,10 @@
 import unittest
-from unittest.mock import patch
-from io import StringIO
 
 from src.bayescalc.lexer import Lexer
 from src.bayescalc.parser import Parser
 from src.bayescalc.queries import QueryParser
 from src.bayescalc.commands import CommandHandler
+
 
 class TestBooleanSyntax(unittest.TestCase):
     def setUp(self):
@@ -40,7 +39,7 @@ class TestBooleanSyntax(unittest.TestCase):
 
     def test_boolean_variable_declaration(self):
         """Test that variables are correctly recognized as Boolean."""
-        for name in ['Rain', 'Sprinkler', 'GrassWet']:
+        for name in ["Rain", "Sprinkler", "GrassWet"]:
             var = self.network.variables[name]
             self.assertTrue(var.is_boolean)
             self.assertEqual(var.var_type, "Boolean")
@@ -66,14 +65,18 @@ class TestBooleanSyntax(unittest.TestCase):
         """Test conditionals with boolean shorthand syntax."""
         # P(Rain | GrassWet) should be equal to P(Rain=True | GrassWet=True)
         result_shorthand = self.query_parser.parse_and_execute("P(Rain | GrassWet)")
-        result_explicit = self.query_parser.parse_and_execute("P(Rain=True | GrassWet=True)")
+        result_explicit = self.query_parser.parse_and_execute(
+            "P(Rain=True | GrassWet=True)"
+        )
         self.assertEqual(result_shorthand.probabilities, result_explicit.probabilities)
 
     def test_conditional_negation(self):
         """Test conditionals with negation syntax."""
         # P(Rain | ~GrassWet) should be equal to P(Rain=True | GrassWet=False)
         result_negation = self.query_parser.parse_and_execute("P(Rain | ~GrassWet)")
-        result_explicit = self.query_parser.parse_and_execute("P(Rain=True | GrassWet=False)")
+        result_explicit = self.query_parser.parse_and_execute(
+            "P(Rain=True | GrassWet=False)"
+        )
         self.assertEqual(result_negation.probabilities, result_explicit.probabilities)
 
     def test_ls_command_shows_type(self):
@@ -84,5 +87,6 @@ class TestBooleanSyntax(unittest.TestCase):
         self.assertIn("Sprinkler", result)
         self.assertIn("GrassWet", result)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

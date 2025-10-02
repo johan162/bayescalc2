@@ -1,8 +1,10 @@
 """
 Tests for the network_model module.
 """
+
 import unittest
 from bayescalc.network_model import Variable, BayesianNetwork
+
 
 class TestNetworkModel(unittest.TestCase):
 
@@ -36,10 +38,9 @@ class TestNetworkModel(unittest.TestCase):
         net = BayesianNetwork()
         net.add_variable("Rain", ("True", "False"))
         net.add_variable("Sprinkler", ("On", "Off"))
-        net.add_factor("Sprinkler", ["Rain"], {
-            ("On", "True"): 0.01,
-            ("On", "False"): 0.4
-        })
+        net.add_factor(
+            "Sprinkler", ["Rain"], {("On", "True"): 0.01, ("On", "False"): 0.4}
+        )
         self.assertIn("Sprinkler", net.factors)
         factor = net.factors["Sprinkler"]
         self.assertEqual(factor.probabilities[("On", "True")], 0.01)
@@ -64,13 +65,14 @@ class TestNetworkModel(unittest.TestCase):
         net.add_variable("A", ("1",))
         net.add_variable("B", ("1",))
         net.add_variable("C", ("1",))
-        net.add_factor("B", ["A"], {("1","1"): 1.0})
-        net.add_factor("C", ["A"], {("1","1"): 1.0})
+        net.add_factor("B", ["A"], {("1", "1"): 1.0})
+        net.add_factor("C", ["A"], {("1", "1"): 1.0})
 
         self.assertEqual(net.get_parents("A"), set())
         self.assertEqual(net.get_children("A"), {"B", "C"})
         self.assertEqual(net.get_parents("B"), {"A"})
         self.assertEqual(net.get_children("B"), set())
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

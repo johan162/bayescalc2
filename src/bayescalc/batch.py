@@ -1,12 +1,14 @@
 """
 This module handles batch mode execution for the Bayesian Network calculator.
 """
+
 import sys
 from .lexer import Lexer
 from .parser import Parser
 from .queries import QueryParser
 from .commands import CommandHandler
 from .network_model import BayesianNetwork
+
 
 def execute_commands(network: BayesianNetwork, commands: list[str]):
     """
@@ -17,12 +19,12 @@ def execute_commands(network: BayesianNetwork, commands: list[str]):
 
     for line in commands:
         line = line.strip()
-        if not line or line.startswith('#'):
+        if not line or line.startswith("#"):
             continue
 
         print(f">> {line}")
         try:
-            if line.lower() == 'exit':
+            if line.lower() == "exit":
                 break
             if line.startswith("P("):
                 result = query_parser.parse_and_execute(line)
@@ -36,19 +38,21 @@ def execute_commands(network: BayesianNetwork, commands: list[str]):
         finally:
             print("-" * 20)
 
+
 def run_batch(network: BayesianNetwork, commands_file: str):
     """
     Executes a list of commands from a file in batch mode.
     """
     try:
-        with open(commands_file, 'r') as f:
+        with open(commands_file, "r") as f:
             commands = f.readlines()
             execute_commands(network, commands)
 
     except FileNotFoundError:
         print(f"Error: Commands file not found at '{commands_file}'", file=sys.stderr)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Example usage for testing
     example_net_str = """
     variable Rain {True, False}
@@ -77,7 +81,7 @@ if __name__ == '__main__':
         "P(Rain | GrassWet=Yes)",
         "showGraph()",
         "# This is a comment",
-        "entropy(Sprinkler)"
+        "entropy(Sprinkler)",
     ]
     cmd_file_path = "test_commands.txt"
     with open(cmd_file_path, "w") as f:
@@ -87,4 +91,5 @@ if __name__ == '__main__':
 
     # Clean up the dummy file
     import os
+
     os.remove(cmd_file_path)

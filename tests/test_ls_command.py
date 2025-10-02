@@ -1,10 +1,10 @@
 import unittest
 import sys
-import os
 from io import StringIO
 from unittest.mock import patch
 
 from bayescalc.main import main
+
 
 class TestLsCommand(unittest.TestCase):
 
@@ -16,14 +16,16 @@ class TestLsCommand(unittest.TestCase):
         """
         Tests if the 'ls' command correctly lists variables.
         """
-        with patch.object(sys, 'argv', ['bayescalc/main.py', self.net_file, '--cmd', 'ls']):
+        with patch.object(
+            sys, "argv", ["bayescalc/main.py", self.net_file, "--cmd", "ls"]
+        ):
             captured_output = StringIO()
-            with patch('sys.stdout', captured_output):
+            with patch("sys.stdout", captured_output):
                 main()
             output = captured_output.getvalue()
-# variable Rain {True, False}
-# variable GrassWet {True, False}
-# ariable Sprinkler {True, False}
+            # variable Rain {True, False}
+            # variable GrassWet {True, False}
+            # ariable Sprinkler {True, False}
             self.assertIn("Variable    | Type       | States", output)
             self.assertIn("Rain        | Boolean    | True, False", output)
             self.assertIn("GrassWet    | Boolean    | True, False", output)
@@ -33,9 +35,11 @@ class TestLsCommand(unittest.TestCase):
         """
         Tests if the 'vars' alias for 'ls' works correctly.
         """
-        with patch.object(sys, 'argv', ['bayescalc/main.py', self.net_file, '--cmd', 'vars']):
+        with patch.object(
+            sys, "argv", ["bayescalc/main.py", self.net_file, "--cmd", "vars"]
+        ):
             captured_output = StringIO()
-            with patch('sys.stdout', captured_output):
+            with patch("sys.stdout", captured_output):
                 main()
             output = captured_output.getvalue()
 
@@ -44,5 +48,6 @@ class TestLsCommand(unittest.TestCase):
             self.assertIn("GrassWet    | Boolean    | True, False", output)
             self.assertIn("Sprinkler   | Boolean    | True, False", output)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

@@ -1,12 +1,13 @@
 """
 Tests for the commands and queries modules.
 """
+
 import unittest
-import numpy as np
 from bayescalc.lexer import Lexer
 from bayescalc.parser import Parser
 from bayescalc.commands import CommandHandler
 from bayescalc.queries import QueryParser
+
 
 class TestCommandsAndQueries(unittest.TestCase):
 
@@ -16,11 +17,11 @@ class TestCommandsAndQueries(unittest.TestCase):
         net_str = """
         variable A {True, False}
         variable B {True, False}
-        
+
         A {
             P(True) = 0.5
         }
-        
+
         B | A {
             P(True | True) = 0.5
             P(False | True) = 0.5
@@ -56,7 +57,9 @@ class TestCommandsAndQueries(unittest.TestCase):
     def test_mutual_information(self):
         # I(A;B) = H(A) - H(A|B) = H(A) - (P(B=T)H(A|B=T) + P(B=F)H(A|B=F))
         # Since they are independent, H(A|B) = H(A), so I(A;B) = 0
-        self.assertAlmostEqual(self.cmd_handler.execute("mutual_information(A, B)"), 0.0)
+        self.assertAlmostEqual(
+            self.cmd_handler.execute("mutual_information(A, B)"), 0.0
+        )
 
     def test_print_cpt(self):
         output = self.cmd_handler.execute("printCPT(B)")
@@ -64,7 +67,8 @@ class TestCommandsAndQueries(unittest.TestCase):
         self.assertIn("B     | A          | P", output)
         self.assertIn("True  | True       | 0.5000", output)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
 
 # 'B     | A      | P     \n------+--------+-------\nTrue  | True   | 0.5000\nTrue  | False  | 0.5000\nFalse | True   | 0.5000\nFalse | False  | 0.5000'

@@ -1,17 +1,20 @@
 """
 Test edge cases in the Bayesian network parser.
 """
+
 import unittest
 import sys
 import os
-import re
 
 # Add src to path to allow importing bayescalc modules
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src"))
+)
 
 from bayescalc.lexer import Lexer
 from bayescalc.parser import Parser
 from bayescalc.network_model import BayesianNetwork
+
 
 class TestParserEdgeCases(unittest.TestCase):
 
@@ -28,20 +31,20 @@ class TestParserEdgeCases(unittest.TestCase):
     def test_whitespace_variations(self):
         """Test parsing with unusual whitespace."""
         network_str = """
-        
+
         variable   Rain   {   True  ,  False   }
-        
-        
+
+
         Rain    {
             P(True)=0.2
-            
+
         }
         """
         lexer = Lexer(network_str)
         tokens = lexer.tokenize()
         parser = Parser(tokens)
         network = parser.parse()
-        
+
         self.assertIn("Rain", network.variables)
         self.assertEqual(network.variables["Rain"].domain, ("True", "False"))
         self.assertAlmostEqual(network.factors["Rain"].probabilities[("True",)], 0.2)
@@ -63,9 +66,9 @@ class TestParserEdgeCases(unittest.TestCase):
         # Missing probability value
         network_str = """
         variable Rain {True, False}
-        
+
         Rain {
-            P(True) = 
+            P(True) =
         }
         """
         lexer = Lexer(network_str)
@@ -79,7 +82,7 @@ class TestParserEdgeCases(unittest.TestCase):
         # Probability > 1
         network_str = """
         variable Rain {True, False}
-        
+
         Rain {
             P(True) = 1.2
         }
@@ -109,7 +112,7 @@ class TestParserEdgeCases(unittest.TestCase):
         """Test handling of references to undeclared variables."""
         network_str = """
         variable Rain {True, False}
-        
+
         Sunshine {
             P(True) = 0.7
         }
@@ -124,7 +127,7 @@ class TestParserEdgeCases(unittest.TestCase):
         """Test handling of references to undeclared variable values."""
         network_str = """
         variable Rain {True, False}
-        
+
         Rain {
             P(Heavy) = 0.3
         }
@@ -141,7 +144,7 @@ class TestParserEdgeCases(unittest.TestCase):
         """Test handling of variables with many values."""
         network_str = """
         variable Weather {Sunny, Cloudy, Rainy, Stormy, Snowy, Foggy, Windy, Humid, Dry}
-        
+
         Weather {
             P(Sunny) = 0.2
             P(Cloudy) = 0.2
@@ -158,16 +161,18 @@ class TestParserEdgeCases(unittest.TestCase):
         tokens = lexer.tokenize()
         parser = Parser(tokens)
         network = parser.parse()
-        
+
         self.assertIn("Weather", network.variables)
         self.assertEqual(len(network.variables["Weather"].domain), 9)
-        self.assertAlmostEqual(sum(network.factors["Weather"].probabilities.values()), 1.0)
+        self.assertAlmostEqual(
+            sum(network.factors["Weather"].probabilities.values()), 1.0
+        )
 
     def test_auto_completion(self):
         """Test auto-completion of probability tables."""
         network_str = """
         variable Rain {True, False}
-        
+
         Rain {
             P(True) = 0.3
             # P(False) should be auto-completed to 0.7
@@ -177,7 +182,7 @@ class TestParserEdgeCases(unittest.TestCase):
         tokens = lexer.tokenize()
         parser = Parser(tokens)
         network = parser.parse()
-        
+
         self.assertAlmostEqual(network.factors["Rain"].probabilities[("True",)], 0.3)
         self.assertAlmostEqual(network.factors["Rain"].probabilities[("False",)], 0.7)
 
@@ -185,7 +190,7 @@ class TestParserEdgeCases(unittest.TestCase):
         """Test that the parser correctly handles ambiguous auto-completion."""
         network_str = """
         variable Weather {Sunny, Cloudy, Rainy}
-        
+
         Weather {
             P(Sunny) = 0.3
             # Missing both Cloudy and Rainy probabilities
@@ -204,7 +209,7 @@ class TestParserEdgeCases(unittest.TestCase):
         network_str = """
         # This is a comment
         variable Rain {True, False} # This is another comment
-        
+
         # Comment before CPT
         Rain { # Comment inside block
             P(True) = 0.3 # Comment after probability
@@ -215,7 +220,7 @@ class TestParserEdgeCases(unittest.TestCase):
         tokens = lexer.tokenize()
         parser = Parser(tokens)
         network = parser.parse()
-        
+
         self.assertIn("Rain", network.variables)
         self.assertAlmostEqual(network.factors["Rain"].probabilities[("True",)], 0.3)
         self.assertAlmostEqual(network.factors["Rain"].probabilities[("False",)], 0.7)
@@ -224,7 +229,7 @@ class TestParserEdgeCases(unittest.TestCase):
         """Test handling of very small probability values."""
         network_str = """
         variable Rare {True, False}
-        
+
         Rare {
             P(True) = 0.0000001
         }
@@ -233,9 +238,14 @@ class TestParserEdgeCases(unittest.TestCase):
         tokens = lexer.tokenize()
         parser = Parser(tokens)
         network = parser.parse()
-        
-        self.assertAlmostEqual(network.factors["Rare"].probabilities[("True",)], 0.0000001)
-        self.assertAlmostEqual(network.factors["Rare"].probabilities[("False",)], 0.9999999)
 
-if __name__ == '__main__':
+        self.assertAlmostEqual(
+            network.factors["Rare"].probabilities[("True",)], 0.0000001
+        )
+        self.assertAlmostEqual(
+            network.factors["Rare"].probabilities[("False",)], 0.9999999
+        )
+
+
+if __name__ == "__main__":
     unittest.main()

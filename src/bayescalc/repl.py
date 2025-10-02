@@ -1,6 +1,7 @@
 """
 This module implements the interactive REPL for the Bayesian Network calculator.
 """
+
 import sys
 import os
 
@@ -11,11 +12,12 @@ from .network_model import BayesianNetwork
 from .expression_parser import ExpressionParser
 
 # Only import prompt_toolkit when not running tests
-if 'pytest' not in sys.modules and not os.environ.get('PYTEST_RUNNING'):
+if "pytest" not in sys.modules and not os.environ.get("PYTEST_RUNNING"):
     from prompt_toolkit import PromptSession
     from prompt_toolkit.history import FileHistory
     from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
     from .completer import PromptToolkitCompleter
+
     PROMPT_TOOLKIT_AVAILABLE = True
 else:
     # Dummy imports for testing
@@ -24,6 +26,7 @@ else:
     AutoSuggestFromHistory = None
     PromptToolkitCompleter = None
     PROMPT_TOOLKIT_AVAILABLE = False
+
 
 class REPL:
     def __init__(self, network: BayesianNetwork):
@@ -41,7 +44,7 @@ class REPL:
                 history=FileHistory(self.history_file),
                 auto_suggest=AutoSuggestFromHistory(),
                 completer=self.completer,
-                complete_while_typing=True  # Enable tab completion while typing
+                complete_while_typing=True,  # Enable tab completion while typing
             )
         else:
             self.session = None
@@ -50,19 +53,19 @@ class REPL:
         """Starts the REPL loop."""
         if not PROMPT_TOOLKIT_AVAILABLE:
             raise RuntimeError("REPL requires prompt_toolkit to be available")
-            
+
         print("Bayesian Network Calculator (using prompt_toolkit)")
         print("Type 'help' for a list of commands, 'exit' to quit.")
-        
+
         while True:
             try:
                 line = self.session.prompt(">> ").strip()
                 if not line:
                     continue
 
-                if line.lower() == 'exit':
+                if line.lower() == "exit":
                     break
-                elif line.lower() == 'help':
+                elif line.lower() == "help":
                     self.print_help()
                     continue
 
@@ -70,12 +73,14 @@ class REPL:
                 if line.startswith("P("):
                     try:
                         # First try to evaluate it as a mathematical expression
-                        if any(op in line for op in ['+', '-', '*', '/', '(', ')']):
+                        if any(op in line for op in ["+", "-", "*", "/", "(", ")"]):
                             result = self.expression_parser.evaluate(line)
-                            if hasattr(result, 'probabilities'):  # It's a Factor object
+                            if hasattr(result, "probabilities"):  # It's a Factor object
                                 # Print the result as a distribution
                                 for assignment, prob in result.probabilities.items():
-                                    print(f"  P({', '.join(assignment) if assignment else ''}) = {prob:.6f}")
+                                    print(
+                                        f"  P({', '.join(assignment) if assignment else ''}) = {prob:.6f}"
+                                    )
                             else:  # It's a scalar value
                                 print(f"  = {result:.6f}")
                             continue
@@ -84,7 +89,9 @@ class REPL:
                             result = self.query_parser.parse_and_execute(line)
                             # Format and print result factor
                             for assignment, prob in result.probabilities.items():
-                                print(f"  P({', '.join(assignment) if assignment else ''}) = {prob:.6f}")
+                                print(
+                                    f"  P({', '.join(assignment) if assignment else ''}) = {prob:.6f}"
+                                )
                     except ValueError as e:
                         print(f"Error: {e}", file=sys.stderr)
                         continue
@@ -123,9 +130,11 @@ Available commands:
 """
         print(help_text)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Example usage for testing
     from .lexer import Lexer
+
     example_net_str = """
     variable Rain {True, False}
     variable Sprinkler {On, Off}
