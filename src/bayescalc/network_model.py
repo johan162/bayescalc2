@@ -43,7 +43,7 @@ class Factor:
 
     variables: Tuple[Variable, ...]
     probabilities: Dict[Tuple[str, ...], float] = field(default_factory=dict)
-    name: str = None
+    name: str | None = None
 
     def __repr__(self):
         if self.name:

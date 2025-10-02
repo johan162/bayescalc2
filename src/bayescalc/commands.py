@@ -5,7 +5,7 @@ This module implements the utility commands for the Bayesian Network calculator.
 import math
 import numpy as np
 import re
-from typing import List, Set
+from typing import Dict, List, Set
 
 from .network_model import BayesianNetwork
 from .inference import Inference
@@ -303,8 +303,13 @@ class CommandHandler:
         max_prob_width = 0
 
         for var_combo in var_combinations:
+            # Convert list of variable names to the expected Dict[str, str | None] format
+            query_vars_dict: Dict[str, str | None] = {
+                var_name: None for var_name in var_combo
+            }
+
             # Compute marginal distribution for this combination
-            marginal = self.inference.variable_elimination(list(var_combo), {})
+            marginal = self.inference.variable_elimination(query_vars_dict, {})
 
             # Get all possible value assignments for these variables
             var_objects = [self.network.variables[var_name] for var_name in var_combo]
@@ -345,7 +350,9 @@ class CommandHandler:
             n = int(n_str)
             m = int(m_str)
         except ValueError:
-            raise ValueError(f"Invalid arguments: n={n_str} and m={m_str} must be integers")
+            raise ValueError(
+                f"Invalid arguments: n={n_str} and m={m_str} must be integers"
+            )
 
         if n <= 0 or m <= 0:
             raise ValueError(f"n and m must be positive, got n={n}, m={m}")
@@ -407,8 +414,11 @@ class CommandHandler:
 
                         # Compute P(A|B) using variable elimination
                         try:
+                            query_vars_dict: Dict[str, str | None] = {
+                                var_name: None for var_name in cond_vars
+                            }
                             conditional_dist = self.inference.variable_elimination(
-                                list(cond_vars), evidence
+                                query_vars_dict, evidence
                             )
 
                             # Get probability for this specific assignment of condition variables
@@ -558,9 +568,9 @@ class CommandHandler:
     def is_independent(self, var1_name: str, var2_name: str) -> bool:
         """Checks if two variables are independent."""
         # P(A, B) == P(A) * P(B)
-        p_a = self.inference.variable_elimination([var1_name], {})
-        p_b = self.inference.variable_elimination([var2_name], {})
-        p_ab = self.inference.variable_elimination([var1_name, var2_name], {})
+        p_a = self.inference.variable_elimination({var1_name: None}, {})
+        p_b = self.inference.variable_elimination({var2_name: None}, {})
+        p_ab = self.inference.variable_elimination({var1_name: None, var2_name: None}, {})
 
         var1 = self.network.variables[var1_name]
         var2 = self.network.variables[var2_name]
@@ -591,10 +601,10 @@ class CommandHandler:
         for cond_values in product(*cond_evidence_domains):
             evidence = dict(zip(cond_vars, cond_values))
 
-            p_a_given_c = self.inference.variable_elimination([var1_name], evidence)
-            p_b_given_c = self.inference.variable_elimination([var2_name], evidence)
+            p_a_given_c = self.inference.variable_elimination({var1_name: None}, evidence)
+            p_b_given_c = self.inference.variable_elimination({var2_name: None}, evidence)
             p_ab_given_c = self.inference.variable_elimination(
-                [var1_name, var2_name], evidence
+                {var1_name: None, var2_name: None}, evidence
             )
 
             var1 = self.network.variables[var1_name]
@@ -616,14 +626,14 @@ class CommandHandler:
 
     def entropy(self, var_name: str) -> float:
         """Computes the entropy of a variable."""
-        p_x = self.inference.variable_elimination([var_name], {})
+        p_x = self.inference.variable_elimination({var_name: None}, {})
         probs = np.array(list(p_x.probabilities.values()))
         return -np.sum(probs * np.log2(probs))
 
     def conditional_entropy(self, var_x_name: str, var_y_name: str) -> float:
         """Computes the conditional entropy H(X|Y)."""
-        p_xy = self.inference.variable_elimination([var_x_name, var_y_name], {})
-        p_y = self.inference.variable_elimination([var_y_name], {})
+        p_xy = self.inference.variable_elimination({var_x_name: None, var_y_name: None}, {})
+        p_y = self.inference.variable_elimination({var_y_name: None}, {})
 
         var_x = self.network.variables[var_x_name]
         var_y = self.network.variables[var_y_name]
@@ -655,7 +665,7 @@ class CommandHandler:
     def print_jpt(self) -> str:
         """Computes and prints the full Joint Probability Table with proper column alignment."""
         all_vars = list(self.network.variables.keys())
-        jpt = self.inference.variable_elimination(all_vars, {})
+        jpt = self.inference.variable_elimination({var: None for var in all_vars}, {})
 
         # Get variables in their original declaration order
         ordered_vars = [

@@ -252,7 +252,7 @@ class Inference:
         return new_factor
 
     def variable_elimination(
-        self, query_vars: Dict[str, str], evidence: Dict[str, str]
+        self, query_vars: Dict[str, str | None], evidence: Dict[str, str]
     ) -> Factor:
         """
         Performs Variable Elimination to compute P(query_vars | evidence).
@@ -321,7 +321,7 @@ class Inference:
         for f in factors:
             if any(v.name in evidence for v in f.variables):
                 # Initialize variables outside the loop to avoid UnboundLocalError
-                new_vars_temp = []
+                new_vars_temp: list[Variable] = []
                 new_probs = {}
 
                 var_map = {v.name: i for i, v in enumerate(f.variables)}
@@ -450,7 +450,7 @@ if __name__ == "__main__":
     inference = Inference(network)
 
     # Test query: P(Rain | GrassWet=Yes)
-    query_vars = ["Rain"]
+    query_vars : Dict[str, str | None] = {"Rain": None}
     evidence = {"GrassWet": "Yes"}
     result = inference.variable_elimination(query_vars, evidence)
 
@@ -459,7 +459,7 @@ if __name__ == "__main__":
         print(f"  P({', '.join(assignment)}) = {prob:.4f}")
 
     # Test query: P(GrassWet)
-    query_vars = ["GrassWet"]
+    query_vars = {"GrassWet": None}
     evidence = {}
     result = inference.variable_elimination(query_vars, evidence)
 

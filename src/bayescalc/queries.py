@@ -124,7 +124,7 @@ class QueryParser:
             If a variable doesn't exist in the network, negation is used with non-boolean variables,
             or a non-boolean variable is missing a value
         """
-        evidence = {}
+        evidence: Dict[str, str] = {}
 
         if not evidence_part:
             return evidence
@@ -189,8 +189,8 @@ class QueryParser:
         ValueError
             If a variable doesn't exist in the network or negation is used with non-boolean variables
         """
-        query_vars_names = []
-        query_evidence = {}
+        query_vars_names: List[str] = []
+        query_evidence: Dict[str, str] = {}
 
         if not query_part:
             return query_vars_names, query_evidence
@@ -261,8 +261,20 @@ class QueryParser:
         ValueError
             If the specified assignment cannot be found in the result
         """
+
+        query_vars_dict: Dict[str, str | None] = {}
+        for var_name in query_vars_names:
+            if var_name in query_evidence:
+                # If we have a specific value for this variable, use it
+                query_vars_dict[var_name] = query_evidence[var_name]
+            else:
+                # If no specific value, query all values (marginal query)
+                query_vars_dict[var_name] = None
+
+        result_factor = self.inference.variable_elimination(query_vars_dict, evidence)
+
         # Perform inference using variable elimination
-        result_factor = self.inference.variable_elimination(query_vars_names, evidence)
+        # result_factor = self.inference.variable_elimination(query_vars_names, evidence)
 
         # If the original query had specific values (e.g., P(Rain=True|...)),
         # we need to filter the final result to get that single probability.
