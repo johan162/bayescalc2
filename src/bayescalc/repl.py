@@ -61,7 +61,7 @@ class REPL:
         if not PROMPT_TOOLKIT_AVAILABLE:
             raise RuntimeError("REPL requires prompt_toolkit to be available")
 
-        print("Bayesian Network Calculator (using prompt_toolkit)")
+        print("Bayesian Network Calculator")
         print("Type 'help' for a list of commands, 'exit' to quit.")
 
         while True:
