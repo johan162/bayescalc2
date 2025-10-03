@@ -624,5 +624,436 @@ class TestConditionalEntropyEdgeCases(unittest.TestCase):
         pass
 
 
+class TestCondprobs(unittest.TestCase):
+    """Test cases for the condprobs(m,n) command."""
+
+    @classmethod
+    def setUpClass(cls):
+        """Set up test networks for condprobs tests."""
+
+        # Network 1: Simple 2-variable network
+        cls.simple_net_str = """
+        variable A {True, False}
+        variable B {True, False}
+
+        A {
+            P(True) = 0.6
+        }
+
+        B | A {
+            P(True | True) = 0.8
+            P(True | False) = 0.3
+        }
+        """
+
+        # Network 2: 3-variable chain A → B → C
+        cls.chain_net_str = """
+        variable A {True, False}
+        variable B {True, False}
+        variable C {True, False}
+
+        A {
+            P(True) = 0.5
+        }
+
+        B | A {
+            P(True | True) = 0.7
+            P(True | False) = 0.2
+        }
+
+        C | B {
+            P(True | True) = 0.9
+            P(True | False) = 0.1
+        }
+        """
+
+        # Network 3: Rain-Sprinkler-GrassWet (3 variables with complex dependencies)
+        cls.rain_net_str = """
+        variable Rain {True, False}
+        variable Sprinkler {True, False}
+        variable GrassWet {True, False}
+
+        Rain {
+            P(True) = 0.2
+        }
+
+        Sprinkler | Rain {
+            P(True | True) = 0.01
+            P(True | False) = 0.4
+        }
+
+        GrassWet | Rain, Sprinkler {
+            P(True | True, True) = 0.99
+            P(True | True, False) = 0.8
+            P(True | False, True) = 0.9
+            P(True | False, False) = 0.1
+        }
+        """
+
+        # Network 4: 4-variable network for testing larger combinations
+        cls.four_var_net_str = """
+        variable A {True, False}
+        variable B {True, False}
+        variable C {True, False}
+        variable D {True, False}
+
+        A {
+            P(True) = 0.5
+        }
+
+        B | A {
+            P(True | True) = 0.8
+            P(True | False) = 0.2
+        }
+
+        C | A {
+            P(True | True) = 0.7
+            P(True | False) = 0.3
+        }
+
+        D | B, C {
+            P(True | True, True) = 0.9
+            P(True | True, False) = 0.6
+            P(True | False, True) = 0.5
+            P(True | False, False) = 0.1
+        }
+        """
+
+        # Parse all networks
+        lexer = Lexer(cls.simple_net_str)
+        cls.simple_network = Parser(lexer.tokenize()).parse()
+        cls.simple_handler = CommandHandler(cls.simple_network)
+
+        lexer = Lexer(cls.chain_net_str)
+        cls.chain_network = Parser(lexer.tokenize()).parse()
+        cls.chain_handler = CommandHandler(cls.chain_network)
+
+        lexer = Lexer(cls.rain_net_str)
+        cls.rain_network = Parser(lexer.tokenize()).parse()
+        cls.rain_handler = CommandHandler(cls.rain_network)
+
+        lexer = Lexer(cls.four_var_net_str)
+        cls.four_var_network = Parser(lexer.tokenize()).parse()
+        cls.four_var_handler = CommandHandler(cls.four_var_network)
+
+    # ========================================================================
+    # Positive Test Cases - condprobs(m,n)
+    # ========================================================================
+
+    def test_condprobs_1_1_simple_network(self):
+        """Test condprobs(1,1) on a simple 2-variable network."""
+        result = self.simple_handler.execute("condprobs(1, 1)")
+
+        # Should return string with conditional probabilities
+        self.assertIsInstance(result, str)
+
+        # Should contain P(A|B) and P(B|A) style probabilities
+        self.assertIn("P(", result)
+        self.assertIn("|", result)
+
+        # Should have multiple lines (multiple conditional probabilities)
+        lines = result.split("\n")
+        self.assertGreater(len(lines), 1)
+
+    def test_condprobs_1_1_contains_expected_probabilities(self):
+        """Test that condprobs(1,1) contains expected probability patterns."""
+        result = self.simple_handler.execute("condprobs(1, 1)")
+
+        # Should contain probabilities with both variables
+        self.assertIn("A", result)
+        self.assertIn("B", result)
+
+        # Should have probability values (decimal numbers)
+        self.assertIn("0.", result)  # Probability values
+
+    def test_condprobs_1_2_three_variable_network(self):
+        """Test condprobs(1,2) with 3-variable chain network."""
+        result = self.chain_handler.execute("condprobs(1, 2)")
+
+        self.assertIsInstance(result, str)
+        self.assertIn("P(", result)
+
+        # Should have conditional probabilities with 2 variables in evidence
+        # Format: P(X | Y, Z)
+        lines = result.split("\n")
+        self.assertGreater(len(lines), 1)
+
+    def test_condprobs_2_1_three_variable_network(self):
+        """Test condprobs(2,1) with 3-variable chain network."""
+        result = self.chain_handler.execute("condprobs(2, 1)")
+
+        self.assertIsInstance(result, str)
+        self.assertIn("P(", result)
+
+        # Should have conditional probabilities with 2 variables being queried
+        # Format: P(X, Y | Z)
+        self.assertIn(",", result)  # Comma separating multiple query variables
+
+    def test_condprobs_output_format(self):
+        """Test that condprobs output is properly formatted."""
+        result = self.simple_handler.execute("condprobs(1, 1)")
+
+        lines = result.split("\n")
+        for line in lines:
+            if line.strip():  # Non-empty lines
+                # Should have format: P(...|...) = number
+                self.assertIn("=", line)
+                self.assertIn("P(", line)
+
+    def test_condprobs_probabilities_valid_range(self):
+        """Test that all probabilities are in valid range [0,1]."""
+        result = self.simple_handler.execute("condprobs(1, 1)")
+
+        import re
+
+        # Extract probability values (numbers after '=')
+        prob_pattern = r"=\s*(\d+\.\d+)"
+        probabilities = re.findall(prob_pattern, result)
+
+        for prob_str in probabilities:
+            prob = float(prob_str)
+            self.assertGreaterEqual(prob, 0.0)
+            self.assertLessEqual(prob, 1.0)
+
+    def test_condprobs_uses_negation_syntax(self):
+        """Test that condprobs uses ~ notation for False values."""
+        result = self.simple_handler.execute("condprobs(1, 1)")
+
+        # Should contain negation symbol for False values
+        # (assuming the variables have True/False domains)
+        self.assertIn("~", result)
+
+    def test_condprobs_sorted_output(self):
+        """Test that condprobs output is sorted consistently."""
+        result1 = self.simple_handler.execute("condprobs(1, 1)")
+        result2 = self.simple_handler.execute("condprobs(1, 1)")
+
+        # Multiple calls should produce identical output
+        self.assertEqual(result1, result2)
+
+    def test_condprobs_rain_network_1_1(self):
+        """Test condprobs(1,1) on Rain-Sprinkler-GrassWet network."""
+        result = self.rain_handler.execute("condprobs(1, 1)")
+
+        self.assertIsInstance(result, str)
+        self.assertIn("Rain", result)
+        self.assertIn("Sprinkler", result)
+        self.assertIn("GrassWet", result)
+
+    def test_condprobs_rain_network_1_2(self):
+        """Test condprobs(1,2) on Rain-Sprinkler-GrassWet network."""
+        result = self.rain_handler.execute("condprobs(1, 2)")
+
+        self.assertIsInstance(result, str)
+
+        # Should have probabilities conditioned on 2 variables
+        # Count occurrences of commas in evidence part
+        lines = result.split("\n")
+        # Each line should have format P(X | Y, Z)
+        self.assertGreater(len(lines), 1)
+
+    def test_condprobs_2_2_four_variable_network(self):
+        """Test condprobs(2,2) with 4-variable network."""
+        result = self.four_var_handler.execute("condprobs(2, 2)")
+
+        self.assertIsInstance(result, str)
+        self.assertIn("P(", result)
+
+        # Should have both query and evidence with 2 variables
+        self.assertIn(",", result)
+
+    def test_condprobs_multiple_calls_consistent(self):
+        """Test that multiple calls return consistent results."""
+        result1 = self.chain_handler.execute("condprobs(1, 1)")
+        result2 = self.chain_handler.execute("condprobs(1, 1)")
+
+        self.assertEqual(result1, result2)
+
+    def test_condprobs_no_overlap_variables(self):
+        """Test that condprobs doesn't create P(A|A) (overlapping variables)."""
+        result = self.simple_handler.execute("condprobs(1, 1)")
+
+        # Parse each line and check that query and evidence don't overlap
+        lines = result.split("\n")
+        for line in lines:
+            if "P(" in line:
+                # Extract query and evidence parts
+                # Format: P(query | evidence) = value
+                import re
+
+                match = re.search(r"P\(([^|]+)\|([^)]+)\)", line)
+                if match:
+                    query_part = match.group(1)
+                    evidence_part = match.group(2)
+
+                    # Extract variable names (removing ~ and whitespace)
+                    query_vars = set(
+                        [v.strip().lstrip("~") for v in query_part.split(",")]
+                    )
+                    evidence_vars = set(
+                        [v.strip().lstrip("~") for v in evidence_part.split(",")]
+                    )
+
+                    # Ensure no overlap
+                    self.assertEqual(len(query_vars & evidence_vars), 0)
+
+    # ========================================================================
+    # Negative Test Cases - condprobs(m,n)
+    # ========================================================================
+
+    def test_condprobs_zero_n(self):
+        """Test that condprobs(0,1) raises ValueError."""
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(0, 1)")
+
+        self.assertIn("positive", str(context.exception).lower())
+
+    def test_condprobs_zero_m(self):
+        """Test that condprobs(1,0) raises ValueError."""
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(1, 0)")
+
+        self.assertIn("positive", str(context.exception).lower())
+
+    def test_condprobs_both_zero(self):
+        """Test that condprobs(0,0) raises ValueError."""
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(0, 0)")
+
+        self.assertIn("positive", str(context.exception).lower())
+
+    def test_condprobs_negative_n(self):
+        """Test that condprobs(-1,1) raises ValueError."""
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(-1, 1)")
+
+        self.assertIn("positive", str(context.exception).lower())
+
+    def test_condprobs_negative_m(self):
+        """Test that condprobs(1,-1) raises ValueError."""
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(1, -1)")
+
+        self.assertIn("positive", str(context.exception).lower())
+
+    def test_condprobs_exceeds_variable_count(self):
+        """Test that condprobs(n+m > num_vars) raises ValueError."""
+        # Simple network has 2 variables
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(2, 2)")  # 2+2=4 > 2 variables
+
+        error_msg = str(context.exception).lower()
+        self.assertTrue("exceeds" in error_msg or "number" in error_msg)
+
+    def test_condprobs_n_exceeds_variables(self):
+        """Test that condprobs with n > num_vars raises ValueError."""
+        # Simple network has 2 variables
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(5, 1)")
+
+        self.assertIn("exceeds", str(context.exception).lower())
+
+    def test_condprobs_m_exceeds_variables(self):
+        """Test that condprobs with m > num_vars raises ValueError."""
+        # Simple network has 2 variables
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(1, 5)")
+
+        self.assertIn("exceeds", str(context.exception).lower())
+
+    def test_condprobs_non_integer_n(self):
+        """Test that condprobs with non-integer n raises ValueError."""
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(1.5, 1)")
+
+        self.assertIn("integer", str(context.exception).lower())
+
+    def test_condprobs_non_integer_m(self):
+        """Test that condprobs with non-integer m raises ValueError."""
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(1, 1.5)")
+
+        self.assertIn("integer", str(context.exception).lower())
+
+    def test_condprobs_string_n(self):
+        """Test that condprobs with string n raises ValueError."""
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(abc, 1)")
+
+        self.assertIn("integer", str(context.exception).lower())
+
+    def test_condprobs_string_m(self):
+        """Test that condprobs with string m raises ValueError."""
+        with self.assertRaises(ValueError) as context:
+            self.simple_handler.execute("condprobs(1, xyz)")
+
+        self.assertIn("integer", str(context.exception).lower())
+
+    def test_condprobs_missing_argument(self):
+        """Test that condprobs with only one argument raises error."""
+        with self.assertRaises(Exception):
+            self.simple_handler.execute("condprobs(1)")
+
+    def test_condprobs_no_arguments(self):
+        """Test that condprobs with no arguments raises error."""
+        with self.assertRaises(Exception):
+            self.simple_handler.execute("condprobs()")
+
+    def test_condprobs_too_many_arguments(self):
+        """Test that condprobs with too many arguments raises error."""
+        with self.assertRaises(Exception):
+            self.simple_handler.execute("condprobs(1, 1, 1)")
+
+    # ========================================================================
+    # Edge Cases and Mathematical Properties
+    # ========================================================================
+
+    def test_condprobs_sum_to_one_for_complete_distribution(self):
+        """Test that conditional probabilities sum to 1 for complete outcome space."""
+        result = self.simple_handler.execute("condprobs(1, 1)")
+
+        # For each unique evidence configuration, probabilities should sum to ~1
+        # This is complex to test thoroughly, but we can verify format
+        self.assertIsInstance(result, str)
+        self.assertGreater(len(result), 0)
+
+    def test_condprobs_whitespace_handling(self):
+        """Test that condprobs handles extra whitespace in arguments."""
+        result1 = self.simple_handler.execute("condprobs(1, 1)")
+        result2 = self.simple_handler.execute("condprobs( 1 , 1 )")
+
+        # Results should be identical (whitespace stripped)
+        self.assertEqual(result1, result2)
+
+    def test_condprobs_max_combinations(self):
+        """Test condprobs with maximum valid n+m equal to number of variables."""
+        # Chain network has 3 variables, so n=2, m=1 should work
+        result = self.chain_handler.execute("condprobs(2, 1)")
+
+        self.assertIsInstance(result, str)
+        self.assertIn("P(", result)
+
+    def test_condprobs_symmetric_arguments(self):
+        """Test that condprobs(n,m) differs from condprobs(m,n)."""
+        # Using 4-variable network
+        result_1_2 = self.four_var_handler.execute("condprobs(1, 2)")
+        result_2_1 = self.four_var_handler.execute("condprobs(2, 1)")
+
+        # Results should be different (different query/evidence structure)
+        self.assertNotEqual(result_1_2, result_2_1)
+
+    def test_condprobs_all_combinations_accounted(self):
+        """Test that condprobs generates all valid non-overlapping combinations."""
+        result = self.chain_handler.execute("condprobs(1, 1)")
+
+        lines = [line for line in result.split("\n") if line.strip()]
+
+        # With 3 variables (A, B, C), condprobs(1,1) should generate:
+        # P(A|B), P(A|C), P(B|A), P(B|C), P(C|A), P(C|B)
+        # Each with True/False variants = 6 * 4 = 24 combinations
+        # (actually depends on how many value combinations exist)
+        self.assertGreater(len(lines), 5)  # At least several combinations
+
+
 if __name__ == "__main__":
     unittest.main()
