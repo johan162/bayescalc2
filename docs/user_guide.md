@@ -544,6 +544,35 @@ Error: Expected variable name after '|'
 
 ## Appendix A: Complete Command Reference
 
+### Initialization
+
+#### `load`
+
+**Purpose**: Load a new network from a file
+
+**Syntax**: `load(filename)`
+
+#### Features
+- **Tab Completion**: File paths support tab completion for easy navigation
+- **Automatic Reload**: All internal state (queries, inference engine, completers) are automatically updated
+- **Error Handling**: Clear error messages for missing or invalid files
+- **Path Expansion**: Supports `~` for home directory expansion
+
+#### Basic Usage
+```
+>> load(examples/rain_sprinkler_grass.net)
+Successfully loaded network from: examples/rain_sprinkler_grass.net
+Variables (3): GrassWet, Rain, Sprinkler
+```
+
+#### Notes
+
+- The previous network state is completely replaced
+- All queries and computations reference the new network after loading
+- File paths are relative to the current working directory where BayesCalc2 was launched
+- Only `.net` files appear in tab completion suggestions (directories also shown for navigation)
+
+
 ### Probability Queries
 
 #### Basic Probability Syntax
@@ -562,8 +591,11 @@ Error: Expected variable name after '|'
 ### Network Structure Commands
 
 #### `showGraph()`
+
 **Purpose**: Display ASCII representation of network structure
+
 **Output**: Tree-like visualization showing parent-child relationships
+
 **Example**:
 ```
 >> showGraph()
@@ -574,9 +606,13 @@ Temp
 ```
 
 #### `parents(Variable)`
+
 **Purpose**: List parent variables of specified variable
+
 **Parameters**: Variable name
+
 **Returns**: Set of parent variable names
+
 **Example**: 
 ```
 >> parents(GrassWet)
@@ -584,9 +620,13 @@ Parents of GrassWet: {Rain, Sprinkler}
 ```
 
 #### `children(Variable)`  
+
 **Purpose**: List child variables of specified variable
+
 **Parameters**: Variable name
+
 **Returns**: Set of child variable names
+
 **Example**:
 ```
 >> children(Rain)
@@ -594,9 +634,13 @@ Children of Rain: {Sprinkler, GrassWet}
 ```
 
 #### `ls` / `vars`
+
 **Purpose**: List all variables with their types and domains
+
 **Aliases**: `ls`, `vars`
+
 **Output**: Formatted table of variable information
+
 **Example**:
 ```
 >> ls
@@ -606,12 +650,17 @@ Rain        | Discrete   | True, False
 Weather     | Discrete   | Sunny, Rainy, Cloudy
 ```
 
+
 ### Probability Tables
 
 #### `printCPT(Variable)`
+
 **Purpose**: Display conditional probability table for specified variable
+
 **Parameters**: Variable name
+
 **Output**: Three-column table (Child | Parents | Probability)
+
 **Example**:
 ```
 >> printCPT(GrassWet)
@@ -624,18 +673,27 @@ GrassWet | Rain=False, Sprinkler=False| 0.10
 ```
 
 #### `printJPT()`
+
 **Purpose**: Display complete joint probability table
+
 **Warning**: Exponentially large for big networks
+
 **Output**: All possible variable assignments with probabilities
+
 **Use**: Small networks only (< 10 variables recommended)
 
 ### Independence Testing
 
 #### `isindependent(Variable1, Variable2)`
+
 **Purpose**: Test marginal independence between two variables
+
 **Parameters**: Two variable names
+
 **Returns**: `True` if independent, `False` otherwise
+
 **Mathematical Test**: P(A,B) = P(A) × P(B)
+
 **Example**:
 ```
 >> isindependent(Rain, Sprinkler)
@@ -643,10 +701,15 @@ True
 ```
 
 #### `iscondindependent(Variable1, Variable2 | ConditioningSet)`
+
 **Purpose**: Test conditional independence
+
 **Syntax**: `iscondindependent(A, B | C, D, ...)`
+
 **Returns**: `True` if conditionally independent
+
 **Mathematical Test**: P(A,B|C) = P(A|C) × P(B|C)
+
 **Example**:
 ```
 >> iscondindependent(Rain, GrassWet | Sprinkler)
@@ -656,10 +719,15 @@ False
 ### Information Theory
 
 #### `entropy(Variable)`
+
 **Purpose**: Compute Shannon entropy of variable
+
 **Formula**: H(X) = -∑ P(x) log₂ P(x)
+
 **Units**: bits
+
 **Range**: [0, log₂(|domain|)]
+
 **Example**:
 ```
 >> entropy(Rain)
@@ -667,10 +735,15 @@ False
 ```
 
 #### `conditional_entropy(Variable1 | Variable2)`
+
 **Purpose**: Compute conditional entropy
+
 **Syntax**: `conditional_entropy(X | Y)`
+
 **Formula**: H(X|Y) = -∑∑ P(x,y) log₂ P(x|y)
+
 **Interpretation**: Average uncertainty in X given Y
+
 **Example**:
 ```
 >> conditional_entropy(Rain | GrassWet)
@@ -678,10 +751,15 @@ False
 ```
 
 #### `mutual_information(Variable1, Variable2)`
+
 **Purpose**: Compute mutual information between variables
+
 **Formula**: I(X;Y) = H(X) - H(X|Y) = H(Y) - H(Y|X)
+
 **Range**: [0, min(H(X), H(Y))]
+
 **Interpretation**: Information shared between variables
+
 **Example**:
 ```
 >> mutual_information(Rain, GrassWet)
@@ -691,26 +769,39 @@ False
 ### Advanced Probability Commands
 
 #### `marginals(N)`
+
 **Purpose**: Generate marginal probabilities for N variables
+
 **Parameters**: Number of variables to include
+
 **Output**: All marginal probability combinations
+
 **Use**: Systematic probability analysis
 
 #### `condprobs(N, M)`  
+
 **Purpose**: Generate conditional probabilities
+
 **Parameters**: N variables conditioned on M variables
+
 **Output**: All conditional probability combinations
+
 **Use**: Systematic conditional analysis
 
 ### Utility Commands
 
 #### `help`
+
 **Purpose**: Display help message with command summary
+
 **Aliases**: `help`, `?`
+
 **Output**: Formatted command reference
 
 #### `exit`
+
 **Purpose**: Exit the interactive session
+
 **Aliases**: `exit`, `quit`, Ctrl-C, Ctrl-D
 
 ### Command Syntax Rules
