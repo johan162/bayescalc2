@@ -9,7 +9,7 @@ description = "Bayesian network calculator v2"
 authors = [ { name = "ljp" } ]
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "MIT" }
+license = "MIT"
 dependencies = [
     "prompt_toolkit>=3.0.0",
     "numpy>=2.3.3",
