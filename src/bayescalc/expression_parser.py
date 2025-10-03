@@ -16,37 +16,47 @@ class ExpressionParser:
     def can_evaluate(self, expr_str: str) -> bool:
         """
         Checks if the given string could potentially be evaluated as a mathematical expression.
-        
+
         This method returns True if the expression contains:
         - Probability queries (P(...))
         - Mathematical operators (+, -, *, /, parentheses)
         - Mathematical function names (log10, sqrt, exp, sin, cos, tan, log, abs, pow)
         - Numbers
-        
+
         Returns:
             bool: True if the expression could be evaluated, False otherwise
         """
         expr_str = expr_str.strip()
-        
+
         # Check for probability queries
         if "P(" in expr_str:
             return True
-        
+
         # Check for mathematical operators (but ignore standalone parentheses which are for commands)
         if any(op in expr_str for op in ["+", "-", "*", "/"]):
             return True
-        
+
         # Check for mathematical functions
-        math_functions = ["log10", "log", "sqrt", "exp", "sin", "cos", "tan", "abs", "pow"]
+        math_functions = [
+            "log10",
+            "log",
+            "sqrt",
+            "exp",
+            "sin",
+            "cos",
+            "tan",
+            "abs",
+            "pow",
+        ]
         for func in math_functions:
             if func + "(" in expr_str:
                 return True
-        
+
         # Check if it looks like a pure numeric expression (numbers and parentheses)
         # This handles cases like "(1 + 2)" or "3.14"
-        if re.match(r'^[\d\s+\-*/().]+$', expr_str):
+        if re.match(r"^[\d\s+\-*/().]+$", expr_str):
             return True
-        
+
         return False
 
     def evaluate(self, expr_str: str):
@@ -68,13 +78,15 @@ class ExpressionParser:
 
         # Find all probability queries in the expression
         prob_queries = prob_query_pattern.findall(expr_str)
-        
+
         # If there are no probability queries, treat it as a pure mathematical expression
         if not prob_queries:
             try:
                 return self._safe_eval(expr_str)
             except Exception as e:
-                raise ValueError(f"Error evaluating mathematical expression '{expr_str}': {str(e)}")
+                raise ValueError(
+                    f"Error evaluating mathematical expression '{expr_str}': {str(e)}"
+                )
 
         # Create a map of query strings to placeholders to avoid collisions
         placeholders = {}
