@@ -151,6 +151,7 @@ options:
 network          = { statement } ;
 statement        = variable_decl | cpt_block ;
 variable_decl    = "variable" identifier [ domain_spec ] ;
+boolean_decl     = "boolean" identifier ;
 domain_spec      = "{" identifier_list "}" ;
 identifier_list  = identifier { "," identifier } ;
 
@@ -185,7 +186,7 @@ variable VariableName {value1, value2, ...}
 
 #### Boolean Variables (Shorthand)
 ```
-variable BooleanVar  # Automatically gets domain {True, False}
+boolean BooleanVar  # Automatically gets domain {True, False}
 ```
 
 #### Examples
