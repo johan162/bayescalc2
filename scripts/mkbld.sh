@@ -153,10 +153,10 @@ if [ "$DRY_RUN" = false ]; then
 fi
 
 # Step 1: Run tests with coverage
-execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-fail-under=65" "Running tests with coverage"
+execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-fail-under=80" "Running tests with coverage"
 
 # Step 2: Static analysis with flake8
-execute_cmd "python -m flake8 src/bayescalc tests/ --max-line-length=100 --extend-ignore=E203,W503,E501,E402" "Running flake8 static analysis"
+execute_cmd "python -m flake8 src/bayescalc tests/ --max-line-length=120 --extend-ignore=E203,W503,E501,E402" "Running flake8 static analysis"
 
 # Step 3: Type checking with mypy
 execute_cmd "python -m mypy src/bayescalc --ignore-missing-imports" "Running mypy type checking"
