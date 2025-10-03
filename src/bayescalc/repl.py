@@ -77,7 +77,7 @@ class REPL:
                     continue
 
                 # Try to handle it as a probability expression first
-                if line.startswith("P("):
+                if line.startswith("P(") or "P(" in line:
                     try:
                         # First try to evaluate it as a mathematical expression
                         if any(op in line for op in ["+", "-", "*", "/", "(", ")"]):
