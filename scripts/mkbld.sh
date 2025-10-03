@@ -25,6 +25,10 @@ print_success() {
     echo -e "${GREEN}✓${NC} ${1}"
 }
 
+print_success_colored() {
+    echo -e "${GREEN}✓ ${1}${NC}"
+}
+
 print_error() {
     echo -e "${RED}✗${NC} ${1}" >&2
 }
@@ -174,15 +178,15 @@ execute_cmd "python -m build" "Building package"
 execute_cmd "python -m twine check dist/*" "Validating package with twine"
 
 if [ "$DRY_RUN" = false ]; then
-    echo ""
-    echo "=========================================="
-    print_success "Build completed successfully!"
-    echo "=========================================="
+    print_success_colored ""
+    print_success_colored "=========================================="
+    print_success_colored "Build completed successfully!"
+    print_success_colored "=========================================="
     echo "Built packages:"
     ls -la dist/
     echo ""
     echo "Coverage report generated in htmlcov/index.html"
 else
-    echo ""
+    print_warning ""
     print_warning "DRY-RUN completed. No commands were executed."
 fi
