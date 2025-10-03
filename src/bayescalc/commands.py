@@ -5,16 +5,24 @@ This module implements the utility commands for the Bayesian Network calculator.
 import math
 import numpy as np
 import re
-from typing import Dict, List, Set
+import os
+from typing import Dict, List, Set, Callable, Optional
 
 from .network_model import BayesianNetwork
 from .inference import Inference
+from .lexer import Lexer
+from .parser import Parser
 
 
 class CommandHandler:
-    def __init__(self, network: BayesianNetwork):
+    def __init__(
+        self,
+        network: BayesianNetwork,
+        reload_callback: Optional[Callable[[BayesianNetwork], None]] = None,
+    ):
         self.network = network
         self.inference = Inference(network)
+        self.reload_callback = reload_callback
         self._initialize_command_registry()
 
     def _initialize_command_registry(self):
@@ -147,6 +155,15 @@ class CommandHandler:
                 "arg_count": 2,
                 "validate_args": True,
             },
+            "load": {
+                "aliases": [],
+                "handler": self.load_network,
+                "help": "load(filename) - Load a new Bayesian network from a file",
+                "requires_args": True,
+                "special_parsing": False,
+                "arg_count": 1,
+                "validate_args": True,
+            },
         }
 
         # Create alias lookup table
@@ -155,6 +172,30 @@ class CommandHandler:
             self.alias_to_command[cmd_name] = cmd_name
             for alias in cmd_info["aliases"]:
                 self.alias_to_command[alias] = cmd_name
+
+    def is_command(self, command_str: str) -> bool:
+        """
+        Check if the given string looks like a command from the command registry.
+
+        Args:
+            command_str: The string to check
+
+        Returns:
+            bool: True if it matches a known command pattern
+        """
+        command_str = command_str.strip()
+
+        # Check if it's a command without arguments
+        if command_str in self.alias_to_command:
+            return True
+
+        # Check if it matches command(args) pattern
+        match = re.match(r"(\w+)\(", command_str)
+        if match:
+            command = match.group(1)
+            return command in self.alias_to_command
+
+        return False
 
     def execute(self, command_str: str):
         """Parses and executes a command using the command registry."""
@@ -768,14 +809,70 @@ class CommandHandler:
 
         return "\n".join(lines)
 
+    def load_network(self, filename: str) -> str:
+        """
+        Load a new Bayesian network from a file.
+
+        Args:
+            filename: Path to the network file (.net)
+
+        Returns:
+            Success message with network details
+
+        Raises:
+            FileNotFoundError: If the file doesn't exist
+            ValueError: If the file cannot be parsed
+        """
+        filename = filename.strip()
+
+        # Expand user home directory if needed
+        filename = os.path.expanduser(filename)
+
+        # Check if file exists
+        if not os.path.exists(filename):
+            raise FileNotFoundError(f"Network file not found: {filename}")
+
+        try:
+            # Read the file
+            with open(filename, "r") as f:
+                network_str = f.read()
+
+            # Parse the network
+            lexer = Lexer(network_str)
+            tokens = lexer.tokenize()
+            parser = Parser(tokens)
+            new_network = parser.parse()
+
+            # Update the network and inference engine
+            self.network = new_network
+            self.inference = Inference(new_network)
+
+            # Notify the REPL to update its references if callback is provided
+            if self.reload_callback:
+                self.reload_callback(new_network)
+
+            # Generate success message
+            num_vars = len(new_network.variables)
+            var_names = ", ".join(sorted(new_network.variables.keys()))
+
+            return (
+                f"Successfully loaded network from: {filename}\n"
+                f"Variables ({num_vars}): {var_names}"
+            )
+
+        except (SyntaxError, ValueError) as e:
+            raise ValueError(f"Error parsing network file '{filename}': {e}")
+        except Exception as e:
+            raise ValueError(f"Error loading network file '{filename}': {e}")
+
 
 if __name__ == "__main__":
     # Example usage for testing
-    from .lexer import Lexer
-    from .parser import Parser
+    # from .lexer import Lexer
+    # from .parser import Parser
 
     example_net = """
-    variable Rain {True, False}
+    boolean Rain
     variable Sprinkler {On, Off}
     variable GrassWet {Yes, No}
 

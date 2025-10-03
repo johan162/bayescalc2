@@ -6,6 +6,7 @@ using the prompt_toolkit library.
 from prompt_toolkit.completion import Completer, Completion
 from .network_model import BayesianNetwork
 import re
+import os
 
 
 class PromptToolkitCompleter(Completer):
@@ -25,6 +26,7 @@ class PromptToolkitCompleter(Completer):
             "mutual_information(",
             "marginals(",
             "condprobs(",
+            "load(",
             "help",
             "exit",
             "ls",
@@ -120,6 +122,48 @@ class PromptToolkitCompleter(Completer):
                 for var_name in self.network.variables:
                     if var_name.startswith(current_arg):
                         yield Completion(var_name, start_position=-len(current_arg))
+                return
+
+            # File path completion for load command
+            if command_name == "load":
+                current_path = args_part.strip()
+
+                # Remove quotes if present
+                if current_path.startswith('"') or current_path.startswith("'"):
+                    current_path = current_path[1:]
+
+                # Expand user home directory
+                current_path = os.path.expanduser(current_path)
+
+                # Get directory and file prefix
+                if current_path == "":
+                    search_dir = "."
+                    prefix = ""
+                elif os.path.isdir(current_path):
+                    search_dir = current_path
+                    prefix = ""
+                else:
+                    search_dir = os.path.dirname(current_path) or "."
+                    prefix = os.path.basename(current_path)
+
+                # Find matching files and directories
+                try:
+                    if os.path.isdir(search_dir):
+                        for entry in os.listdir(search_dir):
+                            if entry.startswith(prefix) or prefix == "":
+                                full_path = os.path.join(search_dir, entry)
+
+                                # Only show .net files and directories
+                                if os.path.isdir(full_path):
+                                    completion_text = entry + "/"
+                                    yield Completion(
+                                        completion_text, start_position=-len(prefix)
+                                    )
+                                elif entry.endswith(".net"):
+                                    yield Completion(entry, start_position=-len(prefix))
+                except (OSError, PermissionError):
+                    # Ignore errors accessing directories
+                    pass
                 return
 
         # Command completion (when not inside a P() query or command arguments)

@@ -33,7 +33,9 @@ class REPL:
     def __init__(self, network: BayesianNetwork):
         self.network = network
         self.query_parser = QueryParser(network)
-        self.command_handler = CommandHandler(network)
+        self.command_handler = CommandHandler(
+            network, reload_callback=self._reload_network
+        )
         self.expression_parser = ExpressionParser(self.query_parser)
 
         # Type annotation to allow both PromptToolkitCompleter and None
@@ -56,6 +58,19 @@ class REPL:
         else:
             self.session = None
 
+    def _reload_network(self, new_network: BayesianNetwork):
+        """Callback to update all internal references when network is reloaded."""
+        self.network = new_network
+        self.query_parser = QueryParser(new_network)
+        self.expression_parser = ExpressionParser(self.query_parser)
+
+        # Update completer with new network
+        if PROMPT_TOOLKIT_AVAILABLE and self.completer:
+            self.completer = PromptToolkitCompleter(new_network)
+            # Update the session's completer
+            if self.session:
+                self.session.completer = self.completer
+
     def run(self):
         """Starts the REPL loop."""
         if not PROMPT_TOOLKIT_AVAILABLE:
@@ -76,6 +91,16 @@ class REPL:
                     self.print_help()
                     continue
 
+                # Check if it's a known command first (before trying expression evaluation)
+                # This prevents commands like load(...) from being treated as mathematical expressions
+                if self.command_handler.is_command(line):
+                    try:
+                        result = self.command_handler.execute(line)
+                        print(result)
+                    except (ValueError, SyntaxError, KeyError) as e:
+                        print(f"Error: {e}", file=sys.stderr)
+                    continue
+
                 # Check if it can be evaluated as an expression (mathematical or probability)
                 if self.expression_parser.can_evaluate(line):
                     try:
@@ -92,12 +117,13 @@ class REPL:
                         print(f"Error: {e}", file=sys.stderr)
                     continue
 
-                # Handle the line as a command
-                try:
-                    result = self.command_handler.execute(line)
-                    print(result)
-                except (ValueError, SyntaxError, KeyError) as e:
-                    print(f"Error: {e}", file=sys.stderr)
+                # If we reach here, it's neither a command nor an expression
+                # This should rarely happen, but provide a helpful error message
+                print(
+                    f"Error: Unknown command or invalid expression: {line}",
+                    file=sys.stderr,
+                )
+                print("Type 'help' for a list of available commands.", file=sys.stderr)
 
             except (ValueError, SyntaxError, KeyError) as e:
                 print(f"Error: {e}", file=sys.stderr)
