@@ -11,7 +11,7 @@ class TestParser(unittest.TestCase):
 
     def test_full_network_parsing(self):
         net_str = """
-        variable Rain {True, False}
+        boolean Rain
         variable Sprinkler {On, Off}
         variable GrassWet {Yes, No}
 

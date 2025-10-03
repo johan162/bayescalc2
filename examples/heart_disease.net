@@ -25,10 +25,10 @@
 # - Excellent for explaining inference in medical contexts
 
 variable Age {Young, Middle, Old}
-variable Smoking {True, False}
-variable Obesity {True, False}
-variable HighBP {True, False}
-variable HeartDisease {True, False}
+boolean Smoking
+boolean Obesity
+boolean HighBP
+boolean HeartDisease
 variable ChestPain {None, Mild, Severe}
 variable Fatigue {None, Mild, Severe}
 

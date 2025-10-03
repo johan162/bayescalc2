@@ -18,9 +18,9 @@
 # - Models marketing funnel process
 # - Good for demonstrating basic forward inference
 
-variable AdExposure {True, False}
-variable SiteVisit {True, False}
-variable Conversion {True, False}
+boolean AdExposure
+boolean SiteVisit
+boolean Conversion
 
 AdExposure {
     P(True) = 0.3

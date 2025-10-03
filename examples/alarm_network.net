@@ -19,11 +19,11 @@
 # - Models noisy relationships between events
 # - Common introductory example with intuitive scenario
 
-variable Burglary {True, False}
-variable Earthquake {True, False}
-variable Alarm {True, False}
-variable JohnCalls {True, False}
-variable MaryCalls {True, False}
+boolean Burglary
+boolean Earthquake
+boolean Alarm
+boolean JohnCalls
+boolean MaryCalls
 
 Burglary {
     P(True) = 0.001

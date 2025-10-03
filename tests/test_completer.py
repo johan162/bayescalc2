@@ -42,7 +42,7 @@ class TestCompleter(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         net_str = """
-        variable Rain {True, False}
+        boolean Rain
         variable Sprinkler {On, Off}
         variable GrassWet {Yes, No}
         """

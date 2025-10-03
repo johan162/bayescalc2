@@ -3,6 +3,7 @@ This module implements the parser for the Bayesian Network input format.
 It takes a list of tokens from the lexer and builds a BayesianNetwork object.
 """
 
+import warnings
 from typing import List, Tuple
 
 from .lexer import Token, TokenType
@@ -37,6 +38,8 @@ class Parser:
         while self._peek().type != TokenType.EOF:
             if self._peek().type == TokenType.VARIABLE:
                 self._parse_variable_declaration()
+            elif self._peek().type == TokenType.BOOLEAN:
+                self._parse_boolean_declaration()
             elif self._peek().type == TokenType.IDENTIFIER:
                 self._parse_cpt_block()
             else:
@@ -49,7 +52,8 @@ class Parser:
     def _parse_variable_declaration(self):
         """Parses a variable declaration."""
         self._consume(TokenType.VARIABLE)
-        name = self._consume(TokenType.IDENTIFIER).value
+        name_token = self._consume(TokenType.IDENTIFIER)
+        name = name_token.value
 
         # Check if domain is explicitly specified
         if self._peek().type == TokenType.LBRACE:
@@ -67,12 +71,32 @@ class Parser:
                     break
 
             self._consume(TokenType.RBRACE)
+
+            # Check if this is an explicit {True, False} domain and warn
+            if set(domain) == {"True", "False"}:
+                warnings.warn(
+                    f"Variable '{name}' at line {name_token.line} uses explicit {{True, False}} domain. "
+                    f"Consider using 'boolean {name}' instead for clearer boolean variable declaration.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
         else:
             # If domain is not specified, default to Boolean
             domain = ["True", "False"]
 
         # Add variable to the network
         self.network.add_variable(name, tuple(domain))
+
+    def _parse_boolean_declaration(self):
+        """Parses a boolean variable declaration."""
+        self._consume(TokenType.BOOLEAN)
+        name = self._consume(TokenType.IDENTIFIER).value
+
+        # Boolean variables always have {True, False} domain
+        domain = ("True", "False")
+
+        # Add variable to the network
+        self.network.add_variable(name, domain)
 
     def _parse_cpt_block(self):
         variable_name = self._consume(TokenType.IDENTIFIER).value

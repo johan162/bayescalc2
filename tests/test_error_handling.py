@@ -59,7 +59,7 @@ class TestErrorHandling(unittest.TestCase):
         with self.assertRaises(Exception):
             parse_string(
                 """
-            variable A {True, False}
+            boolean A
 
             A {
                 # No probability statements

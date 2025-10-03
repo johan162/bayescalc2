@@ -15,8 +15,8 @@ class TestCommandsAndQueries(unittest.TestCase):
     def setUpClass(cls):
         # Using the proper network format
         net_str = """
-        variable A {True, False}
-        variable B {True, False}
+        boolean A
+        boolean B
 
         A {
             P(True) = 0.5

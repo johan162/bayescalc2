@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 class TokenType(Enum):
     VARIABLE = auto()
+    BOOLEAN = auto()
     IDENTIFIER = auto()
     LBRACE = auto()
     RBRACE = auto()
@@ -73,7 +74,8 @@ class Lexer:
 
         token_regex = {
             TokenType.VARIABLE: r"variable",
-            TokenType.PROBABILITY: r"P",
+            TokenType.BOOLEAN: r"boolean",
+            TokenType.PROBABILITY: r"P(?=\()",  # P only when followed by (
             TokenType.IDENTIFIER: r"[a-zA-Z_][a-zA-Z0-9_]*",
             TokenType.FLOAT: r"\d+\.\d+",
             TokenType.LBRACE: r"\{",
@@ -93,8 +95,9 @@ class Lexer:
                 if token_type == TokenType.IDENTIFIER:
                     if value == "variable":
                         token_type = TokenType.VARIABLE
-                    elif value == "P":
-                        token_type = TokenType.PROBABILITY
+                    elif value == "boolean":
+                        token_type = TokenType.BOOLEAN
+                    # Note: P followed by ( is already handled by PROBABILITY pattern
 
                 token = Token(token_type, value, self.line, self.column)
                 self.pos += len(value)

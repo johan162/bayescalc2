@@ -26,14 +26,14 @@
 # - Good for understanding diagnostic reasoning (from symptoms to causes)
 # - Small but representative expert system example
 
-variable VisitToAsia {True, False}
-variable Smoking {True, False}
-variable Tuberculosis {True, False}
-variable Cancer {True, False}
-variable TuberOrCancer {True, False}
-variable XRay {True, False}
-variable Dyspnoea {True, False}
-variable Bronchitis {True, False}
+boolean VisitToAsia
+boolean Smoking
+boolean Tuberculosis
+boolean Cancer
+boolean TuberOrCancer
+boolean XRay
+boolean Dyspnoea
+boolean Bronchitis
 
 VisitToAsia {
     P(True) = 0.01

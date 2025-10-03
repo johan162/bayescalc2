@@ -28,7 +28,7 @@ class TestBatchExecution(unittest.TestCase):
         from bayescalc.parser import Parser
 
         cls.example_net_str = """
-        variable Rain {True, False}
+        boolean Rain
         variable Sprinkler {On, Off}
         variable GrassWet {Yes, No}
 

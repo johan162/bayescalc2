@@ -23,8 +23,8 @@ class TestLsCommand(unittest.TestCase):
             with patch("sys.stdout", captured_output):
                 main()
             output = captured_output.getvalue()
-            # variable Rain {True, False}
-            # variable GrassWet {True, False}
+            # boolean Rain
+            # boolean GrassWet
             # ariable Sprinkler {True, False}
             self.assertIn("Variable    | Type       | States", output)
             self.assertIn("Rain        | Boolean    | True, False", output)

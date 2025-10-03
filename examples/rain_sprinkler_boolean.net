@@ -1,6 +1,6 @@
-variable Rain 
-variable GrassWet 
-variable Sprinkler 
+boolean Rain 
+boolean GrassWet 
+boolean Sprinkler 
 
 
 Rain {

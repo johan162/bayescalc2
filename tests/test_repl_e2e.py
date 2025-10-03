@@ -95,8 +95,8 @@ class TestReplLoop(unittest.TestCase):
 
         # Create a simple test network
         net_str = """
-        variable A {True, False}
-        variable B {True, False}
+        boolean A
+        boolean B
 
         A {
             P(True) = 0.6

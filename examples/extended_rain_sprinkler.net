@@ -20,10 +20,10 @@
 # - Good for explaining d-separation concepts
 # - Perfect for introducing conditional independence
 
-variable Cloudy {True, False}
-variable Rain {True, False}
-variable Sprinkler {True, False}
-variable GrassWet {True, False}
+boolean Cloudy
+boolean Rain
+boolean Sprinkler
+boolean GrassWet
 
 Cloudy {
     P(True) = 0.5
@@ -43,5 +43,5 @@ GrassWet | Rain, Sprinkler {
     P(True | True, True) = 0.99
     P(True | True, False) = 0.9
     P(True | False, True) = 0.9
-    P(True | False, False) = 0
+    P(True | False, False) = 0.0
 }

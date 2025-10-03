@@ -48,9 +48,9 @@ class TestCommandArgumentCompletion(unittest.TestCase):
         # Create a test network with the running.net variables
         net_str = """
         variable Temp {low,high}
-        variable JohnRun
-        variable MaryRun
-        variable Meet
+        boolean JohnRun
+        boolean MaryRun
+        boolean Meet
 
         Temp {
             P(low) = 0.4

@@ -10,9 +10,9 @@ class TestBooleanSyntax(unittest.TestCase):
     def setUp(self):
         # Define a simple Bayesian network with Boolean variables
         network_str = """
-        variable Rain
-        variable Sprinkler
-        variable GrassWet
+        boolean Rain
+        boolean Sprinkler
+        boolean GrassWet
 
         Rain {
             P(True) = 0.2

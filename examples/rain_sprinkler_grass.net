@@ -1,6 +1,6 @@
-variable Rain {True, False}
-variable GrassWet {True, False}
-variable Sprinkler {True, False}
+boolean Rain
+boolean GrassWet
+boolean Sprinkler
 
 
 Rain {

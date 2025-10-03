@@ -22,8 +22,8 @@ class TestMarginalsCommand(unittest.TestCase):
         # Classical medical test with 95% sensitivity and 94% specificity
         # and prevalence of 1%
         net_str = """
-        variable Sick {True, False}
-        variable Test {True, False}
+        boolean Sick
+        boolean Test
 
         Sick {
             P(True) = 0.01

@@ -16,10 +16,10 @@
 # - Good for demonstrating basic inference
 # - Independent causes leading to different diseases
 
-variable VisitAsia {True, False}
-variable Smoking {True, False}
-variable Tuberculosis {True, False}
-variable Cancer {True, False}
+boolean VisitAsia
+boolean Smoking
+boolean Tuberculosis
+boolean Cancer
 
 VisitAsia {
     P(True) = 0.01

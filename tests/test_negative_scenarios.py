@@ -39,7 +39,7 @@ class TestNegativeScenarios(unittest.TestCase):
         with self.assertRaises(ValueError):
             parse_string(
                 """
-            variable Duplicate {True, False}
+            boolean Duplicate
             variable Duplicate {Yes, No}
 
             Duplicate {
@@ -64,7 +64,7 @@ class TestNegativeScenarios(unittest.TestCase):
         with self.assertRaises(Exception):
             parse_string(
                 """
-            variable variable {True, False}
+            boolean variable
 
             variable {
                 P(True) = 0.5
@@ -103,7 +103,7 @@ class TestNegativeScenarios(unittest.TestCase):
         with self.assertRaises(ValueError):
             parse_string(
                 """
-            variable A {True, False}
+            boolean A
 
             A {
                 P(True) = 0.3
@@ -116,7 +116,7 @@ class TestNegativeScenarios(unittest.TestCase):
         with self.assertRaises(Exception):
             parse_string(
                 """
-            variable A {True, False}
+            boolean A
 
             A {
                 P(True) = NotANumber
@@ -167,7 +167,7 @@ class TestNegativeScenarios(unittest.TestCase):
         with self.assertRaises(Exception):
             parse_string(
                 """
-            variable A {True, False}
+            boolean A
 
             A {
                 P(True) 0.5
@@ -179,7 +179,7 @@ class TestNegativeScenarios(unittest.TestCase):
         with self.assertRaises(Exception):
             parse_string(
                 """
-            variable A {True, False}
+            boolean A
 
             A {
                 PTrue) = 0.5
@@ -191,7 +191,7 @@ class TestNegativeScenarios(unittest.TestCase):
         with self.assertRaises(Exception):
             parse_string(
                 """
-            variable A {True, False}
+            boolean A
 
             A {
                 P(True = 0.5

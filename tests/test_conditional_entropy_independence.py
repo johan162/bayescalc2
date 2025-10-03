@@ -24,8 +24,8 @@ class TestConditionalEntropy(unittest.TestCase):
         # Network 1: Independent variables (A ⊥ B)
         # H(A|B) should equal H(A) since they are independent
         cls.independent_net_str = """
-        variable A {True, False}
-        variable B {True, False}
+        boolean A
+        boolean B
 
         A {
             P(True) = 0.5
@@ -40,8 +40,8 @@ class TestConditionalEntropy(unittest.TestCase):
         # Network 2: Deterministic relationship
         # B is completely determined by A
         cls.deterministic_net_str = """
-        variable A {True, False}
-        variable B {True, False}
+        boolean A
+        boolean B
 
         A {
             P(True) = 0.5
@@ -56,9 +56,9 @@ class TestConditionalEntropy(unittest.TestCase):
         # Network 3: Rain-Sprinkler-GrassWet (classic example)
         # GrassWet depends on both Rain and Sprinkler
         cls.rain_net_str = """
-        variable Rain {True, False}
-        variable Sprinkler {True, False}
-        variable GrassWet {True, False}
+        boolean Rain
+        boolean Sprinkler
+        boolean GrassWet
 
         Rain {
             P(True) = 0.2
@@ -79,8 +79,8 @@ class TestConditionalEntropy(unittest.TestCase):
 
         # Network 4: Medical test example
         cls.medical_net_str = """
-        variable Sick {True, False}
-        variable Test {True, False}
+        boolean Sick
+        boolean Test
 
         Sick {
             P(True) = 0.01
@@ -260,8 +260,8 @@ class TestConditionalIndependence(unittest.TestCase):
 
         # Network 1: Simple independent variables
         cls.independent_net_str = """
-        variable A {True, False}
-        variable B {True, False}
+        boolean A
+        boolean B
 
         A {
             P(True) = 0.5
@@ -274,9 +274,9 @@ class TestConditionalIndependence(unittest.TestCase):
 
         # Network 2: Chain A → B → C (B d-separates A and C)
         cls.chain_net_str = """
-        variable A {True, False}
-        variable B {True, False}
-        variable C {True, False}
+        boolean A
+        boolean B
+        boolean C
 
         A {
             P(True) = 0.5
@@ -295,9 +295,9 @@ class TestConditionalIndependence(unittest.TestCase):
 
         # Network 3: Common cause A ← B → C (B d-separates A and C)
         cls.common_cause_net_str = """
-        variable A {True, False}
-        variable B {True, False}
-        variable C {True, False}
+        boolean A
+        boolean B
+        boolean C
 
         B {
             P(True) = 0.5
@@ -317,9 +317,9 @@ class TestConditionalIndependence(unittest.TestCase):
         # Network 4: V-structure (collider) A → C ← B
         # A and B are marginally independent but dependent given C
         cls.collider_net_str = """
-        variable A {True, False}
-        variable B {True, False}
-        variable C {True, False}
+        boolean A
+        boolean B
+        boolean C
 
         A {
             P(True) = 0.5
@@ -339,9 +339,9 @@ class TestConditionalIndependence(unittest.TestCase):
 
         # Network 5: Rain-Sprinkler-GrassWet (classic d-separation example)
         cls.rain_net_str = """
-        variable Rain {True, False}
-        variable Sprinkler {True, False}
-        variable GrassWet {True, False}
+        boolean Rain
+        boolean Sprinkler
+        boolean GrassWet
 
         Rain {
             P(True) = 0.2
@@ -585,8 +585,8 @@ class TestConditionalEntropyEdgeCases(unittest.TestCase):
 
         # Network with extreme probabilities (close to 0 or 1)
         cls.extreme_net_str = """
-        variable A {True, False}
-        variable B {True, False}
+        boolean A
+        boolean B
 
         A {
             P(True) = 0.99
@@ -633,8 +633,8 @@ class TestCondprobs(unittest.TestCase):
 
         # Network 1: Simple 2-variable network
         cls.simple_net_str = """
-        variable A {True, False}
-        variable B {True, False}
+        boolean A
+        boolean B
 
         A {
             P(True) = 0.6
@@ -648,9 +648,9 @@ class TestCondprobs(unittest.TestCase):
 
         # Network 2: 3-variable chain A → B → C
         cls.chain_net_str = """
-        variable A {True, False}
-        variable B {True, False}
-        variable C {True, False}
+        boolean A
+        boolean B
+        boolean C
 
         A {
             P(True) = 0.5
@@ -669,9 +669,9 @@ class TestCondprobs(unittest.TestCase):
 
         # Network 3: Rain-Sprinkler-GrassWet (3 variables with complex dependencies)
         cls.rain_net_str = """
-        variable Rain {True, False}
-        variable Sprinkler {True, False}
-        variable GrassWet {True, False}
+        boolean Rain
+        boolean Sprinkler
+        boolean GrassWet
 
         Rain {
             P(True) = 0.2
@@ -692,10 +692,10 @@ class TestCondprobs(unittest.TestCase):
 
         # Network 4: 4-variable network for testing larger combinations
         cls.four_var_net_str = """
-        variable A {True, False}
-        variable B {True, False}
-        variable C {True, False}
-        variable D {True, False}
+        boolean A
+        boolean B
+        boolean C
+        boolean D
 
         A {
             P(True) = 0.5

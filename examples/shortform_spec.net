@@ -1,0 +1,9 @@
+boolean A 
+boolean B 
+
+A { P(T) = 0.6 }
+
+B | A {
+   P(T | T) = 0.4
+   P(T | F) = 0.6
+}

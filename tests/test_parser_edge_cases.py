@@ -32,7 +32,7 @@ class TestParserEdgeCases(unittest.TestCase):
         """Test parsing with unusual whitespace."""
         network_str = """
 
-        variable   Rain   {   True  ,  False   }
+        boolean Rain
 
 
         Rain    {
@@ -65,7 +65,7 @@ class TestParserEdgeCases(unittest.TestCase):
         """Test that the parser correctly handles errors in CPT declarations."""
         # Missing probability value
         network_str = """
-        variable Rain {True, False}
+        boolean Rain
 
         Rain {
             P(True) =
@@ -81,7 +81,7 @@ class TestParserEdgeCases(unittest.TestCase):
         """Test handling of invalid probability values (outside 0-1 range)."""
         # Probability > 1
         network_str = """
-        variable Rain {True, False}
+        boolean Rain
 
         Rain {
             P(True) = 1.2
@@ -99,7 +99,7 @@ class TestParserEdgeCases(unittest.TestCase):
     def test_duplicate_variable_declaration(self):
         """Test handling of duplicate variable declarations."""
         network_str = """
-        variable Rain {True, False}
+        boolean Rain
         variable Rain {Yes, No}
         """
         lexer = Lexer(network_str)
@@ -111,7 +111,7 @@ class TestParserEdgeCases(unittest.TestCase):
     def test_unknown_variable_in_cpt(self):
         """Test handling of references to undeclared variables."""
         network_str = """
-        variable Rain {True, False}
+        boolean Rain
 
         Sunshine {
             P(True) = 0.7
@@ -126,7 +126,7 @@ class TestParserEdgeCases(unittest.TestCase):
     def test_unknown_value_in_cpt(self):
         """Test handling of references to undeclared variable values."""
         network_str = """
-        variable Rain {True, False}
+        boolean Rain
 
         Rain {
             P(Heavy) = 0.3
@@ -171,7 +171,7 @@ class TestParserEdgeCases(unittest.TestCase):
     def test_auto_completion(self):
         """Test auto-completion of probability tables."""
         network_str = """
-        variable Rain {True, False}
+        boolean Rain
 
         Rain {
             P(True) = 0.3
@@ -208,7 +208,7 @@ class TestParserEdgeCases(unittest.TestCase):
         """Test that comments are properly handled."""
         network_str = """
         # This is a comment
-        variable Rain {True, False} # This is another comment
+        boolean Rain # This is another comment
 
         # Comment before CPT
         Rain { # Comment inside block
@@ -228,7 +228,7 @@ class TestParserEdgeCases(unittest.TestCase):
     def test_very_small_probabilities(self):
         """Test handling of very small probability values."""
         network_str = """
-        variable Rare {True, False}
+        boolean Rare
 
         Rare {
             P(True) = 0.0000001

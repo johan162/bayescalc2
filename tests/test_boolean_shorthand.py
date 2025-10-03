@@ -22,8 +22,8 @@ class TestBooleanShorthandSyntax(unittest.TestCase):
     def test_boolean_shorthand_in_net_file(self):
         """Test that T/F shorthand works in network definitions."""
         network_str = """
-        variable Rain
-        variable Sprinkler
+        boolean Rain
+        boolean Sprinkler
 
         Rain {
             P(T) = 0.2

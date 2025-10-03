@@ -1,6 +1,6 @@
 # Medical test model using T/F shorthand notation
-variable Sick
-variable Test
+boolean Sick
+boolean Test
 
 Sick {
     P(T) = 0.01
