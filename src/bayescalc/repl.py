@@ -76,35 +76,28 @@ class REPL:
                     self.print_help()
                     continue
 
-                # Try to handle it as a probability expression first
-                if line.startswith("P(") or "P(" in line:
+                # Check if it can be evaluated as an expression (mathematical or probability)
+                if self.expression_parser.can_evaluate(line):
                     try:
-                        # First try to evaluate it as a mathematical expression
-                        if any(op in line for op in ["+", "-", "*", "/", "(", ")"]):
-                            result = self.expression_parser.evaluate(line)
-                            if hasattr(result, "probabilities"):  # It's a Factor object
-                                # Print the result as a distribution
-                                for assignment, prob in result.probabilities.items():
-                                    print(
-                                        f"  P({', '.join(assignment) if assignment else ''}) = {prob:.6f}"
-                                    )
-                            else:  # It's a scalar value
-                                print(f"  = {result:.6f}")
-                            continue
-                        else:
-                            # It's a simple probability query
-                            result = self.query_parser.parse_and_execute(line)
-                            # Format and print result factor
+                        result = self.expression_parser.evaluate(line)
+                        if hasattr(result, "probabilities"):  # It's a Factor object
+                            # Print the result as a distribution
                             for assignment, prob in result.probabilities.items():
                                 print(
                                     f"  P({', '.join(assignment) if assignment else ''}) = {prob:.6f}"
                                 )
+                        else:  # It's a scalar value
+                            print(f"  = {result:.6f}")
                     except ValueError as e:
                         print(f"Error: {e}", file=sys.stderr)
-                        continue
-                else:
+                    continue
+
+                # Handle the line as a command
+                try:
                     result = self.command_handler.execute(line)
                     print(result)
+                except (ValueError, SyntaxError, KeyError) as e:
+                    print(f"Error: {e}", file=sys.stderr)
 
             except (ValueError, SyntaxError, KeyError) as e:
                 print(f"Error: {e}", file=sys.stderr)
@@ -118,9 +111,16 @@ class REPL:
 Available commands:
   P(A, B | C=c, D=d)   - Compute conditional probability.
   Arithmetic Expressions - Compute with probabilities:
-    P(A)*P(B|A)/P(B)   - Bayes rule example
+    P(A=a)/P(B=b)      - Divide probabilities
     P(A=a)+P(A=b)      - Sum of probabilities
     P(A|B=b)*2-0.5     - Operations with constants
+  Mathematical Functions - Pure math or with probabilities:
+    log10(0.5)         - Base-10 logarithm
+    sqrt(2)            - Square root
+    exp(1)             - Exponential
+    sin(0), cos(0)     - Trigonometric functions
+    log10(P(A=a))      - Apply math functions to probabilities
+    sqrt(P(A=a)) * 2   - Combine math and probability operations
   printCPT(X)          - Print the Conditional Probability Table for variable X.
   printJPT()           - Print the full Joint Probability Table.
   parents(X)           - Show the parents of variable X.
