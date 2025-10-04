@@ -4,6 +4,7 @@ Purpose: A guide for developers contributing to the BayesCalc2 Bayesian Network 
 
 ## Table of Contents
 
+0. [Setup for Development](#setup-for-development)
 1. [Codebase Overview](#codebase-overview)
 2. [Architecture and Design](#architecture-and-design)
 3. [Testing Framework](#testing-framework)
@@ -15,6 +16,44 @@ Purpose: A guide for developers contributing to the BayesCalc2 Bayesian Network 
 9. [Debugging and Performance](#debugging-and-performance)
 10. [Release Process](#release-process)
 11. [Appendix A: Variable Elimination Algorithm](#appendix-a-variable-elimination-algorithm---detailed-implementation-guide)
+
+---
+
+## Setup for Development
+
+Steps to clone the repo and setup a working venv environment.
+
+### Installing `graphviz`:
+The bayescalc2 is using graphviz via its Python bindings
+
+- **MacOS:** `brew install graphviz`
+- **Linux Fedore:** `sudo dnf install grphviz`
+
+### Setting up Python venv
+
+1. Clone and create venv:
+   ```bash
+   git clone https://github.com/johan162/bayescalc2.git && cd bayescalc2
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+
+2. Install package in editable mode:
+   ```bash
+   pip install -e .
+   ```
+
+3. Install dev dependencies from `pyproject.toml`:
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+4. Verify installation:
+   ```bash
+   bayescalc --help
+   python -c "import bayescalc; print(bayescalc.__file__)"
+   ```
+
 
 ---
 
