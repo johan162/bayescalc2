@@ -185,7 +185,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 ### Development Setup
 
 ```bash
-git clone https://github.com/your-username/bayescalc2.git
+git clone https://github.com/johan162/bayescalc2.git
 cd bayescalc2
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
