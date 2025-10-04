@@ -28,6 +28,9 @@ The bayescalc2 is using graphviz via its Python bindings
 
 - **MacOS:** `brew install graphviz`
 - **Linux Fedore:** `sudo dnf install grphviz`
+- **Ubuntu:** `sudo apt-get install graphviz`
+
+
 
 ### Setting up Python venv
 
