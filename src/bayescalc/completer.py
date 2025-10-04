@@ -224,6 +224,11 @@ class PromptToolkitCompleter(Completer):
                         "layout=circo",
                         "rankdir=TB",
                         "rankdir=LR",
+                        "scale=1.0",
+                        "page_size=A3",
+                        "page_size=A4",
+                        "page_size=A5",
+                        "page_size=297x210",
                     ]
                     current_arg = args[-1] if args else ""
                     for option in options:
