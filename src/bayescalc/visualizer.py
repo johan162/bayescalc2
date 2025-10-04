@@ -29,7 +29,7 @@ class NetworkVisualizer:
         show_cpt: bool = True,
         layout: str = "dot",
         rankdir: str = "TB",
-        page_size: str = None,
+        page_size: str | None = None,
         scale: float = 1.0,
     ) -> str:
         """
@@ -99,9 +99,7 @@ class NetworkVisualizer:
                     else:
                         # Parse custom size: '297x210'
                         try:
-                            width_mm, height_mm = map(
-                                float, page_size.lower().split("x")
-                            )
+                            width_mm, height_mm = map(int, page_size.lower().split("x"))
                         except Exception:
                             raise ValueError(
                                 f"Invalid page_size '{page_size}'. Use 'A3', 'A4', 'A5' or 'WxH' in mm."
@@ -109,7 +107,7 @@ class NetworkVisualizer:
                     # Set page size in inches (1 inch = 25.4 mm)
                     width_in = width_mm / 25.4
                     height_in = height_mm / 25.4
-                    
+
                     # Apply scale to the graph size
                     if scale and scale != 1.0:
                         # Scale down the maximum size the graph can occupy
@@ -131,10 +129,11 @@ class NetworkVisualizer:
                     height_in = 11.69
                     default_graph_width = width_in * scale
                     default_graph_height = height_in * scale
-                    dot.attr("graph", size=f"{default_graph_width},{default_graph_height}!")
+                    dot.attr(
+                        "graph", size=f"{default_graph_width},{default_graph_height}!"
+                    )
                     dot.attr("graph", page=f"{width_in},{height_in}")
                     dot.attr("graph", center="true")
-
 
             # Add nodes with optional CPT tables
             for var_name in sorted(self.network.variables.keys()):

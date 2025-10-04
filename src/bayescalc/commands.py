@@ -915,7 +915,6 @@ class CommandHandler:
         # First argument is always the output file
         output_file = parts[0]
 
-
         # Parse optional arguments
         format_arg = None
         show_cpt = True
@@ -944,7 +943,9 @@ class CommandHandler:
                     try:
                         scale = float(value)
                     except ValueError:
-                        return f"Error: Invalid scale value '{value}'. Must be a number."
+                        return (
+                            f"Error: Invalid scale value '{value}'. Must be a number."
+                        )
 
         # Determine format from filename extension if not explicitly specified
         if format_arg is None:
