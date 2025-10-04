@@ -176,19 +176,7 @@ if [ "$CI_MODE" = false ]; then
 fi
 
 # Step 1: Run tests with coverage
-
-# Generate coverage XML for CI
-if [ "$CI_MODE" = true ]; then
-    echo -e "Generating coverage XML for CI..."
-    python -m pytest tests/ \
-        --cov=src/bayescalc \
-        --cov-report=xml \
-        --cov-report=term-missing \
-        --cov-fail-under=80
-else
-    execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-fail-under=80" "Running tests with coverage"
-fi
-
+execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-fail-under=80" "Running tests with coverage"
 
 # Step 2: Static analysis with flake8
 execute_cmd "python -m flake8 src/bayescalc tests/ --max-line-length=120 --extend-ignore=E203,W503,E501,E402" "Running flake8 static analysis"
