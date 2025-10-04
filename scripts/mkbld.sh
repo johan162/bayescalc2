@@ -156,6 +156,8 @@ if [ "$DRY_RUN" = true ]; then
 fi
 echo ""
 
+# If not in CI mode, ensure we are in a virtual environment
+print_step "Updating virtual environment if needed"
 if [ "$CI_MODE" = false ]; then
     # Step 0: Verify we are running in a virtual environment and if not try to activate one
     if [ "$DRY_RUN" = false ]; then
@@ -178,22 +180,38 @@ fi
 # Step 1: Run tests with coverage
 execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-report=xml --cov-fail-under=80" "Running tests with coverage"
 
+# Step 1b: Update coverage badge in README
+if [ "$CI_MODE" = false ] && [ "$DRY_RUN" = false ]; then
+    print_step "Updating coverage badge in README.md"
+    if [ -f "scripts/update_coverage_badge.sh" ]; then
+        ./scripts/update_coverage_badge.sh
+    else
+        print_warning "Coverage badge update script not found"
+    fi
+fi
+
 # Step 2: Static analysis with flake8
+print_step "Running static analysis with flake8"
 execute_cmd "python -m flake8 src/bayescalc tests/ --max-line-length=120 --extend-ignore=E203,W503,E501,E402" "Running flake8 static analysis"
 
 # Step 3: Type checking with mypy
+print_step "Running type checking with mypy"
 execute_cmd "python -m mypy src/bayescalc --ignore-missing-imports" "Running mypy type checking"
 
 # Step 4: Code formatting check with black
+print_step "Checking code formatting with black"
 execute_cmd "python -m black --check --diff src/bayescalc tests/" "Checking code formatting with black"
 
 # Step 5: Clean previous builds
+print_step "Cleaning previous builds"
 execute_cmd "rm -rf dist/ build/ src/*.egg-info/" "Cleaning previous builds"
 
 # Step 6: Build package
+print_step "Building the package"
 execute_cmd "python -m build" "Building package"
 
 # Step 7: Check package with twine
+print_step "Validating built package with twine"
 execute_cmd "python -m twine check dist/*" "Validating package with twine"
 
 if [ "$DRY_RUN" = false ]; then
