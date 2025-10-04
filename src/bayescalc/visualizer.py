@@ -29,6 +29,8 @@ class NetworkVisualizer:
         show_cpt: bool = True,
         layout: str = "dot",
         rankdir: str = "TB",
+        page_size: str = None,
+        scale: float = 1.0,
     ) -> str:
         """
         Generate network visualization.
@@ -39,6 +41,8 @@ class NetworkVisualizer:
             show_cpt: Include CPT tables beside nodes
             layout: graphviz layout engine ('dot', 'neato', 'fdp', 'circo', 'twopi')
             rankdir: Graph direction ('TB'=top-bottom, 'LR'=left-right, 'BT', 'RL')
+            page_size: PDF page size ('A3', 'A4', 'A5', or 'HxW' in mm, e.g. '297x210')
+            scale: Optional scale factor for the graph (default 1.0)
 
         Returns:
             Path to generated file
@@ -50,6 +54,11 @@ class NetworkVisualizer:
         valid_formats = ["pdf", "png", "svg", "jpg", "jpeg", "ps"]
         valid_layouts = ["dot", "neato", "fdp", "circo", "twopi", "sfdp"]
         valid_rankdirs = ["TB", "LR", "BT", "RL"]
+        valid_page_sizes = {
+            "A3": (420, 297),
+            "A4": (297, 210),
+            "A5": (210, 148),
+        }
 
         if format.lower() not in valid_formats:
             raise ValueError(
@@ -81,6 +90,29 @@ class NetworkVisualizer:
                 fontsize="10",
             )
             dot.attr("edge", color="gray40", arrowsize="0.8")
+
+            # PDF page size and scale
+            if format.lower() == "pdf":
+                if page_size:
+                    if page_size in valid_page_sizes:
+                        width_mm, height_mm = valid_page_sizes[page_size]
+                    else:
+                        # Parse custom size: '297x210'
+                        try:
+                            width_mm, height_mm = map(
+                                float, page_size.lower().split("x")
+                            )
+                        except Exception:
+                            raise ValueError(
+                                f"Invalid page_size '{page_size}'. Use 'A3', 'A4', 'A5' or 'WxH' in mm."
+                            )
+                    # Set page size in inches (1 inch = 25.4 mm)
+                    width_in = width_mm / 25.4
+                    height_in = height_mm / 25.4
+                    dot.attr("graph", page=f"{width_in},{height_in}")
+                    dot.attr("graph", size=f"{width_in},{height_in}!")
+                if scale and scale != 1.0:
+                    dot.attr("graph", scale=str(scale))
 
             # Add nodes with optional CPT tables
             for var_name in sorted(self.network.variables.keys()):
@@ -151,8 +183,8 @@ class NetworkVisualizer:
             # Group by parent assignments
             entries = self._format_cpt_entries(variable, cpt, list(parents))
 
-            # Show first 8 entries, then indicate if there are more
-            max_entries = 8
+            # Show first 10 entries, then indicate if there are more
+            max_entries = 10
             for i, (condition, value, prob) in enumerate(entries):
                 if i >= max_entries:
                     remaining = len(entries) - max_entries
