@@ -156,23 +156,24 @@ if [ "$DRY_RUN" = true ]; then
 fi
 echo ""
 
-# Step 0: Verify we are running in a virtual environment and if not try to activate one
-if [ "$DRY_RUN" = false ]; then
-    if [ -z "$VIRTUAL_ENV" ]; then
-        # Activate virtual environment if exists
-        if [ -f ".venv/bin/activate" ]; then
-            print_warning "No virtual environment detected. Activating venv/bin/activate"
-            # shellcheck disable=SC1091
-            source .venv/bin/activate
+if [ "$CI_MODE" = false ]; then
+    # Step 0: Verify we are running in a virtual environment and if not try to activate one
+    if [ "$DRY_RUN" = false ]; then
+        if [ -z "$VIRTUAL_ENV" ]; then
+            # Activate virtual environment if exists
+            if [ -f ".venv/bin/activate" ]; then
+                print_warning "No virtual environment detected. Activating venv/bin/activate"
+                # shellcheck disable=SC1091
+                source .venv/bin/activate
+            else
+                print_warning "No virtual environment detected and venv/bin/activate not found. Exiting."
+                exit 2
+            fi
         else
-            print_warning "No virtual environment detected and venv/bin/activate not found. Exiting."
-            exit 2
+            echo "Using virtual environment: $VIRTUAL_ENV"
         fi
-    else
-        echo "Using virtual environment: $VIRTUAL_ENV"
     fi
 fi
-
 
 # Step 1: Run tests with coverage
 
