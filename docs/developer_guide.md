@@ -19,18 +19,21 @@ Purpose: A guide for developers contributing to the BayesCalc2 Bayesian Network 
 
 ---
 
-## Setup for Development
+## TLDR; Quick Setup for Development
 
-Steps to clone the repo and setup a working venv environment.
+Steps to clone the repo and setup a working virtusl environment.
 
-### Installing `graphviz`:
-The bayescalc2 is using graphviz via its Python bindings
+### Installing Pre-erqs
+
+#### `graphviz`:
+The bayescalc2 is using graphviz via its Python bindings to create graph
+visualizations.
 
 - **MacOS:** `brew install graphviz`
 - **Linux Fedore:** `sudo dnf install grphviz`
 - **Ubuntu:** `sudo apt-get install graphviz`
 
-### Setting up Python venv
+### Setting up Python virtual environment (.venv)
 
 1. Clone and create venv:
    ```bash
