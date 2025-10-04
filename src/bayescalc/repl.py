@@ -157,9 +157,14 @@ Available commands:
   entropy(X)           - Compute the entropy of variable X.
   conditional_entropy(X|Y) - Compute conditional entropy H(X|Y).
   mutual_information(X, Y) - Compute mutual information between X and Y.
-  help                 - Show this help message.
+  visualize(file, format=pdf, show_cpt=True) - Generate network visualization.
+  load(filename)       - Load a new Bayesian network from a file.
+  help()               - Show detailed help for all commands.
+  help(command)        - Show detailed help for a specific command.
   exit                 - Exit the calculator.
   ls / vars            - List all defined variables and their states.
+
+Note: Use 'help()' with parentheses for detailed command documentation.
 """
         print(help_text)
 
@@ -169,7 +174,7 @@ if __name__ == "__main__":
     from .lexer import Lexer
 
     example_net_str = """
-    variable Rain {True, False}
+    boolean Rain
     variable Sprinkler {On, Off}
     variable GrassWet {Yes, No}
 

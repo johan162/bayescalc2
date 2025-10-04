@@ -27,6 +27,8 @@ class PromptToolkitCompleter(Completer):
             "marginals(",
             "condprobs(",
             "load(",
+            "visualize(",
+            "viz(",
             "help",
             "exit",
             "ls",
@@ -164,6 +166,69 @@ class PromptToolkitCompleter(Completer):
                 except (OSError, PermissionError):
                     # Ignore errors accessing directories
                     pass
+                return
+
+            # File path completion for visualize command (suggest output filenames)
+            if command_name in ["visualize", "viz"]:
+                # Get first argument (current path being typed)
+                args = [arg.strip() for arg in args_part.split(",")]
+
+                if len(args) == 1:
+                    # First argument: suggest output filenames with common formats
+                    current_arg = args[0]
+
+                    # Remove quotes if present
+                    if current_arg.startswith('"') or current_arg.startswith("'"):
+                        current_arg = current_arg[1:]
+
+                    # Suggest common filenames if nothing typed yet
+                    if not current_arg:
+                        suggestions = [
+                            "network.pdf",
+                            "network.png",
+                            "network.svg",
+                            "network_simple.pdf",
+                        ]
+                        for suggestion in suggestions:
+                            yield Completion(suggestion, start_position=0)
+                    else:
+                        # Complete existing filename
+                        prefix = os.path.basename(current_arg)
+                        search_dir = os.path.dirname(current_arg) or "."
+
+                        # Suggest directories
+                        try:
+                            if os.path.isdir(search_dir):
+                                for entry in os.listdir(search_dir):
+                                    if entry.startswith(prefix) or prefix == "":
+                                        full_path = os.path.join(search_dir, entry)
+                                        if os.path.isdir(full_path):
+                                            completion_text = entry + "/"
+                                            yield Completion(
+                                                completion_text,
+                                                start_position=-len(prefix),
+                                            )
+                        except (OSError, PermissionError):
+                            pass
+                else:
+                    # Subsequent arguments: suggest options
+                    options = [
+                        "format=pdf",
+                        "format=png",
+                        "format=svg",
+                        "show_cpt=True",
+                        "show_cpt=False",
+                        "layout=dot",
+                        "layout=neato",
+                        "layout=fdp",
+                        "layout=circo",
+                        "rankdir=TB",
+                        "rankdir=LR",
+                    ]
+                    current_arg = args[-1] if args else ""
+                    for option in options:
+                        if option.startswith(current_arg):
+                            yield Completion(option, start_position=-len(current_arg))
                 return
 
         # Command completion (when not inside a P() query or command arguments)

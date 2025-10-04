@@ -14,6 +14,7 @@ A powerful Bayesian network calculator designed for learning, teaching, and rese
 - **Rich Query Language**: Support for conditional probabilities, arithmetic expressions, and independence tests
 - **Information Theory**: Built-in entropy, mutual information, and conditional entropy calculations
 - **Network Analysis**: Graph structure analysis with parent/child relationships
+- **Network Visualization**: Generate publication-quality network diagrams with CPT tables (PDF, PNG, SVG)
 - **Educational Focus**: Clear output formatting ideal for learning and teaching
 
 ## Installation
@@ -23,11 +24,25 @@ A powerful Bayesian network calculator designed for learning, teaching, and rese
 - Python 3.10 or higher
 - NumPy >= 2.3.3
 - prompt_toolkit >= 3.0.0
+- graphviz >= 0.20.0 (for visualization)
 
 ### Install from PyPI
 
 ```bash
 pip install bayescalc2
+```
+
+For visualization support, also install graphviz system package:
+
+```bash
+# macOS
+brew install graphviz
+
+# Ubuntu/Debian
+sudo apt-get install graphviz
+
+# Windows
+# Download from https://graphviz.org/download/
 ```
 
 ### Install from Source
@@ -122,6 +137,8 @@ GrassWet | Rain, Sprinkler {
 - `parents(X)` - Show parent variables
 - `children(X)` - Show child variables
 - `showGraph()` - Display network structure
+- `visualize(file.pdf)` - Generate network visualization with CPT tables
+- `load(file.net)` - Load a different network file
 
 ### Independence Testing
 - `isindependent(A,B)` - Test marginal independence
@@ -131,6 +148,19 @@ GrassWet | Rain, Sprinkler {
 - `entropy(X)` - Shannon entropy
 - `conditional_entropy(X|Y)` - Conditional entropy
 - `mutual_information(X,Y)` - Mutual information
+
+### Visualization Examples
+
+```bash
+# Generate PDF with CPT tables
+>> visualize(network.pdf)
+
+# Generate PNG without CPT tables
+>> visualize(simple_network.png, show_cpt=False)
+
+# Generate SVG with horizontal layout
+>> visualize(network.svg, rankdir=LR)
+```
 
 ## Examples
 

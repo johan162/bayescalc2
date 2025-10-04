@@ -164,6 +164,23 @@ class CommandHandler:
                 "arg_count": 1,
                 "validate_args": True,
             },
+            "visualize": {
+                "aliases": ["viz"],
+                "handler": self._handle_visualize,
+                "help": (
+                    "visualize(output_file, format=pdf, show_cpt=True, layout=dot, rankdir=TB) - Generate network visualization\n"
+                    "    output_file: Path to output file (without extension)\n"
+                    "    format: Output format (pdf, png, svg, jpg) [default: pdf]\n"
+                    "    show_cpt: Include CPT tables in visualization (True/False) [default: True]\n"
+                    "    layout: Graph layout engine (dot, neato, fdp, circo, twopi) [default: dot]\n"
+                    "    rankdir: Graph direction (TB, LR, BT, RL) [default: TB]\n"
+                    "    Examples: visualize(network.pdf), visualize(graph, format=png, show_cpt=False)"
+                ),
+                "requires_args": True,
+                "special_parsing": True,
+                "arg_count": None,
+                "validate_args": False,
+            },
         }
 
         # Create alias lookup table
@@ -864,6 +881,86 @@ class CommandHandler:
             raise ValueError(f"Error parsing network file '{filename}': {e}")
         except Exception as e:
             raise ValueError(f"Error loading network file '{filename}': {e}")
+
+    def _handle_visualize(self, args_str: str) -> str:
+        """
+        Handle the visualize command with flexible argument parsing.
+
+        Args:
+            args_str: Arguments string (e.g., "output.pdf, show_cpt=False, layout=neato")
+
+        Returns:
+            Success message with output file path
+        """
+        # Check if graphviz is available
+        try:
+            from .visualizer import NetworkVisualizer
+        except ImportError:
+            return (
+                "Error: graphviz package not installed.\n"
+                "Install it with: pip install graphviz\n"
+                "You also need the graphviz system package:\n"
+                "  macOS: brew install graphviz\n"
+                "  Ubuntu/Debian: sudo apt-get install graphviz\n"
+                "  Windows: Download from https://graphviz.org/download/"
+            )
+
+        # Parse arguments
+        args_str = args_str.strip()
+        if not args_str:
+            return "Error: Output filename required. Usage: visualize(output.pdf)"
+
+        parts = [p.strip() for p in args_str.split(",")]
+
+        # First argument is always the output file
+        output_file = parts[0]
+
+        # Parse optional arguments
+        format_arg = None
+        show_cpt = True
+        layout = "dot"
+        rankdir = "TB"
+
+        for part in parts[1:]:
+            if "=" in part:
+                key, value = part.split("=", 1)
+                key = key.strip().lower()
+                value = value.strip()
+
+                if key == "format":
+                    format_arg = value
+                elif key == "show_cpt":
+                    show_cpt = value.lower() in ("true", "1", "yes")
+                elif key == "layout":
+                    layout = value
+                elif key == "rankdir":
+                    rankdir = value.upper()
+
+        # Determine format from filename extension if not explicitly specified
+        if format_arg is None:
+            if "." in output_file:
+                format_arg = output_file.rsplit(".", 1)[1].lower()
+                output_file = output_file.rsplit(".", 1)[0]
+            else:
+                format_arg = "pdf"
+
+        try:
+            visualizer = NetworkVisualizer(self.network)
+            output_path = visualizer.generate_graph(
+                output_file=output_file,
+                format=format_arg,
+                show_cpt=show_cpt,
+                layout=layout,
+                rankdir=rankdir,
+            )
+            return f"Network visualization saved to: {output_path}"
+
+        except ImportError as e:
+            return f"Error: {e}\nMake sure graphviz is installed on your system."
+        except ValueError as e:
+            return f"Error: {e}"
+        except Exception as e:
+            return f"Error generating visualization: {e}"
 
 
 if __name__ == "__main__":
