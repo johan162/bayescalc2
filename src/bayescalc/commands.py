@@ -915,11 +915,14 @@ class CommandHandler:
         # First argument is always the output file
         output_file = parts[0]
 
+
         # Parse optional arguments
         format_arg = None
         show_cpt = True
         layout = "dot"
         rankdir = "TB"
+        page_size = None
+        scale = 1.0
 
         for part in parts[1:]:
             if "=" in part:
@@ -935,6 +938,13 @@ class CommandHandler:
                     layout = value
                 elif key == "rankdir":
                     rankdir = value.upper()
+                elif key == "page_size":
+                    page_size = value
+                elif key == "scale":
+                    try:
+                        scale = float(value)
+                    except ValueError:
+                        return f"Error: Invalid scale value '{value}'. Must be a number."
 
         # Determine format from filename extension if not explicitly specified
         if format_arg is None:
@@ -952,6 +962,8 @@ class CommandHandler:
                 show_cpt=show_cpt,
                 layout=layout,
                 rankdir=rankdir,
+                page_size=page_size,
+                scale=scale,
             )
             return f"Network visualization saved to: {output_path}"
 

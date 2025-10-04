@@ -880,6 +880,7 @@ sudo apt-get install graphviz
 **Windows:**
 Download from https://graphviz.org/download/ and add to PATH
 
+
 ### Usage
 
 #### Basic Command
@@ -891,7 +892,7 @@ visualize(output_file)
 #### Command Syntax
 
 ```
-visualize(output_file, format=FORMAT, show_cpt=BOOL, layout=LAYOUT, rankdir=DIR)
+visualize(output_file, format=FORMAT, show_cpt=BOOL, layout=LAYOUT, rankdir=DIR, page_size=SIZE, scale=FACTOR)
 ```
 
 **Parameters:**
@@ -900,16 +901,34 @@ visualize(output_file, format=FORMAT, show_cpt=BOOL, layout=LAYOUT, rankdir=DIR)
 - `format`: Output format (`pdf`, `png`, `svg`, `jpg`) - default: determined from filename or `pdf`
 - `show_cpt`: Include CPT tables in visualization (`True`/`False`) - default: `True`
 - `layout`: Graph layout engine - default: `dot`
-  - `dot`: Hierarchical layout (best for DAGs)
-  - `neato`: Spring model layout
-  - `fdp`: Force-directed placement
-  - `circo`: Circular layout
-  - `twopi`: Radial layout
+    - `dot`: Hierarchical layout (best for DAGs)
+    - `neato`: Spring model layout
+    - `fdp`: Force-directed placement
+    - `circo`: Circular layout
+    - `twopi`: Radial layout
 - `rankdir`: Graph direction - default: `TB`
-  - `TB`: Top to bottom
-  - `LR`: Left to right
-  - `BT`: Bottom to top
-  - `RL`: Right to left
+    - `TB`: Top to bottom
+    - `LR`: Left to right
+    - `BT`: Bottom to top
+    - `RL`: Right to left
+- `page_size`: PDF page size (`A3`, `A4`, `A5`, or custom size as `WxH` in mm, e.g. `297x210`) - PDF only
+- `scale`: Scale factor for the graph (float, e.g. `1.0`, `0.8`, `2.0`) - PDF only
+
+#### PDF Page Size and Scale
+
+When generating PDF output, you can control the page size and scaling:
+
+- `page_size`: Choose from standard sizes (`A3`, `A4`, `A5`) or specify custom dimensions in millimeters (`WxH`, e.g. `210x148`).
+- `scale`: Adjusts the overall size of the graph on the page. Use values less than 1.0 to shrink, greater than 1.0 to enlarge.
+
+**Examples:**
+
+```bash
+>> visualize(network.pdf, page_size=A4, scale=0.8)
+>> visualize(network.pdf, page_size=297x210, scale=1.2)
+```
+
+If omitted, defaults are `page_size=None` (Graphviz default) and `scale=1.0` (no scaling).
 
 ### Examples
 
