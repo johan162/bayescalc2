@@ -1,10 +1,16 @@
 # BayesCalc2
 
+
+
 [![PyPI version](https://badge.fury.io/py/bayescalc2.svg)](https://badge.fury.io/py/bayescalc2)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/)
+[![Linting: flake8](https://img.shields.io/badge/linting-flake8-yellowgreen)](https://flake8.pycqa.org/)
+[![Coverage](https://img.shields.io/badge/coverage-83%25-brightgreen.svg)](https://github.com/johan162/bayescalc2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A powerful Bayesian network calculator designed for learning, teaching, and research in probabilistic reasoning. This tool allows you to define Bayesian networks, calculate probabilities, and perform various probabilistic operations using an efficient variable-elimination algorithm that scales well with network complexity.
+A Bayesian network calculator designed for learning probabilistic reasoning using Bayesian networks. This tool allows you to define Bayesian networks, calculate probabilities, and perform various probabilistic operations using an efficient variable-elimination algorithm that scales well with network complexity.
 
 ## Features
 
@@ -14,7 +20,7 @@ A powerful Bayesian network calculator designed for learning, teaching, and rese
 - **Rich Query Language**: Support for conditional probabilities, arithmetic expressions, and independence tests
 - **Information Theory**: Built-in entropy, mutual information, and conditional entropy calculations
 - **Network Analysis**: Graph structure analysis with parent/child relationships
-- **Network Visualization**: Generate publication-quality network diagrams with CPT tables (PDF, PNG, SVG)
+- **Network Visualization**: Generate network diagrams with CPT tables (PDF, PNG, SVG)
 - **Educational Focus**: Clear output formatting ideal for learning and teaching
 
 ## Installation
@@ -32,7 +38,7 @@ A powerful Bayesian network calculator designed for learning, teaching, and rese
 pip install bayescalc2
 ```
 
-For visualization support, also install graphviz system package:
+For visualization support install the `graphviz` system package:
 
 ```bash
 # macOS
@@ -40,6 +46,9 @@ brew install graphviz
 
 # Ubuntu/Debian
 sudo apt-get install graphviz
+
+# Fedora/Redhat
+sudo dnf install graphviz
 
 # Windows
 # Download from https://graphviz.org/download/
@@ -167,7 +176,7 @@ GrassWet | Rain, Sprinkler {
 The `examples/` directory contains various Bayesian networks demonstrating different use cases:
 
 - `rain_sprinkler_grass.net` - Classic sprinkler example
-- `medical_test.net` - Medical diagnosis scenario
+- `medical_test.net` - The classical Medical diagnosis scenario 
 - `student_network.net` - Academic performance model
 - `asia_chest_clinic.net` - Medical expert system
 
@@ -180,15 +189,17 @@ The `examples/` directory contains various Bayesian networks demonstrating diffe
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change. 
 
 ### Development Setup
+
+Please read the `docs/developer_guide.md` for specific information about architecture and code base and how to contribute.
 
 ```bash
 git clone https://github.com/johan162/bayescalc2.git
 cd bayescalc2
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source .venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -e ".[dev]"  # Quotes needed for zsh shell
 python -m pytest tests/
 ```
@@ -201,8 +212,8 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 - **Documentation**: See `docs/user_guide.md` for detailed usage instructions
 - **Developer guide**: See `docs/developer_guide.md` for how to get started to contribute and overview of key dev practices and algorithms.
-- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/your-username/bayescalc2/issues)
-- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/your-username/bayescalc2/discussions)
+- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/johan162/bayescalc2/issues)
+- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/johan162/bayescalc2/discussions)
 
 ## Citation
 
