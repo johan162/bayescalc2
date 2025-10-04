@@ -30,8 +30,6 @@ The bayescalc2 is using graphviz via its Python bindings
 - **Linux Fedore:** `sudo dnf install grphviz`
 - **Ubuntu:** `sudo apt-get install graphviz`
 
-
-
 ### Setting up Python venv
 
 1. Clone and create venv:
@@ -57,6 +55,18 @@ The bayescalc2 is using graphviz via its Python bindings
    python -c "import bayescalc; print(bayescalc.__file__)"
    ```
 
+### Quick build guide
+
+Once the local environment is setup and a code change has been made the primary build script `scripts/mkbld.sh` should be run. This script does the following checks
+
+1. That code coverage is > 80%
+2. That all tests passes
+3. Run "flake8" static analysis with no errors  or warnings
+4. Checks code formatting with "black"
+5. Creates a PyPi distribution and validates with "twine"
+
+The build script must have a successfull result before a commit can be made. 
+The CI pipeline setup at GitHub will run the script as a pre-commit script that must pass.
 
 ---
 
@@ -1099,7 +1109,7 @@ class NetworkTestBase(unittest.TestCase):
 #### Development Environment
 ```bash
 # Clone repository
-git clone https://github.com/your-org/bayescalc2.git
+git clone https://github.com/johan162/bayescalc2.git
 cd bayescalc2
 
 # Create virtual environment
@@ -1107,8 +1117,8 @@ python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install development dependencies
-pip install -e .
-pip install pytest pytest-cov black flake8 mypy
+pip install -e ".[dev]"
+# pip install pytest pytest-cov black flake8 mypy
 
 # Verify installation
 bayescalc examples/rain_sprinkler_grass.net --cmd "P(Rain=True)"
@@ -1202,8 +1212,6 @@ mypy src/
 # Run tests with coverage
 pytest --cov=bayescalc --cov-report=term-missing --cov-fail-under=90
 
-# Security check
-bandit -r src/
 ```
 
 ### Continuous Integration

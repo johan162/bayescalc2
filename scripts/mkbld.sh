@@ -5,12 +5,29 @@
 
 set -e  # Exit on any error
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Detect CI environment
+if [ -n "$CI" ] || [ -n "$GITHUB_ACTIONS" ]; then
+    echo "🔧 Running in CI mode"
+    CI_MODE=true
+else
+    echo "🔧 Running in local mode"
+    CI_MODE=false
+fi
+
+# Color codes (disabled in CI)
+if [ "$CI_MODE" = true ]; then
+    GREEN=""
+    RED=""
+    YELLOW=""
+    BLUE=""
+    NC=""
+else
+    GREEN='\033[0;32m'
+    RED='\033[0;31m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    NC='\033[0m'
+fi
 
 # Default options
 DRY_RUN=false
@@ -156,8 +173,21 @@ if [ "$DRY_RUN" = false ]; then
     fi
 fi
 
+
 # Step 1: Run tests with coverage
-execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-fail-under=80" "Running tests with coverage"
+
+# Generate coverage XML for CI
+if [ "$CI_MODE" = true ]; then
+    echo -e "Generating coverage XML for CI..."
+    python -m pytest tests/ \
+        --cov=src/bayescalc \
+        --cov-report=xml \
+        --cov-report=term-missing \
+        --cov-fail-under=80
+else
+    execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-fail-under=80" "Running tests with coverage"
+fi
+
 
 # Step 2: Static analysis with flake8
 execute_cmd "python -m flake8 src/bayescalc tests/ --max-line-length=120 --extend-ignore=E203,W503,E501,E402" "Running flake8 static analysis"
