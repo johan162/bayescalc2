@@ -65,7 +65,7 @@ For development or if you want to modify the source code:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/bayescalc2.git
+git clone https://github.com/johan162/bayescalc2.git 
 cd bayescalc2
 
 # Create and activate virtual environment
@@ -107,10 +107,8 @@ cd bayescalc2
 python -m venv .venv
 source .venv/bin/activate
 
-# Install dependencies
-pip install -r requirements.txt  # If available
-# OR install from pyproject.toml
-pip install -e .
+# Install dev dependencies from `pyproject.toml`:
+pip install -e ".[dev]"
 
 # Verify installation
 bayescalc --help
@@ -122,6 +120,12 @@ bayescalc --help
 - **Dependencies**: 
   - `prompt_toolkit >= 3.0.0` (for interactive REPL)
   - `numpy >= 2.3.3` (for numerical computations)
+  - `graphviz` (for network visualization)
+
+---
+
+## Usage
+
 
 
 ### Usage
