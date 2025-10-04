@@ -14,6 +14,7 @@ bayescalc.egg-info/
 .bayescalc_history
 bayescalc2.egg-info
 .coverage
+coverage.xml
 htmlcov/
 *.png
 *.jpg
