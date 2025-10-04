@@ -109,10 +109,32 @@ class NetworkVisualizer:
                     # Set page size in inches (1 inch = 25.4 mm)
                     width_in = width_mm / 25.4
                     height_in = height_mm / 25.4
+                    
+                    # Apply scale to the graph size
+                    if scale and scale != 1.0:
+                        # Scale down the maximum size the graph can occupy
+                        graph_width = width_in * scale
+                        graph_height = height_in * scale
+                        # Set maximum size and let graph fit within it
+                        dot.attr("graph", size=f"{graph_width},{graph_height}")
+                        dot.attr("graph", ratio="compress")
+                        # Set the actual page size for the PDF
+                        dot.attr("graph", page=f"{width_in},{height_in}")
+                        dot.attr("graph", center="true")
+                    else:
+                        # Fill the page completely when scale is 1.0
+                        dot.attr("graph", size=f"{width_in},{height_in}!")
+                elif scale and scale != 1.0:
+                    # Set the default size to A4 at 100% scale
+                    # A4 size in inches is approximately 8.27 x 11.69
+                    width_in = 8.27
+                    height_in = 11.69
+                    default_graph_width = width_in * scale
+                    default_graph_height = height_in * scale
+                    dot.attr("graph", size=f"{default_graph_width},{default_graph_height}!")
                     dot.attr("graph", page=f"{width_in},{height_in}")
-                    dot.attr("graph", size=f"{width_in},{height_in}!")
-                if scale and scale != 1.0:
-                    dot.attr("graph", scale=str(scale))
+                    dot.attr("graph", center="true")
+
 
             # Add nodes with optional CPT tables
             for var_name in sorted(self.network.variables.keys()):
