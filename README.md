@@ -99,7 +99,7 @@ Create a Bayesian network definition in a .net file:
 
 ```
 # Example network definition
-variable Rain {True, False}
+boolean Rain
 variable Sprinkler {On, Off}
 variable GrassWet {Yes, No}
 
@@ -200,6 +200,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 ## Support
 
 - **Documentation**: See `docs/user_guide.md` for detailed usage instructions
+- **Developer guide**: See `docs/developer_guide.md` for how to get started to contribute and overview of key dev practices and algorithms.
 - **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/your-username/bayescalc2/issues)
 - **Discussions**: Ask questions in [GitHub Discussions](https://github.com/your-username/bayescalc2/discussions)
 
@@ -210,9 +211,9 @@ If you use BayesCalc2 in academic work, please cite:
 ```bibtex
 @software{bayescalc2,
   title={BayesCalc2: A Bayesian Network Calculator},
-  author={Your Name},
+  author={Johan Persson},
   year={2025},
-  url={https://github.com/your-username/bayescalc2},
+  url={https://github.com/johan162/bayescalc2},
   version={2.0.0}
 }
 ```
