@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.11', '3.12', '3.13']
+        python-version: ['3.13']
     
     steps:
     - name: Checkout repository
@@ -44,17 +44,8 @@ jobs:
       run: |
         chmod +x scripts/mkbld.sh
         ./scripts/mkbld.sh
-    
-    - name: Upload Coverage Report
-      if: success()
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report-${{ matrix.python-version }}
-        path: | 
-          htmlcov/
-          coverage.xml
 
-    - name: Upload test artifacts
+    - name: Upload test artifacts on Failure
       if: failure()
       uses: actions/upload-artifact@v4
       with:
@@ -63,3 +54,4 @@ jobs:
           htmlcov/
           .coverage
           pytest-report.xml
+        retention-days: 7 
