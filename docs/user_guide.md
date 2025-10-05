@@ -107,7 +107,7 @@ To exactly replicate the development environment:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/bayescalc2.git
+git clone https://github.com/johan162/bayescalc2.git
 cd bayescalc2
 
 # Create virtual environment with Python 3.10+

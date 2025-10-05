@@ -60,7 +60,7 @@ sudo dnf install graphviz
 ### Install from Source
 
 ```bash
-git clone https://github.com/your-username/bayescalc2.git
+git clone https://github.com/johan162/bayescalc2.git
 cd bayescalc2
 pip install -e .
 ```
@@ -69,7 +69,7 @@ pip install -e .
 
 ```bash
 # Download an example network
-wget https://raw.githubusercontent.com/your-username/bayescalc2/main/examples/rain_sprinkler_grass.net
+wget https://raw.githubusercontent.com/johan162/bayescalc2/main/examples/rain_sprinkler_grass.net
 
 # Launch interactive mode
 bayescalc rain_sprinkler_grass.net
