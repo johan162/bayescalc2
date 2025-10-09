@@ -251,7 +251,7 @@ else
 fi
 
 # 2.4: Command-line interface testing
-run_command 'python -m bayescalc.main examples/rain_sprinkler_grass.net --cmd "P(Rain=True)" | grep -q "Probability"' "Testing CLI probability queries..."
+run_command 'python -m bayescalc.main examples/rain_sprinkler_grass.net --cmd "P(Rain=True)" | grep -q "P() = 0.200000"' "Testing CLI probability queries..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
     echo "❌ CLI probability query test failed"
