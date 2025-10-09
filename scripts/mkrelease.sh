@@ -192,8 +192,8 @@ run_command "git pull origin develop" "Pulling latest changes..."
 # 1.3: Validate version format (semver)
 check_condition '[[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc[1-9][0-9]?)?$ ]]' "❌ Version must follow semver format (x.y.z or x.y.z-rcNN)"
 
-# 1.4: Check if version already exists  
-check_condition '! git tag | grep -q "$VERSION"' "❌ Version $VERSION already exists"
+# 1.4: Check if version already exists
+check_condition '! git tag | grep -q "${VERSION}\$"' "❌ Version $VERSION already exists"
 
 # =====================================
 # PHASE 2: COMPREHENSIVE TESTING
