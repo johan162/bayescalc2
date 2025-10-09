@@ -382,7 +382,7 @@ run_command "git checkout main" "Switching to main branch..."
 run_command "git pull origin main" "Pulling latest main..."
 
 # Squash merge develop into main
-run_command "git merge --squash -m \"Merge branch 'develop' into main\"" "Squashing develop changes..."
+run_command "git merge --squash develop -m \"Merge branch 'develop' into main\"" "Squashing develop changes..."
 run_command "git commit -m \"release: $VERSION
 
 Summary of changes:
