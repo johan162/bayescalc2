@@ -1,9 +1,20 @@
+## [v1.0.0-rc3] - 2025-10-09
+
+Release Type: minor
+
+### 🛠 Internal
+- Further refinement of release script
+
 ## [v1.0.0-rc2] - 2025-10-09
+
+Release Type: minor
 
 ### 🛠 Internal
 - Fixed typo in tag setting in release script 
 
 ## [v1.0.0-rc1] - 2025-10-09
+
+Release Type: Major
 
 ### ✨ Additions
 - Added `load()` command to load a network while in interactive mode
@@ -25,13 +36,10 @@
 
 ## [0.1.0] - 2025-09-30
 
+Relase type: Major
+
 ### ✨ Additions
-- Complete rewrite with new inference engine based on a variable elimination algorithm
+- Complete rewrite of Bayescalc with new inference engine based on a variable elimination algorithm
 - Use prompt_toolkit which gives both Tab-completion (with pop-up window) and command history
 
-### 🚀 Improvements
-
-### 🐛 Bug Fixes
-
-### 🛠 Internal
 
