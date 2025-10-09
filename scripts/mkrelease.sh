@@ -242,7 +242,7 @@ else
     for network in examples/*.net; do
         if [[ -f "$network" ]]; then
             echo "    Testing: $network"
-            python -m bayescalc "examples/$network" --cmd "help" >/dev/null 2>&1 || {
+            python -m bayescalc.main "$network" --cmd "help" >/dev/null 2>&1 || {
                 echo "❌ Failed to load network: $network"
                 exit 1
             }
