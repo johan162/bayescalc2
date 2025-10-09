@@ -338,6 +338,13 @@ fi
 # 3.3: Final pre-commit validation
 run_command "pytest tests/test_main.py -v" "Final validation after version updates..."
 
+exit 1
+
+if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
+    echo "❌ Final validation failed"
+    exit 1
+fi
+
 # =====================================
 # PHASE 4: RELEASE EXECUTION
 # =====================================
