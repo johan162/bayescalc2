@@ -238,11 +238,11 @@ if [[ "$DRY_RUN" == "true" ]]; then
     echo "  [DRY-RUN] Would iterate through examples/*.net files"
     echo "  [DRY-RUN] Would run: python -m bayescalc \$network --cmd \"help\" for each network"
 else
-    echo "  ✓ Testing example networks..."
+    echo "  ✓ Testing that all example networks can load ..."
     for network in examples/*.net; do
         if [[ -f "$network" ]]; then
-            echo "    Testing: $(basename "$network")"
-            python -m bayescalc "$network" --cmd "help" >/dev/null 2>&1 || {
+            echo "    Testing: $network"
+            python -m bayescalc "examples/$network" --cmd "help" >/dev/null 2>&1 || {
                 echo "❌ Failed to load network: $network"
                 exit 1
             }
