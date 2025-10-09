@@ -1,3 +1,10 @@
+## [v1.0.0-rc4] - 2025-10-09
+
+Release Type: minor
+
+### 🛠 Internal
+- Further refinement of release script
+
 ## [v1.0.0-rc3] - 2025-10-09
 
 Release Type: minor
