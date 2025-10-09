@@ -1,3 +1,8 @@
+## [v1.0.0-rc2] - 2025-10-09
+
+### Internal
+- Fixed typo in tag setting in release script 
+
 ## [v1.0.0-rc1] - 2025-10-09
 
 ### Added

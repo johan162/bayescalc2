@@ -354,7 +354,7 @@ echo "🎯 PHASE 4: Release execution"
 # 4.1: Commit version updates
 run_command "git add src/bayescalc/__init__.py pyproject.toml CHANGELOG.md" "Staging release files..."
 
-run_command "git commit -m \"chore(release): prepare v$VERSION
+run_command "git commit -m \"chore(release): prepare $VERSION
 
 - Update version to $VERSION
 - Update changelog with release notes
@@ -367,7 +367,7 @@ run_command "git pull origin main" "Pulling latest main..."
 
 # Squash merge develop into main
 run_command "git merge --squash develop" "Squashing develop changes..."
-run_command "git commit -m \"release: v$VERSION
+run_command "git commit -m \"release: $VERSION
 
 Summary of changes:
 - All features and fixes from develop branch
@@ -381,12 +381,12 @@ See CHANGELOG.md for detailed changes.\"" "Creating release commit on main..."
 
 # 4.3: Create annotated release tag
 if [[ "$DRY_RUN" == "true" ]]; then
-    echo "  [DRY-RUN] Would create annotated tag v$VERSION..."
+    echo "  [DRY-RUN] Would create annotated tag $VERSION..."
     echo "  [DRY-RUN] Tag message would include release type, date, and QA checklist"
 else
     echo "  ✓ Creating release tag..."
     CHANGELOG_DATE=$(date +%Y-%m-%d)
-    git tag -a "v$VERSION" -m "Release version $VERSION
+    git tag -a "$VERSION" -m "Release version $VERSION
 
 Release Type: $RELEASE_TYPE
 Release Date: $CHANGELOG_DATE
@@ -404,7 +404,7 @@ fi
 
 # 4.4: Push main branch and tags
 run_command "git push origin main" "Pushing main branch..."
-run_command "git push origin \"v$VERSION\"" "Pushing release tag..."
+run_command "git push origin \"$VERSION\"" "Pushing release tag..."
 
 # =====================================
 # PHASE 5: POST-RELEASE CLEANUP
@@ -420,7 +420,7 @@ run_command "git push origin develop" "Pushing updated develop..."
 
 # 5.2: Clean up build artifacts
 run_command "rm -rf build/ dist/ src/*.egg-info/ htmlcov/" "Cleaning up build artifacts..."
-run_command "rm -f *.bak" "Removing backup files..."
+run_command "rm -f *.bak src/bayescalc/*.bak" "Removing backup files..."
 
 # =====================================
 # RELEASE COMPLETE
@@ -447,11 +447,11 @@ else
     echo "✅ RELEASE COMPLETE!"
     echo ""
     echo "📊 Release Summary:"
-    echo "   Version:     v$VERSION"
+    echo "   Version:     $VERSION"
     echo "   Type:        $RELEASE_TYPE"
     echo "   Date:        $(date +%Y-%m-%d)"
     echo "   Branch:      main"
-    echo "   Tag:         v$VERSION"
+    echo "   Tag:         $VERSION"
     echo ""
     echo "🚀 Next Steps:"
     echo "   1. Verify release on GitHub/GitLab"
