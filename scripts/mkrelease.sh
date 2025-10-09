@@ -313,13 +313,10 @@ else
 ### Added
 - [List new features added in this release]
 
-### Changed
-- [List changes to existing functionality]
-
 ### Fixed
 - [List bug fixes]
 
-### Removed
+### Internal
 - [List deprecated features removed]
 
 EOF
@@ -341,8 +338,6 @@ fi
 
 # 3.3: Final pre-commit validation
 run_command "pytest tests/test_main.py -v" "Final validation after version updates..."
-
-exit 1
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
     echo "❌ Final validation failed"
@@ -366,16 +361,23 @@ run_command "git commit -m \"chore(release): prepare v$VERSION
 - All tests passing with >80% coverage
 - Package build validation complete\"" "Committing release preparation..."
 
-# 4.2: Merge to main branch
+# 4.2: Merge to main branch and create release commit
 run_command "git checkout main" "Switching to main branch..."
 run_command "git pull origin main" "Pulling latest main..."
-run_command "git merge --no-ff develop -m \"release: merge v$VERSION from develop
 
-This release includes:
+# Squash merge develop into main
+run_command "git merge --squash develop" "Squashing develop changes..."
+run_command "git commit -m \"release: v$VERSION
+
+Summary of changes:
+- All features and fixes from develop branch
 - Comprehensive test coverage (>80%)
-- Full integration testing
-- Package build validation
-- Static analysis validation\"" "Merging develop to main..."
+- Full integration testing completed
+- Package build validation successful
+- Static analysis passed
+
+See CHANGELOG.md for detailed changes.\"" "Creating release commit on main..."
+
 
 # 4.3: Create annotated release tag
 if [[ "$DRY_RUN" == "true" ]]; then
