@@ -258,12 +258,16 @@ if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
     exit 1
 fi
 
+echo "CLI query output verified successfully."
+
 run_command 'echo "printCPT(Rain)" | python -m bayescalc.main examples/rain_sprinkler_grass.net >/dev/null 2>&1' "Testing REPL commands..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
     echo "❌ REPL command test failed"
     exit 1
 fi
+
+echo "REPL command output verified successfully."
 
 # 2.5: Package building test
 run_command "python -m build --wheel --sdist" "Testing package building..."
