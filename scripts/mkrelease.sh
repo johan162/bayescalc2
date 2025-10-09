@@ -420,7 +420,7 @@ run_command "git push origin develop" "Pushing updated develop..."
 
 # 5.2: Clean up build artifacts
 run_command "rm -rf build/ dist/ src/*.egg-info/ htmlcov/" "Cleaning up build artifacts..."
-run_command "rm -f *.bak" "Removing backup files..."
+run_command "rm -f *.bak src/bayescalc/*.bak" "Removing backup files..."
 
 # =====================================
 # RELEASE COMPLETE
@@ -447,11 +447,11 @@ else
     echo "✅ RELEASE COMPLETE!"
     echo ""
     echo "📊 Release Summary:"
-    echo "   Version:     v$VERSION"
+    echo "   Version:     $VERSION"
     echo "   Type:        $RELEASE_TYPE"
     echo "   Date:        $(date +%Y-%m-%d)"
     echo "   Branch:      main"
-    echo "   Tag:         v$VERSION"
+    echo "   Tag:         $VERSION"
     echo ""
     echo "🚀 Next Steps:"
     echo "   1. Verify release on GitHub/GitLab"
