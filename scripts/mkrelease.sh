@@ -202,7 +202,7 @@ echo ""
 echo "🧪 PHASE 2: Comprehensive testing suite"
 
 # 2.1: Full test suite with coverage requirements
-run_command "pytest --cov=bayescalc --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=70 --verbose tests/" "Running full test suite with coverage..."
+run_command "pytest --cov=bayescalc --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --verbose tests/" "Running full test suite with coverage..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
     echo "❌ Test suite failed - aborting release"
@@ -351,7 +351,7 @@ run_command "git commit -m \"chore(release): prepare v$VERSION
 
 - Update version to $VERSION
 - Update changelog with release notes
-- All tests passing with >90% coverage
+- All tests passing with >80% coverage
 - Package build validation complete\"" "Committing release preparation..."
 
 # 4.2: Merge to main branch
@@ -360,7 +360,7 @@ run_command "git pull origin main" "Pulling latest main..."
 run_command "git merge --no-ff develop -m \"release: merge v$VERSION from develop
 
 This release includes:
-- Comprehensive test coverage (>90%)
+- Comprehensive test coverage (>80%)
 - Full integration testing
 - Package build validation
 - Static analysis validation\"" "Merging develop to main..."
@@ -446,7 +446,7 @@ else
     echo "   4. Announce release to stakeholders"
     echo ""
     echo "📋 Quality Metrics Achieved:"
-    echo "   ✓ Test Coverage: >90%"
+    echo "   ✓ Test Coverage: >80%"
     echo "   ✓ All Example Networks: Validated"
     echo "   ✓ Package Build: Successful" 
     echo "   ✓ Static Analysis: Passed"
