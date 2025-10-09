@@ -378,7 +378,7 @@ Release Type: $RELEASE_TYPE
 Release Date: $CHANGELOG_DATE
 
 Quality Assurance:
-✓ Full test suite passed (>90% coverage)
+✓ Full test suite passed (>80% coverage)
 ✓ All example networks validated  
 ✓ CLI and REPL functionality verified
 ✓ Package build and validation complete
