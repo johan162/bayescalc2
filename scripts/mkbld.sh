@@ -1,0 +1,229 @@
+#!/bin/bash
+
+# mkbld.sh - Build script for BayesCalc2
+# This script runs tests, static analysis, formatting checks, and builds the package
+
+set -e  # Exit on any error
+
+# Detect CI environment
+if [ -n "$CI" ] || [ -n "$GITHUB_ACTIONS" ]; then
+    echo "🔧 Running in CI mode"
+    CI_MODE=true
+else
+    echo "🔧 Running in local mode"
+    CI_MODE=false
+fi
+
+# Color codes (disabled in CI)
+if [ "$CI_MODE" = true ]; then
+    GREEN=""
+    RED=""
+    YELLOW=""
+    BLUE=""
+    NC=""
+else
+    GREEN='\033[0;32m'
+    RED='\033[0;31m'
+    YELLOW='\033[1;33m'
+    BLUE='\033[0;34m'
+    NC='\033[0m'
+fi
+
+# Default options
+DRY_RUN=false
+HELP=false
+
+# Function to print colored output
+print_step() {
+    echo -e "${BLUE}==>${NC} ${1}"
+}
+
+print_success() {
+    echo -e "${GREEN}✓${NC} ${1}"
+}
+
+print_success_colored() {
+    echo -e "${GREEN}✓ ${1}${NC}"
+}
+
+print_error() {
+    echo -e "${RED}✗${NC} ${1}" >&2
+}
+
+print_warning() {
+    echo -e "${YELLOW}⚠${NC} ${1}"
+}
+
+# Function to execute command or print it in dry-run mode
+execute_cmd() {
+    local cmd="$1"
+    local description="$2"
+    
+    if [ "$DRY_RUN" = true ]; then
+        echo -e "${YELLOW}[DRY-RUN]${NC} Would execute: ${cmd}"
+    else
+        print_step "$description"
+        echo "Executing: $cmd"
+        if eval "$cmd"; then
+            print_success "$description completed"
+        else
+            print_error "$description failed"
+            exit 1
+        fi
+    fi
+}
+
+# Help function
+show_help() {
+    cat << EOF
+Usage: $0 [OPTIONS]
+
+BayesCalc2 Build Script
+
+This script performs a complete build and validation process:
+1. Runs pytest with coverage reporting
+2. Performs static analysis with flake8 and mypy
+3. Checks code formatting with black
+4. Builds the Python package
+5. Validates the built package with twine
+
+OPTIONS:
+    --dry-run       Print commands that would be executed without running them
+    --help          Show this help message and exit
+
+REQUIREMENTS:
+    - Development dependencies must be installed: pip install -e ".[dev]"
+    - Must be run from the project root directory
+
+EXAMPLES:
+    $0                  # Run full build process
+    $0 --dry-run        # Show what would be executed
+    $0 --help           # Show this help
+
+EXIT CODES:
+    0    Success
+    1    Build failure (tests, linting, or package build failed)
+    2    Usage error
+EOF
+}
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        --help)
+            HELP=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            echo "Use --help for usage information" >&2
+            exit 2
+            ;;
+    esac
+done
+
+# Show help if requested
+if [ "$HELP" = true ]; then
+    show_help
+    exit 0
+fi
+
+# Check if we're in the right directory
+if [ ! -f "pyproject.toml" ]; then
+    print_error "Error: pyproject.toml not found. Please run this script from the project root directory."
+    exit 2
+fi
+
+# Check if dev dependencies are available
+if [ "$DRY_RUN" = false ]; then
+    if ! command -v pytest &> /dev/null; then
+        print_error "Error: pytest not found. Please install dev dependencies: pip install -e \".[dev]\""
+        exit 2
+    fi
+fi
+
+echo "=========================================="
+echo "  BayesCalc2 Build Script"
+echo "=========================================="
+echo "Branch: $(git branch --show-current)"
+echo "Commit: $(git rev-parse --short HEAD)"
+if [ "$DRY_RUN" = true ]; then
+    print_warning "DRY-RUN MODE: Commands will be printed but not executed"
+fi
+echo ""
+
+# If not in CI mode, ensure we are in a virtual environment
+print_step "Updating virtual environment if needed"
+if [ "$CI_MODE" = false ]; then
+    # Step 0: Verify we are running in a virtual environment and if not try to activate one
+    if [ "$DRY_RUN" = false ]; then
+        if [ -z "$VIRTUAL_ENV" ]; then
+            # Activate virtual environment if exists
+            if [ -f ".venv/bin/activate" ]; then
+                print_warning "No virtual environment detected. Activating venv/bin/activate"
+                # shellcheck disable=SC1091
+                source .venv/bin/activate
+            else
+                print_warning "No virtual environment detected and venv/bin/activate not found. Exiting."
+                exit 2
+            fi
+        else
+            echo "Using virtual environment: $VIRTUAL_ENV"
+        fi
+    fi
+fi
+
+# Step 1: Run tests with coverage
+execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-report=xml --cov-fail-under=80" "Running tests with coverage"
+
+# Step 1b: Update coverage badge in README
+if [ "$CI_MODE" = false ] && [ "$DRY_RUN" = false ]; then
+    print_step "Updating coverage badge in README.md"
+    if [ -f "scripts/update_coverage_badge.sh" ]; then
+        ./scripts/update_coverage_badge.sh
+    else
+        print_warning "Coverage badge update script not found"
+    fi
+fi
+
+# Step 2: Static analysis with flake8
+print_step "Running static analysis with flake8"
+execute_cmd "python -m flake8 src/bayescalc tests/ --max-line-length=120 --extend-ignore=E203,W503,E501,E402" "Running flake8 static analysis"
+
+# Step 3: Type checking with mypy
+print_step "Running type checking with mypy"
+execute_cmd "python -m mypy src/bayescalc --ignore-missing-imports" "Running mypy type checking"
+
+# Step 4: Code formatting check with black
+print_step "Checking code formatting with black"
+execute_cmd "python -m black --check --diff src/bayescalc tests/" "Checking code formatting with black"
+
+# Step 5: Clean previous builds
+print_step "Cleaning previous builds"
+execute_cmd "rm -rf dist/ build/ src/*.egg-info/" "Cleaning previous builds"
+
+# Step 6: Build package
+print_step "Building the package"
+execute_cmd "python -m build" "Building package"
+
+# Step 7: Check package with twine
+print_step "Validating built package with twine"
+execute_cmd "python -m twine check dist/*" "Validating package with twine"
+
+if [ "$DRY_RUN" = false ]; then
+    print_success_colored ""
+    print_success_colored "=========================================="
+    print_success_colored "Build completed successfully!"
+    print_success_colored "=========================================="
+    echo "Built packages:"
+    ls -la dist/
+    echo ""
+    echo "Coverage report generated in htmlcov/index.html"
+else
+    print_warning ""
+    print_warning "DRY-RUN completed. No commands were executed."
+fi

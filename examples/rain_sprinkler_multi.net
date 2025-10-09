@@ -1,4 +1,4 @@
-variable Rain {True, False}
+boolean Rain
 variable Sprinkler {On, Off}
 variable GrassWet {Yes, No}
 

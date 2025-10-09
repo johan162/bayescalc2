@@ -1,15 +1,17 @@
 """
 Tests for the lexer and parser modules.
 """
+
 import unittest
 from bayescalc.lexer import Lexer
 from bayescalc.parser import Parser
+
 
 class TestParser(unittest.TestCase):
 
     def test_full_network_parsing(self):
         net_str = """
-        variable Rain {True, False}
+        boolean Rain
         variable Sprinkler {On, Off}
         variable GrassWet {Yes, No}
 
@@ -41,11 +43,15 @@ class TestParser(unittest.TestCase):
         self.assertIn("GrassWet", network.factors)
 
         self.assertAlmostEqual(network.factors["Rain"].probabilities[("False",)], 0.8)
-        self.assertAlmostEqual(network.factors["Sprinkler"].probabilities[("Off", "True")], 0.99)
-        self.assertAlmostEqual(network.factors["GrassWet"].probabilities[("No", "False", "On")], 0.1)
+        self.assertAlmostEqual(
+            network.factors["Sprinkler"].probabilities[("Off", "True")], 0.99
+        )
+        self.assertAlmostEqual(
+            network.factors["GrassWet"].probabilities[("No", "False", "On")], 0.1
+        )
 
     def test_syntax_error_variable(self):
-        net_str = "variable Rain {True False}" # Missing comma
+        net_str = "variable Rain {True False}"  # Missing comma
         lexer = Lexer(net_str)
         tokens = lexer.tokenize()
         parser = Parser(tokens)
@@ -53,12 +59,13 @@ class TestParser(unittest.TestCase):
             parser.parse()
 
     def test_syntax_error_cpt(self):
-        net_str = "Rain { P(True)  0.2 }" # Missing equals
+        net_str = "Rain { P(True)  0.2 }"  # Missing equals
         lexer = Lexer(net_str)
         tokens = lexer.tokenize()
         parser = Parser(tokens)
         with self.assertRaises(SyntaxError):
             parser.parse()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

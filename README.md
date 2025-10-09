@@ -1,10 +1,19 @@
-# BayesCalc2
 
-[![PyPI version](https://badge.fury.io/py/bayescalc2.svg)](https://badge.fury.io/py/bayescalc2)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# BayesCalc2: A Bayesian Network Calculator
 
-A powerful Bayesian network calculator designed for learning, teaching, and research in probabilistic reasoning. This tool allows you to define Bayesian networks, calculate probabilities, and perform various probabilistic operations using an efficient variable-elimination algorithm that scales well with network complexity.
+| Category | Badge |
+|---|---|
+|License|[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)|
+|Python|[![PyPI version](https://badge.fury.io/py/bayescalc2.svg)](https://badge.fury.io/py/bayescalc2) [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/) |
+|Code policy|[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/) [![Linting: flake8](https://img.shields.io/badge/linting-flake8-yellowgreen)](https://flake8.pycqa.org/)|
+|Pipeline | [![Continuous Integration](https://github.com/johan162/bayescalc2/actions/workflows/ci.yml/badge.svg)](https://github.com/johan162/bayescalc2/actions/workflows/ci.yml) [![Coverage](https://img.shields.io/badge/coverage-83%25-darkgreen.svg)](https://github.com/johan162/bayescalc2) |
+
+
+
+
+## Overview
+
+A Bayesian network calculator designed for learning probabilistic reasoning using Bayesian networks. This tool allows you to define Bayesian networks, calculate probabilities, and perform various probabilistic operations using an efficient variable-elimination algorithm that scales well with network complexity.
 
 ## Features
 
@@ -14,6 +23,7 @@ A powerful Bayesian network calculator designed for learning, teaching, and rese
 - **Rich Query Language**: Support for conditional probabilities, arithmetic expressions, and independence tests
 - **Information Theory**: Built-in entropy, mutual information, and conditional entropy calculations
 - **Network Analysis**: Graph structure analysis with parent/child relationships
+- **Network Visualization**: Generate network diagrams with CPT tables (PDF, PNG, SVG)
 - **Educational Focus**: Clear output formatting ideal for learning and teaching
 
 ## Installation
@@ -23,6 +33,7 @@ A powerful Bayesian network calculator designed for learning, teaching, and rese
 - Python 3.10 or higher
 - NumPy >= 2.3.3
 - prompt_toolkit >= 3.0.0
+- graphviz >= 0.20.0 (for visualization)
 
 ### Install from PyPI
 
@@ -30,10 +41,26 @@ A powerful Bayesian network calculator designed for learning, teaching, and rese
 pip install bayescalc2
 ```
 
+For visualization support install the `graphviz` system package:
+
+```bash
+# macOS
+brew install graphviz
+
+# Ubuntu/Debian
+sudo apt-get install graphviz
+
+# Fedora/Redhat
+sudo dnf install graphviz
+
+# Windows
+# Download from https://graphviz.org/download/
+```
+
 ### Install from Source
 
 ```bash
-git clone https://github.com/your-username/bayescalc2.git
+git clone https://github.com/johan162/bayescalc2.git
 cd bayescalc2
 pip install -e .
 ```
@@ -42,7 +69,7 @@ pip install -e .
 
 ```bash
 # Download an example network
-wget https://raw.githubusercontent.com/your-username/bayescalc2/main/examples/rain_sprinkler_grass.net
+wget https://raw.githubusercontent.com/johan162/bayescalc2/main/examples/rain_sprinkler_grass.net
 
 # Launch interactive mode
 bayescalc rain_sprinkler_grass.net
@@ -84,7 +111,7 @@ Create a Bayesian network definition in a .net file:
 
 ```
 # Example network definition
-variable Rain {True, False}
+boolean Rain
 variable Sprinkler {On, Off}
 variable GrassWet {Yes, No}
 
@@ -122,6 +149,8 @@ GrassWet | Rain, Sprinkler {
 - `parents(X)` - Show parent variables
 - `children(X)` - Show child variables
 - `showGraph()` - Display network structure
+- `visualize(file.pdf)` - Generate network visualization with CPT tables
+- `load(file.net)` - Load a different network file
 
 ### Independence Testing
 - `isindependent(A,B)` - Test marginal independence
@@ -132,12 +161,25 @@ GrassWet | Rain, Sprinkler {
 - `conditional_entropy(X|Y)` - Conditional entropy
 - `mutual_information(X,Y)` - Mutual information
 
+### Visualization Examples
+
+```bash
+# Generate PDF with CPT tables
+>> visualize(network.pdf)
+
+# Generate PNG without CPT tables
+>> visualize(simple_network.png, show_cpt=False)
+
+# Generate SVG with horizontal layout
+>> visualize(network.svg, rankdir=LR)
+```
+
 ## Examples
 
 The `examples/` directory contains various Bayesian networks demonstrating different use cases:
 
 - `rain_sprinkler_grass.net` - Classic sprinkler example
-- `medical_test.net` - Medical diagnosis scenario
+- `medical_test.net` - The classical Medical diagnosis scenario 
 - `student_network.net` - Academic performance model
 - `asia_chest_clinic.net` - Medical expert system
 
@@ -150,15 +192,17 @@ The `examples/` directory contains various Bayesian networks demonstrating diffe
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change. 
 
 ### Development Setup
 
+Please read the `docs/developer_guide.md` for specific information about architecture and code base and how to contribute.
+
 ```bash
-git clone https://github.com/your-username/bayescalc2.git
+git clone https://github.com/johan162/bayescalc2.git
 cd bayescalc2
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source .venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -e ".[dev]"  # Quotes needed for zsh shell
 python -m pytest tests/
 ```
@@ -170,8 +214,9 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 ## Support
 
 - **Documentation**: See `docs/user_guide.md` for detailed usage instructions
-- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/your-username/bayescalc2/issues)
-- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/your-username/bayescalc2/discussions)
+- **Developer guide**: See `docs/developer_guide.md` for how to get started to contribute and overview of key dev practices and algorithms.
+- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/johan162/bayescalc2/issues)
+- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/johan162/bayescalc2/discussions)
 
 ## Citation
 
@@ -180,9 +225,9 @@ If you use BayesCalc2 in academic work, please cite:
 ```bibtex
 @software{bayescalc2,
   title={BayesCalc2: A Bayesian Network Calculator},
-  author={Your Name},
+  author={Johan Persson},
   year={2025},
-  url={https://github.com/your-username/bayescalc2},
+  url={https://github.com/johan162/bayescalc2},
   version={2.0.0}
 }
 ```

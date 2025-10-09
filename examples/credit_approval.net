@@ -22,7 +22,7 @@
 variable Income {Low, Medium, High}
 variable CreditHistory {Bad, Fair, Good}
 variable CreditRisk {High, Medium, Low}
-variable ApprovalChance {True, False}
+boolean ApprovalChance
 
 Income {
     P(Low) = 0.3

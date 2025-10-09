@@ -21,12 +21,12 @@
 # - Useful for teaching how to work backward from observations to causes
 # - Good for explaining diagnostic inference
 
-variable Battery {True, False}
-variable FuelSystem {True, False}
-variable Lights {True, False}
-variable Radio {True, False}
-variable Engine {True, False}
-variable CarStarts {True, False}
+boolean Battery
+boolean FuelSystem
+boolean Lights
+boolean Radio
+boolean Engine
+boolean CarStarts
 
 # True means component is working properly, False means it is faulty
 

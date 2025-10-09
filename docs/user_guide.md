@@ -9,7 +9,8 @@ A comprehensive guide to using the Bayesian Network Calculator for learning, tea
 3. [Network File Format](#network-file-format)
 4. [Usage Walkthrough](#usage-walkthrough)
 5. [Appendix A: Complete Command Reference](#appendix-a-complete-command-reference)
-6. [Appendix B: Mathematical Background](#appendix-b-mathematical-background)
+6. [Appendix B: Visualization Guide](#appendix-b-visualization-guide)
+7. [Appendix C: Mathematical Background](#appendix-c-mathematical-background)
 
 ---
 
@@ -20,7 +21,7 @@ A comprehensive guide to using the Bayesian Network Calculator for learning, tea
 BayesCalc2 is an educational and research tool designed to:
 
 - **Learn Bayesian Networks**: Understand probabilistic relationships through hands-on experimentation
-- **Teach Probability**: Provide students with an interactive environment for exploring conditional probability, independence, and inference
+- **Teach Probability**: Provide an interactive environment for exploring conditional probability, independence, and inference
 - **Research Support**: Rapid prototyping and analysis of small to medium-sized Bayesian networks
 - **Validate Calculations**: Double-check manual probability calculations and reasoning
 
@@ -35,7 +36,7 @@ BayesCalc2 is an educational and research tool designed to:
 
 ### Limitations
 
-**Network Size**: Optimized for networks with fewer than 20 variables. Performance degrades with larger networks due to exponential complexity.
+**Network Size**: Optimized for networks with fewer than 15-20 variables. Performance degrades with larger networks due to exponential complexity.
 
 **Exact Inference Only**: Uses exact algorithms (variable elimination). No approximate inference methods like sampling or variational approaches.
 
@@ -51,6 +52,12 @@ BayesCalc2 is an educational and research tool designed to:
 
 ### Standard Installation
 
+The graph visualization makes use of `graphviz` so this must be installed first:
+
+- **MacOS:** `brew install graphviz`
+- **Linux Fedore:** `sudo dnf install grphviz`
+- **Ubuntu:** `sudo apt-get install graphviz`
+
 The simplest way to install BayesCalc2:
 
 ```bash
@@ -65,7 +72,7 @@ For development or if you want to modify the source code:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/bayescalc2.git
+git clone https://github.com/johan162/bayescalc2.git 
 cd bayescalc2
 
 # Create and activate virtual environment
@@ -100,17 +107,15 @@ To exactly replicate the development environment:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-repo/bayescalc2.git
+git clone https://github.com/johan162/bayescalc2.git
 cd bayescalc2
 
 # Create virtual environment with Python 3.10+
 python -m venv .venv
 source .venv/bin/activate
 
-# Install dependencies
-pip install -r requirements.txt  # If available
-# OR install from pyproject.toml
-pip install -e .
+# Install dev dependencies from `pyproject.toml`:
+pip install -e ".[dev]"
 
 # Verify installation
 bayescalc --help
@@ -122,7 +127,9 @@ bayescalc --help
 - **Dependencies**: 
   - `prompt_toolkit >= 3.0.0` (for interactive REPL)
   - `numpy >= 2.3.3` (for numerical computations)
+  - `graphviz` (for network visualization)
 
+---
 
 ### Usage
 ```txt
@@ -151,6 +158,7 @@ options:
 network          = { statement } ;
 statement        = variable_decl | cpt_block ;
 variable_decl    = "variable" identifier [ domain_spec ] ;
+boolean_decl     = "boolean" identifier ;
 domain_spec      = "{" identifier_list "}" ;
 identifier_list  = identifier { "," identifier } ;
 
@@ -185,7 +193,7 @@ variable VariableName {value1, value2, ...}
 
 #### Boolean Variables (Shorthand)
 ```
-variable BooleanVar  # Automatically gets domain {True, False}
+boolean BooleanVar  # Automatically gets domain {True, False}
 ```
 
 #### Examples
@@ -543,6 +551,35 @@ Error: Expected variable name after '|'
 
 ## Appendix A: Complete Command Reference
 
+### Initialization
+
+#### `load`
+
+**Purpose**: Load a new network from a file
+
+**Syntax**: `load(filename)`
+
+#### Features
+- **Tab Completion**: File paths support tab completion for easy navigation
+- **Automatic Reload**: All internal state (queries, inference engine, completers) are automatically updated
+- **Error Handling**: Clear error messages for missing or invalid files
+- **Path Expansion**: Supports `~` for home directory expansion
+
+#### Basic Usage
+```
+>> load(examples/rain_sprinkler_grass.net)
+Successfully loaded network from: examples/rain_sprinkler_grass.net
+Variables (3): GrassWet, Rain, Sprinkler
+```
+
+#### Notes
+
+- The previous network state is completely replaced
+- All queries and computations reference the new network after loading
+- File paths are relative to the current working directory where BayesCalc2 was launched
+- Only `.net` files appear in tab completion suggestions (directories also shown for navigation)
+
+
 ### Probability Queries
 
 #### Basic Probability Syntax
@@ -561,8 +598,11 @@ Error: Expected variable name after '|'
 ### Network Structure Commands
 
 #### `showGraph()`
+
 **Purpose**: Display ASCII representation of network structure
+
 **Output**: Tree-like visualization showing parent-child relationships
+
 **Example**:
 ```
 >> showGraph()
@@ -572,10 +612,18 @@ Temp
 └── Meet
 ```
 
+### `visualize(output_file)`
+
+See: **Appendix C**
+
 #### `parents(Variable)`
+
 **Purpose**: List parent variables of specified variable
+
 **Parameters**: Variable name
+
 **Returns**: Set of parent variable names
+
 **Example**: 
 ```
 >> parents(GrassWet)
@@ -583,9 +631,13 @@ Parents of GrassWet: {Rain, Sprinkler}
 ```
 
 #### `children(Variable)`  
+
 **Purpose**: List child variables of specified variable
+
 **Parameters**: Variable name
+
 **Returns**: Set of child variable names
+
 **Example**:
 ```
 >> children(Rain)
@@ -593,9 +645,13 @@ Children of Rain: {Sprinkler, GrassWet}
 ```
 
 #### `ls` / `vars`
+
 **Purpose**: List all variables with their types and domains
+
 **Aliases**: `ls`, `vars`
+
 **Output**: Formatted table of variable information
+
 **Example**:
 ```
 >> ls
@@ -605,12 +661,17 @@ Rain        | Discrete   | True, False
 Weather     | Discrete   | Sunny, Rainy, Cloudy
 ```
 
+
 ### Probability Tables
 
 #### `printCPT(Variable)`
+
 **Purpose**: Display conditional probability table for specified variable
+
 **Parameters**: Variable name
+
 **Output**: Three-column table (Child | Parents | Probability)
+
 **Example**:
 ```
 >> printCPT(GrassWet)
@@ -623,18 +684,27 @@ GrassWet | Rain=False, Sprinkler=False| 0.10
 ```
 
 #### `printJPT()`
+
 **Purpose**: Display complete joint probability table
+
 **Warning**: Exponentially large for big networks
+
 **Output**: All possible variable assignments with probabilities
+
 **Use**: Small networks only (< 10 variables recommended)
 
 ### Independence Testing
 
 #### `isindependent(Variable1, Variable2)`
+
 **Purpose**: Test marginal independence between two variables
+
 **Parameters**: Two variable names
+
 **Returns**: `True` if independent, `False` otherwise
+
 **Mathematical Test**: P(A,B) = P(A) × P(B)
+
 **Example**:
 ```
 >> isindependent(Rain, Sprinkler)
@@ -642,10 +712,15 @@ True
 ```
 
 #### `iscondindependent(Variable1, Variable2 | ConditioningSet)`
+
 **Purpose**: Test conditional independence
+
 **Syntax**: `iscondindependent(A, B | C, D, ...)`
+
 **Returns**: `True` if conditionally independent
+
 **Mathematical Test**: P(A,B|C) = P(A|C) × P(B|C)
+
 **Example**:
 ```
 >> iscondindependent(Rain, GrassWet | Sprinkler)
@@ -655,10 +730,15 @@ False
 ### Information Theory
 
 #### `entropy(Variable)`
+
 **Purpose**: Compute Shannon entropy of variable
+
 **Formula**: H(X) = -∑ P(x) log₂ P(x)
+
 **Units**: bits
+
 **Range**: [0, log₂(|domain|)]
+
 **Example**:
 ```
 >> entropy(Rain)
@@ -666,10 +746,15 @@ False
 ```
 
 #### `conditional_entropy(Variable1 | Variable2)`
+
 **Purpose**: Compute conditional entropy
+
 **Syntax**: `conditional_entropy(X | Y)`
+
 **Formula**: H(X|Y) = -∑∑ P(x,y) log₂ P(x|y)
+
 **Interpretation**: Average uncertainty in X given Y
+
 **Example**:
 ```
 >> conditional_entropy(Rain | GrassWet)
@@ -677,10 +762,15 @@ False
 ```
 
 #### `mutual_information(Variable1, Variable2)`
+
 **Purpose**: Compute mutual information between variables
+
 **Formula**: I(X;Y) = H(X) - H(X|Y) = H(Y) - H(Y|X)
+
 **Range**: [0, min(H(X), H(Y))]
+
 **Interpretation**: Information shared between variables
+
 **Example**:
 ```
 >> mutual_information(Rain, GrassWet)
@@ -690,26 +780,39 @@ False
 ### Advanced Probability Commands
 
 #### `marginals(N)`
+
 **Purpose**: Generate marginal probabilities for N variables
+
 **Parameters**: Number of variables to include
+
 **Output**: All marginal probability combinations
+
 **Use**: Systematic probability analysis
 
 #### `condprobs(N, M)`  
+
 **Purpose**: Generate conditional probabilities
+
 **Parameters**: N variables conditioned on M variables
+
 **Output**: All conditional probability combinations
+
 **Use**: Systematic conditional analysis
 
 ### Utility Commands
 
 #### `help`
+
 **Purpose**: Display help message with command summary
+
 **Aliases**: `help`, `?`
+
 **Output**: Formatted command reference
 
 #### `exit`
+
 **Purpose**: Exit the interactive session
+
 **Aliases**: `exit`, `quit`, Ctrl-C, Ctrl-D
 
 ### Command Syntax Rules
@@ -738,7 +841,282 @@ False
 
 ---
 
-## Appendix B: Mathematical Background
+## Appendix B: Visualization Guide
+
+### Overview
+
+BayesCalc2 now supports generating visual representations of Bayesian networks with optional CPT (Conditional Probability Table) displays. This feature uses graphviz to create publication-quality visualizations in multiple formats.
+
+### Installation
+
+#### 1. Install Python Package
+
+The graphviz Python package is included in BayesCalc2's dependencies:
+
+```bash
+pip install bayescalc2
+```
+
+Or if installing from source:
+
+```bash
+pip install -e ".[dev]"
+```
+
+#### 2. Install Graphviz System Package
+
+You also need the graphviz system binary:
+
+**macOS:**
+```bash
+brew install graphviz
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install graphviz
+```
+
+**Windows:**
+Download from https://graphviz.org/download/ and add to PATH
+
+
+### Usage
+
+#### Basic Command
+
+```
+visualize(output_file)
+```
+
+#### Command Syntax
+
+```
+visualize(output_file, format=FORMAT, show_cpt=BOOL, layout=LAYOUT, rankdir=DIR, page_size=SIZE, scale=FACTOR)
+```
+
+**Parameters:**
+
+- `output_file` (required): Output filename with or without extension
+- `format`: Output format (`pdf`, `png`, `svg`, `jpg`) - default: determined from filename or `pdf`
+- `show_cpt`: Include CPT tables in visualization (`True`/`False`) - default: `True`
+- `layout`: Graph layout engine - default: `dot`
+    - `dot`: Hierarchical layout (best for DAGs)
+    - `neato`: Spring model layout
+    - `fdp`: Force-directed placement
+    - `circo`: Circular layout
+    - `twopi`: Radial layout
+- `rankdir`: Graph direction - default: `TB`
+    - `TB`: Top to bottom
+    - `LR`: Left to right
+    - `BT`: Bottom to top
+    - `RL`: Right to left
+- `page_size`: PDF page size (`A3`, `A4`, `A5`, or custom size as `WxH` in mm, e.g. `297x210`) - PDF only
+- `scale`: Scale factor for the graph (float, e.g. `1.0`, `0.8`, `2.0`) - PDF only
+
+#### PDF Page Size and Scale
+
+When generating PDF output, you can control the page size and scaling:
+
+- `page_size`: Choose from standard sizes (`A3`, `A4`, `A5`) or specify custom dimensions in millimeters (`WxH`, e.g. `210x148`).
+- `scale`: Adjusts the overall size of the graph on the page. Use values less than 1.0 to shrink, greater than 1.0 to enlarge.
+
+**Examples:**
+
+```bash
+>> visualize(network.pdf, page_size=A4, scale=0.8)
+>> visualize(network.pdf, page_size=297x210, scale=1.2)
+```
+
+If omitted, defaults are `page_size=None` (Graphviz default) and `scale=1.0` (no scaling).
+
+### Examples
+
+#### Basic Visualization with CPT
+
+```bash
+>> load(examples/rain_sprinkler_grass.net)
+>> visualize(network.pdf)
+Network visualization saved to: network.pdf
+```
+
+#### PNG Without CPT Tables
+
+```bash
+>> visualize(simple_network.png, show_cpt=False)
+Network visualization saved to: simple_network.png
+```
+
+#### SVG with Horizontal Layout
+
+```bash
+>> visualize(network.svg, rankdir=LR)
+Network visualization saved to: network.svg
+```
+
+#### Custom Layout Engine
+
+```bash
+>> visualize(network.pdf, layout=neato)
+Network visualization saved to: network.pdf
+```
+
+#### Multiple Options
+
+```bash
+>> visualize(exam_network.png, show_cpt=True, layout=dot, rankdir=LR, format=png)
+Network visualization saved to: exam_network.png
+```
+
+#### Using the Alias
+
+The command has a short alias `viz`:
+
+```bash
+>> viz(network.pdf)
+Network visualization saved to: network.pdf
+```
+
+### Output Examples
+
+#### With CPT Tables (`show_cpt=True`)
+
+Nodes display:
+- Variable name (header)
+- Domain values
+- Probability values for each state
+- For conditional probabilities, shows parent conditions
+
+Example node display:
+```
+┌─────────────────────┐
+│      Rain           │
+├─────────────────────┤
+│   True, False       │
+├──────────┬──────────┤
+│ P(True)  │  0.2000  │
+│ P(False) │  0.8000  │
+└──────────┴──────────┘
+```
+
+#### Without CPT Tables (`show_cpt=False`)
+
+Shows only variable names and network structure (useful for large networks or presentations).
+
+### Layout Comparison
+
+#### dot (default)
+Best for Bayesian networks - creates hierarchical tree layout respecting parent-child relationships.
+
+#### neato
+Force-directed layout - good for showing network connectivity patterns.
+
+#### fdp
+Similar to neato but uses different force model - useful for larger networks.
+
+#### circo
+Circular layout - good for visualizing networks with cyclic structures or for aesthetic purposes.
+
+### Tab Completion
+
+The visualize command supports tab completion:
+
+```bash
+>> visualize(<TAB>
+network.pdf    network.png    network.svg    network_simple.pdf
+
+>> visualize(network.pdf, <TAB>
+format=pdf    format=png    format=svg    show_cpt=True    show_cpt=False    
+layout=dot    layout=neato  layout=fdp    rankdir=TB       rankdir=LR
+```
+
+### Use Cases
+
+#### 1. Documentation
+Generate diagrams for papers, reports, or documentation:
+```bash
+>> visualize(paper_figure.pdf, show_cpt=False, rankdir=LR)
+```
+
+#### 2. Teaching
+Create educational materials showing both structure and probabilities:
+```bash
+>> visualize(lecture_slide.png, show_cpt=True)
+```
+
+#### 3. Debugging
+Quickly visualize network structure during development:
+```bash
+>> viz(debug.svg, show_cpt=False)
+```
+
+#### 4. Presentations
+Generate clean, professional-looking network diagrams:
+```bash
+>> visualize(presentation.pdf, show_cpt=True, layout=dot, rankdir=TB)
+```
+
+## Troubleshooting
+
+### Error: graphviz package not installed
+
+Install the Python package:
+```bash
+pip install graphviz
+```
+
+### Error: failed to execute 'dot'
+
+Install the graphviz system package (see Installation section above).
+
+### Large CPT Tables
+
+For variables with many parent combinations, the visualizer automatically truncates the CPT display to show only the first 8 entries, with a note indicating how many more exist.
+
+### Graph Too Large
+
+For large networks:
+1. Use `show_cpt=False` to reduce node size
+2. Try different layouts (`neato`, `fdp`) for better spacing
+3. Use `rankdir=LR` for horizontal layout
+4. Generate SVG format for scalable output
+
+## Programmatic Use
+
+For advanced users, the visualizer can be used programmatically:
+
+```python
+from bayescalc.visualizer import NetworkVisualizer
+
+visualizer = NetworkVisualizer(network)
+output_path = visualizer.generate_graph(
+    output_file="custom_network",
+    format="pdf",
+    show_cpt=True,
+    layout="dot",
+    rankdir="TB"
+)
+print(f"Saved to: {output_path}")
+```
+
+## File Formats
+
+- **PDF**: Best for documents and papers (vector format, scales perfectly)
+- **PNG**: Good for web and presentations (raster format)
+- **SVG**: Best for web and editing (vector format, editable)
+- **JPG**: Compact raster format (lower quality)
+
+## Tips
+
+1. **Start simple**: First generate without CPT tables to see structure
+2. **Iterate**: Try different layouts to find best visualization
+3. **Choose format wisely**: Use PDF/SVG for publications, PNG for quick sharing
+4. **Direction matters**: Top-bottom works well for small networks, left-right for wide ones
+5. **Tab completion**: Use tab completion to discover options quickly
+
+---
+
+## Appendix C: Mathematical Background
 
 ### Bayesian Networks Fundamentals
 

@@ -1,17 +1,19 @@
 """
 Tests for the inference module.
 """
+
 import unittest
 from bayescalc.lexer import Lexer
 from bayescalc.parser import Parser
 from bayescalc.inference import Inference
+
 
 class TestInference(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
         net_str = """
-        variable Rain {True, False}
+        boolean Rain
         variable Sprinkler {On, Off}
         variable GrassWet {Yes, No}
 
@@ -59,19 +61,25 @@ class TestInference(unittest.TestCase):
 
     def test_query_joint_conditional(self):
         # P(Sprinkler, Rain | GrassWet=Yes)
-        result = self.inference.variable_elimination(["Sprinkler", "Rain"], {"GrassWet": "Yes"})
+        result = self.inference.variable_elimination(
+            ["Sprinkler", "Rain"], {"GrassWet": "Yes"}
+        )
         # Check one value
         # P(S=on, R=t | G=y) = P(S=on, R=t, G=y) / P(G=y)
         # P(S=on, R=t, G=y) = 0.2 * 0.01 * 0.99 = 0.00198
         # P(G=y) = 0.49638 (from above)
         # P(S=on, R=t | G=y) = 0.00198 / 0.49638 = 0.003988
-        
+
         # Need to check order of variables in result factor
         if result.variables[0].name == "Sprinkler":
-            self.assertAlmostEqual(result.probabilities[("On", "True")], 0.003988, places=4)
+            self.assertAlmostEqual(
+                result.probabilities[("On", "True")], 0.003988, places=4
+            )
         else:
-            self.assertAlmostEqual(result.probabilities[("True", "On")], 0.003988, places=4)
+            self.assertAlmostEqual(
+                result.probabilities[("True", "On")], 0.003988, places=4
+            )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

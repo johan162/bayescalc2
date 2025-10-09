@@ -7,6 +7,7 @@ __pycache__/
 .venv/
 env/
 dist/
+build/
 bayescalc.egg-info/
 .pytest_cache/
 *.pdf
@@ -14,3 +15,10 @@ bayescalc.egg-info/
 .bayescalc_history
 bayescalc2.egg-info
 .coverage
+coverage.xml
+htmlcov/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg

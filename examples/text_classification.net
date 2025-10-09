@@ -18,9 +18,9 @@
 # - Simple enough for manual calculations
 
 variable DocumentClass {Sports, Politics, Technology}
-variable Word1 {True, False}  # "team"
-variable Word2 {True, False}  # "election"
-variable Word3 {True, False}  # "device"
+boolean Word1  # "team"
+boolean Word2  # "election"
+boolean Word3  # "device"
 
 DocumentClass {
     P(Sports) = 0.33
