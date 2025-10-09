@@ -310,14 +310,19 @@ else
     cat > CHANGELOG_ENTRY.tmp << EOF
 ## [$VERSION] - $CHANGELOG_DATE
 
-### Added
+Release Type: $RELEASE_TYPE
+
+### ✨ Additions
 - [List new features added in this release]
 
-### Fixed
-- [List bug fixes]
+### 🚀 Improvements
+- [List improvements made in this release]
 
-### Internal
-- [List deprecated features removed]
+### 🐛 Bug Fixes
+- [List bug fixes addressed in this release]
+
+### 🛠 Internal
+- [List internal changes, refactoring, etc.]
 
 EOF
 
