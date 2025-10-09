@@ -431,7 +431,7 @@ echo "🧹 PHASE 5: Post-release cleanup"
 
 # 5.1: Return to develop and merge back release changes
 run_command "git checkout develop" "Switching back to develop..."
-run_command "git merge -m \"Merge branch 'main' into 'develop' after release $VERSION\" main" "Merging release changes back to develop..."
+run_command "git merge --no-ff -m \"Merge branch 'main' into 'develop' after release $VERSION\" main" "Merging release changes back to develop..."
 run_command "git push origin develop" "Pushing updated develop..."
 
 # 5.2: Clean up build artifacts
