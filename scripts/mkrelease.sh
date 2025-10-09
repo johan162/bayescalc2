@@ -193,7 +193,7 @@ run_command "git pull origin develop" "Pulling latest changes..."
 check_condition '[[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc[1-9][0-9]?)?$ ]]' "❌ Version must follow semver format (x.y.z or x.y.z-rcNN)"
 
 # 1.4: Check if version already exists  
-check_condition '! git tag | grep -q "v$VERSION"' "❌ Version v$VERSION already exists"
+check_condition '! git tag | grep -q "$VERSION"' "❌ Version $VERSION already exists"
 
 # =====================================
 # PHASE 2: COMPREHENSIVE TESTING
@@ -292,9 +292,20 @@ echo ""
 echo "📝 PHASE 3: Release preparation"
 
 # 3.1: Update version numbers
-run_command "sed -i.bak \"s/__version__ = \\\".*\\\"/__version__ = \\\"$VERSION\\\"/\" src/bayescalc/__init__.py" "Updating version in __init__.py..."
+if [[ "$DRY_RUN" == "true" ]]; then
+    echo "  [DRY-RUN] Would update __version__ in __init__.py to $VERSION"
+    echo "  [DRY-RUN] Would update version in pyproject.toml to $VERSION"
+    echo "  [DRY-RUN] Would update version in README.md to $VERSION"
+else
+    echo "  ✓ Updating version in __init__.py..."
+    sed -i.bak 's/__version__ = ".*"/__version__ = "'"$VERSION"'"/' src/bayescalc/__init__.py
+    
+    echo "  ✓ Updating version in pyproject.toml..."
+    sed -i.bak 's/^version = ".*"/version = "'"$VERSION"'"/' pyproject.toml
 
-run_command "sed -i.bak \"s/version = \\\".*\\\"/version = \\\"$VERSION\\\"/\" pyproject.toml" "Updating version in pyproject.toml..."
+    echo "  ✓ Updating version in README.md..."
+    sed -i.bak 's/^  version={.*}/  version={'"$VERSION"'}/' README.md
+fi
 
 # 3.2: Generate changelog entry
 if [[ "$DRY_RUN" == "true" ]]; then
@@ -310,14 +321,19 @@ else
     cat > CHANGELOG_ENTRY.tmp << EOF
 ## [$VERSION] - $CHANGELOG_DATE
 
-### Added
+Release Type: $RELEASE_TYPE
+
+### ✨ Additions
 - [List new features added in this release]
 
-### Fixed
-- [List bug fixes]
+### 🚀 Improvements
+- [List improvements made in this release]
 
-### Internal
-- [List deprecated features removed]
+### 🐛 Bug Fixes
+- [List bug fixes addressed in this release]
+
+### 🛠 Internal
+- [List internal changes, refactoring, etc.]
 
 EOF
 
@@ -352,7 +368,7 @@ echo ""
 echo "🎯 PHASE 4: Release execution"
 
 # 4.1: Commit version updates
-run_command "git add src/bayescalc/__init__.py pyproject.toml CHANGELOG.md" "Staging release files..."
+run_command "git add src/bayescalc/__init__.py pyproject.toml CHANGELOG.md README.md" "Staging release files..."
 
 run_command "git commit -m \"chore(release): prepare $VERSION
 
@@ -366,7 +382,7 @@ run_command "git checkout main" "Switching to main branch..."
 run_command "git pull origin main" "Pulling latest main..."
 
 # Squash merge develop into main
-run_command "git merge --squash develop" "Squashing develop changes..."
+run_command "git merge --squash -m \"Merge branch 'develop' into main\"" "Squashing develop changes..."
 run_command "git commit -m \"release: $VERSION
 
 Summary of changes:
@@ -415,7 +431,7 @@ echo "🧹 PHASE 5: Post-release cleanup"
 
 # 5.1: Return to develop and merge back release changes
 run_command "git checkout develop" "Switching back to develop..."
-run_command "git merge main" "Merging release changes back to develop..."
+run_command "git merge main -m \"Merge branch 'main' into 'develop' after release $VERSION\" to get release changes back into develop." "Merging release changes back to develop..."
 run_command "git push origin develop" "Pushing updated develop..."
 
 # 5.2: Clean up build artifacts
