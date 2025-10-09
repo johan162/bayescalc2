@@ -203,7 +203,7 @@ echo ""
 echo "🧪 PHASE 2: Comprehensive testing suite"
 
 # 2.1: Full test suite with coverage requirements
-run_command "pytest --cov=src/bayescalc --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80  "Running full test suite with coverage..."
+run_command "pytest --cov=src/bayescalc --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80"  "Running full test suite with coverage..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
     echo "❌ Test suite failed - aborting release"
@@ -211,7 +211,7 @@ if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
 fi
 
 # 2.2: Static analysis and code quality
-if [[ "$DRY_RUN" == "true" ]]; then
+if [[ "$DRY_RUN" == "true" ]]; then 
     echo "  [DRY-RUN] Would run static analysis..."
     echo "  [DRY-RUN] Would check if mypy is available and run type checking"
     echo "  [DRY-RUN] Would check if black is available and run code formatting checks"
