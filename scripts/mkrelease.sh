@@ -382,7 +382,7 @@ run_command "git checkout main" "Switching to main branch..."
 run_command "git pull origin main" "Pulling latest main..."
 
 # Squash merge develop into main
-run_command "git merge --squash develop -m \"Merge branch 'develop' into main\"" "Squashing develop changes..."
+run_command "git merge --squash -m \"Merge 'develop' into 'main' in preparation for release $VERSION\" develop" "Squashing develop changes..."
 run_command "git commit -m \"release: $VERSION
 
 Summary of changes:
@@ -431,7 +431,7 @@ echo "🧹 PHASE 5: Post-release cleanup"
 
 # 5.1: Return to develop and merge back release changes
 run_command "git checkout develop" "Switching back to develop..."
-run_command "git merge main -m \"Merge branch 'main' into 'develop' after release $VERSION\" to get release changes back into develop." "Merging release changes back to develop..."
+run_command "git merge -m \"Merge branch 'main' into 'develop' after release $VERSION\" main" "Merging release changes back to develop..."
 run_command "git push origin develop" "Pushing updated develop..."
 
 # 5.2: Clean up build artifacts
