@@ -1,8 +1,8 @@
 #!/bin/bash
 # BayesCalc2 Release Script
 # Usage: ./scripts/release.sh <version> [major|minor|patch] [--dry-run] [--help]
-# Example: ./scripts/release.sh 2.1.0 minor
-# Example: ./scripts/release.sh 2.1.0 minor --dry-run
+# Example: ./scripts/release.sh v2.1.0 minor
+# Example: ./scripts/release.sh v2.1.0 minor --dry-run
 # Example: ./scripts/release.sh --help
 
 set -euo pipefail  # Exit on any error
