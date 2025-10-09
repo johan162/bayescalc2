@@ -39,17 +39,18 @@ EXAMPLES:
     $0 --help
     
     # Preview a minor release (recommended first step)
-    $0 2.1.0 minor --dry-run
+    $0 v2.1.0 minor --dry-run
     
     # Execute a minor release
-    $0 2.1.0 minor
+    $0 v2.1.0 minor
     
     # Create a patch release with preview
-    $0 2.0.1 patch --dry-run
-    $0 2.0.1 patch
-    
+    $0 v2.0.1 patch --dry-run
+    $0 v2.0.1 patch
+
     # Create a major release
-    $0 3.0.0 major
+    $0 v3.0.0-rc1 major --dry-run
+    $0 v3.0.0-rc1 major
 
 QUALITY GATES:
     The script enforces comprehensive quality controls:
@@ -189,7 +190,7 @@ fi
 run_command "git pull origin develop" "Pulling latest changes..."
 
 # 1.3: Validate version format (semver)
-check_condition '[[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]' "❌ Version must follow semver format (x.y.z)"
+check_condition '[[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc[1-9][0-9]?)?$ ]]' "❌ Version must follow semver format (x.y.z or x.y.z-rcNN)"
 
 # 1.4: Check if version already exists  
 check_condition '! git tag | grep -q "v$VERSION"' "❌ Version v$VERSION already exists"
