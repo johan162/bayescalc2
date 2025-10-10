@@ -76,16 +76,22 @@ execute_cmd() {
 # Help function
 show_help() {
     cat << EOF
-Usage: $0 [OPTIONS]
+🚀 BayesCalc2 Build Script
 
-BayesCalc2 Build Script
+DESCRIPTION:
+    This script automates the build and validation process for the BayesCalc2 project.
+    It runs tests, performs static analysis, checks code formatting, builds the package,
+    and validates the built package.
+    
+    This script performs a complete build and validation process:
+    1. Runs pytest with coverage reporting
+    2. Performs static analysis with flake8 and mypy
+    3. Checks code formatting with black
+    4. Builds the Python package
+    5. Validates the built package with twine 
 
-This script performs a complete build and validation process:
-1. Runs pytest with coverage reporting
-2. Performs static analysis with flake8 and mypy
-3. Checks code formatting with black
-4. Builds the Python package
-5. Validates the built package with twine
+USAGE: 
+    $0 [OPTIONS]
 
 OPTIONS:
     --dry-run       Print commands that would be executed without running them

@@ -89,38 +89,38 @@ print_step() {
 
 show_help() {
     cat << EOF
-${BLUE}GitHub Release Creator for BayesCalc2${NC}
+🚀 GitHub Release Creator for BayesCalc2
 
-${GREEN}Usage:${NC}
-    $0 [OPTIONS]
-
-${GREEN}Description:${NC}
+DESCRIPTION:
     Creates a GitHub release using the gh CLI tool. This script should be run
     AFTER mkrelease.sh has completed successfully and all GitHub Actions 
     workflows have finished.
 
-${GREEN}Options:${NC}
+USAGE:
+    $0 [OPTIONS]
+
+OPTIONS:
     --help          Show this help message and exit
     --pre-release   Force the release to be marked as a pre-release
                     (overrides automatic detection based on tag name)
     --dry-run       Show what commands would be executed without actually
                     running them
 
-${GREEN}Prerequisites:${NC}
+PREREQUISITES:
     1. GitHub CLI (gh) version ${REQUIRED_GH_VERSION} or higher installed
     2. Authenticated with GitHub (gh auth login)
     3. mkrelease.sh completed successfully
     4. All GitHub Actions workflows completed
     5. On the 'main' branch with latest tag pushed
 
-${GREEN}Automatic Pre-release Detection:${NC}
+AUTOMATIC PRE-RELEASE DETECTION:
     If --pre-release is NOT specified, the script automatically determines
     pre-release status based on the tag name:
     
     - Tags ending with -rc1, -rc2, etc. → Pre-release
     - All other tags (e.g., v1.0.0)     → Stable release
 
-${GREEN}What This Script Does:${NC}
+WHAT THIS SCRIPT DOES:
     1. Validates gh CLI is installed and authenticated
     2. Checks that no workflows are currently running
     3. Identifies the latest tag on main branch
@@ -131,7 +131,7 @@ ${GREEN}What This Script Does:${NC}
     8. Creates GitHub release with artifacts
     9. Cleans up temporary files
 
-${GREEN}Examples:${NC}
+EXAMPLES:
     # Create a stable release (tag: v1.0.0)
     $0
 
@@ -144,7 +144,7 @@ ${GREEN}Examples:${NC}
     # Preview what would be done
     $0 --dry-run
 
-${GREEN}See Also:${NC}
+SEE ALSO:
     - scripts/mkrelease.sh    (Run this first to create the release)
     - scripts/mkbld.sh        (Build and test the package)
 
