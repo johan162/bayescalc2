@@ -1,14 +1,14 @@
-
 # BayesCalc2: A Bayesian Network Calculator
 
-| Category | Badge |
-|---|---|
-|License|[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)|
-|Python|[![PyPI version](https://badge.fury.io/py/bayescalc2.svg)](https://badge.fury.io/py/bayescalc2) [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/) |
-|Code policy|[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/) [![Linting: flake8](https://img.shields.io/badge/linting-flake8-yellowgreen)](https://flake8.pycqa.org/)|
-|Pipeline | [![Continuous Integration](https://github.com/johan162/bayescalc2/actions/workflows/ci.yml/badge.svg)](https://github.com/johan162/bayescalc2/actions/workflows/ci.yml) [![Coverage](https://img.shields.io/badge/coverage-83%25-darkgreen.svg)](https://github.com/johan162/bayescalc2) |
-
-
+| Category | Badges |
+|----------|--------|
+|**Package**|[![PyPI version](https://img.shields.io/pypi/v/bayescalc2.svg)](https://pypi.org/project/bayescalc2/) [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)|
+|**License**|[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)|
+|**Release**|[![GitHub release](https://img.shields.io/github/v/release/johan162/bayescalc2?include_prereleases)](https://github.com/johan162/bayescalc2/releases)|
+|**CI/CD**|[![CI](https://github.com/johan162/bayescalc2/actions/workflows/ci.yml/badge.svg)](https://github.com/johan162/bayescalc2/actions/workflows/ci.yml) [![Coverage](https://img.shields.io/badge/coverage-83%25-green)](coverage.svg)|
+|**Code Quality**|[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Checked with mypy](https://www.mypy-lang.org/static/mypy_badge.svg)](https://mypy-lang.org/) [![Linting: flake8](https://img.shields.io/badge/linting-flake8-yellowgreen)](https://flake8.pycqa.org/)|
+|Repo URL|[![GitHub](https://img.shields.io/badge/GitHub-100000?style=flat-square&logo=github&logoColor=white)](https://github.com/johan162/bayescalc2)|
+| Documentation| [User Guide](https://github.com/johan162/bayescalc2/blob/main/docs/user_guide.md),  [Developer Guide](https://github.com/johan162/bayescalc2/blob/main/docs/developer_guide.md) |
 
 
 ## Overview
@@ -216,7 +216,6 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 - **Documentation**: See `docs/user_guide.md` for detailed usage instructions
 - **Developer guide**: See `docs/developer_guide.md` for how to get started to contribute and overview of key dev practices and algorithms.
 - **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/johan162/bayescalc2/issues)
-- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/johan162/bayescalc2/discussions)
 
 ## Citation
 
@@ -228,7 +227,7 @@ If you use BayesCalc2 in academic work, please cite:
   author={Johan Persson},
   year={2025},
   url={https://github.com/johan162/bayescalc2},
-  version={v1.0.0}
+  version={v1.0.1}
 }
 ```
 

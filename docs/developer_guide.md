@@ -16,6 +16,7 @@ Purpose: A guide for developers contributing to the BayesCalc2 Bayesian Network 
 9. [Debugging and Performance](#debugging-and-performance)
 10. [Release Process](#release-process)
 11. [Appendix A: Variable Elimination Algorithm](#appendix-a-variable-elimination-algorithm---detailed-implementation-guide)
+12. [Appendix B: GitHub Release Script Documentation](#appendix-b-github-release-script-documentation)
 
 ---
 
@@ -23,7 +24,7 @@ Purpose: A guide for developers contributing to the BayesCalc2 Bayesian Network 
 
 Steps to clone the repo and setup a working virtusl environment.
 
-### Installing Pre-erqs
+### Installing Pre-reqs
 
 #### `graphviz`:
 The bayescalc2 is using graphviz via its Python bindings to create graph
@@ -1561,33 +1562,6 @@ BayesCalc2 follows [Semantic Versioning](https://semver.org/):
 - **MINOR**: New functionality (backwards compatible)
 - **PATCH**: Bug fixes (backwards compatible)
 
-#### Version Update Process
-1. **Update `src/bayescalc/__init__.py`**:
-```python
-__version__ = "2.1.0"
-```
-
-2. **Update `pyproject.toml`**:
-```toml
-[project]
-version = "2.1.0"
-```
-
-3. **Update `CHANGELOG.md`**:
-```markdown
-## [2.1.0] - 2025-09-26
-
-### Added
-- New entropy calculation commands
-- Enhanced tab completion for command arguments
-
-### Fixed
-- Fixed import issues in test suite
-- Improved error messages for invalid queries
-
-### Changed
-- Improved CPT display format with 3-column layout
-```
 
 ### Release Checklist
 
@@ -1601,26 +1575,26 @@ version = "2.1.0"
 
 #### Git Flow and Release Strategy
 
-BayesCalc2 follows a **Git Flow** branching strategy with continuous integration principles:
+BayesCalc2 follows a simplified **Git Flow** branching strategy with continuous integration principles:
 
-##### Branching Model Diagrams
+#### Branching Model Diagrams
 
-To make the workflow clearer, here are separate diagrams for each major process, followed by a simplified high-level overview.
+To make the workflow clearer, here are separate diagrams for each major proces.
 
 **1. High-Level Overview**
 
-This diagram shows the main relationship between the `develop` and `main` branches. Features are integrated into `develop`, and `release` and `hotfix` branches are used to update `main`.
+This diagram shows the main relationship between the `develop` and `main` branches. Features are integrated into `develop`.
 
 ```
-main   <------------------ release/vX.Y.Z <------------------ develop
-  ^                             ^                              ^
-  |                             |                              |
-  '---- hotfix/critical-fix ----'                              '---- feature/new-feature
+main   <------------------ develop
+                              ^
+                              |
+                              '---- feature/bugfix/refactor/etc.
 ```
 
-**2. Feature Branch Workflow**
+**2. Feature/Bugfix/Refactor Branch Workflow**
 
-Feature branches are for developing new features. They are created from `develop` and merged back into `develop`.
+Feature/bugfix/refactor branches are for developing new features and bugfixes. They are created from `develop` and merged back into `develop`.
 
 ```
            (start work)
@@ -1630,34 +1604,8 @@ develop ------------------.----------------------------------.------------>
                                 (commit 1) (commit 2)
 ```
 
-**3. Release Branch Workflow**
 
-When `develop` is ready for a release, a `release` branch is created. This branch is used for final testing and versioning. It is then merged into `main` (and tagged), and also merged back into `develop` to include any changes made during the release process.
-
-```
-main   ---------------------.----------------------------------.--->
-                           / (merge to main & tag)            /
-                          /                                  /
-develop --.--------------( release/vX.Y.Z )------------------'----->
-           \            (version bump, final tests)         (merge back)
-            `---------------------------------------------`
-```
-
-**4. Hotfix Branch Workflow**
-
-If a critical bug is found in production (`main`), a `hotfix` branch is created directly from `main`. After fixing the bug, the hotfix is merged into both `main` (for immediate deployment) and `develop` (to ensure the fix is included in future releases).
-
-```
-main   ---.---------------------.------------------->
-         /                      | (merge & tag)
-        / (fix critical bug)    |
-       ( hotfix/critical-bug )--'
-        \                       |
-         \                      | (merge back)
-develop --'---------------------'------------------->
-```
-
-##### Branch Types and Purposes
+### Branch Types and Purposes
 
 **`main` Branch** (Production)
 - **Purpose**: Stable, production-ready code
@@ -1675,42 +1623,16 @@ develop --'---------------------'------------------->
 - **Purpose**: Individual feature development
 - **Naming**: `feature/descriptive-name` (e.g., `feature/tab-completion`)
 - **Source**: Branch from `develop`
-- **Target**: Merge back to `develop` via PR
+- **Target**: Merge back to `develop` via PR (or direct merge))
 - **Lifetime**: Short-lived (days to weeks)
 
-**Release Branches** (`release/*`)
-- **Purpose**: Prepare specific release versions
-- **Naming**: `release/vX.Y.Z` (e.g., `release/v2.1.0`)
-- **Source**: Branch from `develop` when feature-complete
-- **Activities**: Version bumps, changelog updates, final testing
-- **Target**: Merge to `main` for release, then merge back to `develop`
+**Bugfix Branches** (`bugfix/*`)
+- **Purpose**: Individual bugfix development
+- **Naming**: `bugfix/bug-description` (e.g., `bugfix/missing-option-check`)
+- **Source**: Branch from `develop`
+- **Target**: Merge back to `develop` via PR (or direct merge)
+- **Lifetime**: Short-lived (days to weeks)
 
-**Hotfix Branches** (`hotfix/*`)
-- **Purpose**: Critical production bug fixes
-- **Naming**: `hotfix/descriptive-name` (e.g., `hotfix/critical-parsing-bug`)
-- **Source**: Branch from `main` (production)
-- **Target**: Merge to both `main` AND `develop`
-- **Urgency**: Immediate release without waiting for next planned release
-
-##### Release Workflow Principles
-
-**Continuous Integration**
-- Every push to `develop` triggers full test suite
-- Feature branches must pass CI before merging
-- Release branches undergo extended testing including manual validation
-- No code reaches `main` without passing comprehensive tests
-
-**Quality Gates**
-1. **Feature Complete**: All planned features merged to `develop`
-2. **Testing Complete**: All tests pass, including integration tests
-3. **Documentation Complete**: User-facing docs updated
-4. **Performance Validated**: No regressions in benchmarks
-5. **Security Cleared**: No vulnerabilities detected
-
-**Version Strategy**
-- **Major** (X.0.0): Breaking API changes, major new functionality
-- **Minor** (X.Y.0): New features, backwards compatible
-- **Patch** (X.Y.Z): Bug fixes, backwards compatible
 
 #### Standard Release Process
 
@@ -1720,29 +1642,30 @@ develop --'---------------------'------------------->
 - All planned features merged to `develop` branch
 - No known critical bugs
 - Documentation updated for new features
-- All tests passing on latest `develop`
+- All tests passing on latest `develop` by passing the build script `scripts/mkbld.sh`
 
-**Release Script** 
-See: `scripts/release.sh`
+**Release Scripts** 
 
-Usage: `./scripts/release.sh <version> [major|minor|patch] [--dry-run] [--help]`
+The release process is a two-step stage process
+
+#### Release step 1: Createing a release tag
+Running the git release script  `scripts/mkrelease.sh` while on the `develop` branch.
+   This will merge back and squash all changes on develop to main, tag the release, and finally
+   merge back changes from main onto develop. 
+
+Usage: 
+
+`./scripts/mkrelease.sh <version> [major|minor|patch] [--dry-run] [--help]`
 
 ```
-$ ./scripts/release.sh 2.1.0 minor
-$ ./scripts/release.sh 2.1.0 minor --dry-run
-$ ./scripts/release.sh --help
+$ ./scripts/mkrelease.sh 2.1.0 minor
+$ ./scripts/mkrelease.sh 2.1.0 minor --dry-run
+$ ./scripts/mkrelease.sh --help
 ```
 
-**Dry-Run Benefits:**
-- ✅ **Preview all commands** before execution
-- ✅ **Validate arguments** and repository state
-- ✅ **See exact git operations** that would be performed
-- ✅ **Check quality gates** without side effects
-- ✅ **Identify issues early** before making changes
-- ✅ **Perfect for testing** script modifications
 
 **Quality Gates Enforced:**
-- ✅ **70%+ test coverage** requirement
+- ✅ **80%+ test coverage** requirement
 - ✅ **All example networks** must load and execute
 - ✅ **CLI and REPL** functionality validation
 - ✅ **Package building** and validation via twine
@@ -1753,53 +1676,29 @@ $ ./scripts/release.sh --help
 - ✅ **Semver compliance** validation
 - ✅ **Duplicate version** prevention
 
-#### Hotfix Process
+#### Release step 2: Creating a GitHub Release
 
-```bash
-# 1. Critical bug discovered in production (main)
-git checkout main
-git pull origin main
-git checkout -b hotfix/critical-parsing-bug
+After a succesful run of the git/branch release script it is time to create the GitHub release. using the script `scripts/mkghrelease.sh`. This will use the latest tag created and name a new release with this name. The GitHub release will be made with an updated release note and the latest artifacts. Due to the CI/CD workflow this will also trigger a release to be pushed to PyPI with the given version number.
 
-# 2. Fix the bug with minimal changes
-# Edit only the necessary files to fix the critical issue
+Usage:
 
-# 3. Test the fix
-pytest tests/test_parser.py
-pytest tests/test_critical_functionality.py
+`./scripts/mkghrelease.sh [--dry-run] [--help] [--pre-release]`
 
-# 4. Update version (patch increment)
-sed -i 's/version = "2.1.0"/version = "2.1.1"/' pyproject.toml
-echo '__version__ = "2.1.1"' > src/bayescalc/__init__.py
-
-# 5. Commit hotfix
-git add .
-git commit -m "hotfix: fix critical parsing bug
-
-- Fixed null pointer exception in parser
-- Added validation for empty input
-- Resolves production crash #456"
-
-git push origin hotfix/critical-parsing-bug
-
-# 6. Create PR to main (expedited review process)
-# Merge to main immediately after approval
-
-# 7. Tag hotfix release
-git checkout main
-git pull origin main
-git tag -a v2.1.1 -m "Hotfix release v2.1.1 - critical parsing bug fix"
-git push origin v2.1.1
-
-# 8. Merge hotfix to develop
-git checkout develop
-git merge main
-git push origin develop
-
-# 9. Clean up
-git branch -d hotfix/critical-parsing-bug
-git push origin --delete hotfix/critical-parsing-bug
 ```
+$ ./scripts/mkghrelease.sh
+$ ./scripts/mkghrelease.sh --dry-run
+$ ./scripts/mkghrelease.sh --help
+$ ./scripts/mkghrelease.sh --pre-release
+```
+
+**Quality Gates Enforced:**
+- ✅ **Authenticated** That the user is authenticated to use `gh`
+- ✅ **Running workflows** Checks that no workflows are currently running
+- ✅ **Auto-naming** Identifies the latest tag on main branch
+- ✅ **Tag validation** Validates tag format (vX.Y.Z or vX.Y.Z-rcN)
+- ✅ **Artifact validation** Validates artifacts in dist/ directory
+- ✅ **Release creation** Creates GitHub release with artifacts and release notes
+
 
 ### Post-Release
 
@@ -1817,19 +1716,19 @@ git push origin --delete hotfix/critical-parsing-bug
 
 ---
 
-## Appendix A: Variable Elimination Algorithm - Detailed Implementation Guide
+# Appendix A: Variable Elimination Algorithm - Detailed Implementation Guide
 
 This appendix provides a comprehensive, step-by-step explanation of the Variable Elimination algorithm as implemented in BayesCalc2, complete with worked examples and implementation details.
 
-### Algorithm Overview
+## Algorithm Overview
 
 Variable Elimination is an exact inference algorithm for Bayesian networks that computes marginal and conditional probabilities by systematically eliminating variables through factor operations. The algorithm transforms a complex joint probability computation into a sequence of simpler factor manipulations.
 
-#### Core Concept
+### Core Concept
 
 Instead of computing the full joint probability table (which grows exponentially), Variable Elimination works with **factors** - smaller probability tables that are combined and reduced as needed. This approach is much more efficient for most practical networks.
 
-#### Mathematical Foundation
+### Mathematical Foundation
 
 For a Bayesian network with variables X₁, X₂, ..., Xₙ, the joint probability factors as:
 
@@ -1841,9 +1740,9 @@ To compute a conditional probability P(Q | E) where Q are query variables and E 
 
 Variable elimination computes this efficiently by eliminating hidden variables in a strategic order.
 
-### Step-by-Step Algorithm
+## Step-by-Step Algorithm
 
-#### Phase 1: Network Preparation
+### Phase 1: Network Preparation
 
 **Input**: Query variables Q, Evidence E, Bayesian Network BN
 **Output**: Conditional probability distribution P(Q | E)
@@ -1853,7 +1752,7 @@ Variable elimination computes this efficiently by eliminating hidden variables i
 3. **Identify Variables**: Determine which variables need elimination
 4. **Order Selection**: Choose elimination order (affects efficiency)
 
-#### Phase 2: Variable Elimination Loop
+### Phase 2: Variable Elimination Loop
 
 For each variable X to eliminate:
 1. **Collect Factors**: Find all factors containing X
@@ -1861,16 +1760,16 @@ For each variable X to eliminate:
 3. **Marginalize**: Sum out X from the joined factor
 4. **Replace**: Substitute new factor for old ones
 
-#### Phase 3: Final Computation
+### Phase 3: Final Computation
 
 1. **Join Remaining**: Multiply all remaining factors
 2. **Normalize**: Convert to conditional probabilities
 
-### Detailed Example: Rain-Sprinkler-GrassWet Network
+## Detailed Example: Rain-Sprinkler-GrassWet Network
 
 Let's work through computing **P(Rain | GrassWet=True)** step by step.
 
-#### Network Definition
+### Network Definition
 
 ```
 Variables:
@@ -1902,7 +1801,7 @@ P(GrassWet=False | Rain=False, Sprinkler=True) = 0.1
 P(GrassWet=False | Rain=False, Sprinkler=False) = 0.9
 ```
 
-#### Phase 1: Preparation
+### Phase 1: Preparation
 
 **Step 1.1: Extract Initial Factors**
 
@@ -1958,7 +1857,7 @@ Probabilities: {
 - Evidence variables: {GrassWet}
 - Variables to eliminate: {Sprinkler}
 
-#### Phase 2: Variable Elimination
+### Phase 2: Variable Elimination
 
 **Step 2.1: Eliminate Sprinkler**
 
@@ -2016,7 +1915,7 @@ Probabilities: {
 }
 ```
 
-#### Phase 3: Final Computation
+### Phase 3: Final Computation
 
 **Step 3.1: Join Remaining Factors**
 
@@ -2046,15 +1945,15 @@ P(Rain=True | GrassWet=True) = 0.16038 / 0.49638 ≈ 0.323
 P(Rain=False | GrassWet=True) = 0.336 / 0.49638 ≈ 0.677
 ```
 
-#### Final Result
+### Final Result
 
 **P(Rain | GrassWet=True) = {True: 0.323, False: 0.677}**
 
 This means that given the grass is wet, there's approximately a 32.3% chance it rained and a 67.7% chance it didn't rain.
 
-### Implementation Details
+## Implementation Details
 
-#### Factor Data Structure
+### Factor Data Structure
 
 ```python
 @dataclass
@@ -2067,7 +1966,7 @@ class Factor:
         self._validate_probabilities()
 ```
 
-#### Join Operation Implementation
+### Join Operation Implementation
 
 ```python
 def _join_factors(self, factor1: Factor, factor2: Factor) -> Factor:
@@ -2098,7 +1997,7 @@ def _join_factors(self, factor1: Factor, factor2: Factor) -> Factor:
     return new_factor
 ```
 
-#### Marginalization Implementation
+### Marginalization Implementation
 
 ```python
 def _sum_out(self, factor: Factor, var_to_eliminate: Variable) -> Factor:
@@ -2127,9 +2026,9 @@ def _sum_out(self, factor: Factor, var_to_eliminate: Variable) -> Factor:
     return new_factor
 ```
 
-### Optimization Strategies
+## Optimization Strategies
 
-#### Elimination Order Selection
+### Elimination Order Selection
 
 The order in which variables are eliminated significantly affects performance. BayesCalc2 uses a simple heuristic:
 
@@ -2147,7 +2046,7 @@ def _select_elimination_order(self, variables_to_eliminate: Set[str]) -> List[st
 - **Min-width**: Choose variable that results in smallest factor size
 - **Weighted min-fill**: Consider both factor size and number of factors
 
-#### Complexity Analysis
+### Complexity Analysis
 
 **Time Complexity**: O(n × d^w) where:
 - n = number of variables
@@ -2161,9 +2060,9 @@ def _select_elimination_order(self, variables_to_eliminate: Set[str]) -> List[st
 - Networks with cycles: potentially exponential
 - Good elimination order crucial for performance
 
-### Common Implementation Pitfalls
+## Common Implementation Pitfalls
 
-#### 1. Factor Alignment Issues
+### 1. Factor Alignment Issues
 
 **Problem**: Variables in different orders between factors
 ```python
@@ -2180,7 +2079,7 @@ map1 = [new_vars.index(v) for v in factor1.variables]
 map2 = [new_vars.index(v) for v in factor2.variables]
 ```
 
-#### 2. Evidence Handling Errors
+### 2. Evidence Handling Errors
 
 **Problem**: Not properly reducing factors with evidence
 ```python
@@ -2198,7 +2097,7 @@ def normalize_value(value):
     return value
 ```
 
-#### 3. Numerical Precision Issues
+### 3. Numerical Precision Issues
 
 **Problem**: Floating point errors accumulate
 ```python
@@ -2212,9 +2111,9 @@ if total_probability == 1.0:  # Exact comparison problematic
 if abs(total_probability - 1.0) < 1e-9:
 ```
 
-### Testing Variable Elimination
+## Testing Variable Elimination
 
-#### Unit Test Structure
+### Unit Test Structure
 
 ```python
 def test_variable_elimination_step_by_step(self):
@@ -2243,7 +2142,7 @@ def test_variable_elimination_step_by_step(self):
     self.assertAlmostEqual(total_prob, 1.0, places=6)
 ```
 
-#### Integration Tests
+### Integration Tests
 
 ```python
 def test_inference_against_hand_calculation(self):
@@ -2264,3 +2163,335 @@ def test_inference_against_hand_calculation(self):
 This detailed implementation guide provides everything needed to understand, modify, and extend the Variable Elimination algorithm in BayesCalc2. The step-by-step example demonstrates the algorithm's mechanics, while the implementation details show how theory translates to working code.
 
 ---
+
+# APPENDIX B: GitHub Release Script Documentation
+
+## Overview
+
+`mkghrelease.sh` automates GitHub release creation using the `gh` CLI tool. It's designed to be run **after** `mkrelease.sh` completes and all GitHub Actions workflows pass.
+
+## Installation Prerequisites
+
+### Install GitHub CLI
+
+```bash
+# macOS
+brew install gh
+
+# Ubuntu/Debian
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+sudo apt-add-repository https://cli.github.com/packages
+sudo apt update
+sudo apt install gh
+
+# Fedora
+sudo dnf install gh
+
+# Windows
+winget install --id GitHub.cli
+```
+
+### Authenticate with GitHub
+
+```bash
+# Interactive authentication
+gh auth login
+
+# Select: GitHub.com
+# Select: HTTPS
+# Authenticate with: Login with a web browser
+# Follow the prompts
+```
+
+### Verify Installation
+
+```bash
+gh --version
+# Should show: gh version 2.0.0 or higher
+
+gh auth status
+# Should show: Logged in to github.com as <username>
+```
+
+## Usage
+
+### Basic Release Creation
+
+```bash
+# After mkrelease.sh completes:
+./scripts/mkghrelease.sh
+```
+
+This will:
+1. Check prerequisites
+2. Verify no workflows are running
+3. Extract release notes from CHANGELOG.md
+4. Open editor for you to review/edit notes
+5. Create GitHub release with artifacts
+6. Upload wheel and sdist files
+
+### Pre-release Creation
+
+```bash
+# For release candidates (auto-detected from tag):
+./scripts/mkghrelease.sh
+# Tag v1.0.0-rc1 → automatically marked as pre-release
+
+# Force pre-release regardless of tag:
+./scripts/mkghrelease.sh --pre-release
+```
+
+### Dry Run (Preview)
+
+```bash
+# See what would be done without executing:
+./scripts/mkghrelease.sh --dry-run
+```
+
+## Complete Workflow Example
+
+```bash
+# Step 1: Create release on local/GitHub
+./scripts/mkrelease.sh v1.0.0 major
+
+# Step 2: Wait for CI to complete
+gh run list --branch main
+# Or watch in real-time:
+gh run watch
+
+# Step 3: Verify CI passed
+gh run list --branch main --limit 1
+
+# Step 4: Create GitHub release
+./scripts/mkghrelease.sh
+
+# Step 5: Verify release
+gh release view v1.0.0
+# Or visit: https://github.com/johan162/bayescalc2/releases/tag/v1.0.0
+```
+
+## Release Notes Editing
+
+The script extracts release notes from CHANGELOG.md and opens your editor:
+
+### Default Editor Priority
+
+1. `$EDITOR` environment variable
+2. `$VISUAL` environment variable
+3. `nano` (fallback)
+
+### Set Your Preferred Editor
+
+```bash
+# In ~/.bashrc or ~/.zshrc
+export EDITOR=vim
+# or
+export EDITOR=code  # VS Code
+# or
+export EDITOR=nano
+```
+
+### Release Notes Format
+
+The script extracts the section matching your tag from CHANGELOG.md:
+
+```markdown
+## [v1.0.0] - 2025-10-10
+
+### 📋 Summary
+Major refactor with new inference algorithm...
+
+### ✨ Additions
+- New load() command
+- Graph visualization
+
+### 🚀 Improvements
+- Faster inference engine
+- Better error messages
+```
+
+You can edit this before the release is created.
+
+## Troubleshooting
+
+### Error: "gh is not installed"
+
+```bash
+# Install gh CLI (see Installation Prerequisites above)
+brew install gh  # macOS
+```
+
+### Error: "Not authenticated with GitHub"
+
+```bash
+gh auth login
+# Follow the prompts
+```
+
+### Error: "There are N workflow(s) currently running"
+
+```bash
+# Wait for workflows to complete
+gh run list --branch main
+
+# Watch in real-time
+gh run watch
+```
+
+### Error: "Latest workflow did not succeed"
+
+```bash
+# Check workflow status
+gh run list --branch main --limit 5
+
+# View specific run details
+gh run view <run-id>
+
+# Fix the issue and re-run workflows
+```
+
+### Error: "Release v1.0.0 already exists"
+
+```bash
+# Option 1: Delete and recreate
+gh release delete v1.0.0
+./scripts/mkghrelease.sh
+
+# Option 2: Create new version
+./scripts/mkrelease.sh v1.0.1 patch
+./scripts/mkghrelease.sh
+```
+
+### Error: "Wheel file not found for version X.Y.Z"
+
+```bash
+# Rebuild the package
+./scripts/mkbld.sh
+
+# Or re-run release script
+./scripts/mkrelease.sh v1.0.0 major
+```
+
+### Error: "Must be on 'main' branch"
+
+```bash
+git checkout main
+git pull origin main
+./scripts/mkghrelease.sh
+```
+
+## Pre-release vs Stable Release
+
+### Automatic Detection
+
+The script automatically determines release type:
+
+| Tag Format | Release Type | Example |
+|------------|--------------|---------|
+| `vX.Y.Z-rcN` | Pre-release | `v1.0.0-rc1`, `v2.1.0-rc5` |
+| `vX.Y.Z` | Stable | `v1.0.0`, `v2.1.0` |
+
+### Force Pre-release
+
+```bash
+# Override automatic detection
+./scripts/mkghrelease.sh --pre-release
+# Even v1.0.0 will be marked as pre-release
+```
+
+## Artifacts Uploaded
+
+For each release, the script uploads:
+
+1. **Wheel file**: `bayescalc2-X.Y.Z-py3-none-any.whl`
+   - Binary distribution
+   - Fast installation
+   - Platform independent
+
+2. **Source distribution**: `bayescalc2-X.Y.Z.tar.gz`
+   - Complete source code
+   - Includes all files from MANIFEST.in
+   - For building from source
+
+Both files are validated for:
+- Correct version number in filename
+- Minimum file size (> 1KB)
+- Existence in `dist/` directory
+
+## Integration with PyPI
+
+After creating GitHub release, optionally upload to PyPI:
+
+```bash
+# Test PyPI first (recommended)
+python -m twine upload --repository testpypi dist/*
+
+# Production PyPI
+python -m twine upload dist/*
+```
+
+## Script Exit Codes
+
+- `0` - Success
+- `1` - Error (validation failed, prerequisites not met, etc.)
+- `130` - User aborted (Ctrl+C or empty release notes)
+
+## Environment Variables
+
+None required. The script uses:
+- `$EDITOR` or `$VISUAL` - For editing release notes
+- Git repository context (branch, tags, etc.)
+
+## Files Created/Modified
+
+### Temporary Files
+- `.github_release_notes.tmp` - Extracted release notes (deleted after use)
+
+### No Permanent Changes
+The script does NOT modify:
+- Git repository (no commits, tags, or branch changes)
+- Source code
+- CHANGELOG.md
+- Version files
+
+All changes should be done via `mkrelease.sh` before running this script.
+
+## Security Considerations
+
+- Requires GitHub authentication via `gh auth`
+- Uses existing git tags (no new tags created)
+- Only uploads files from `dist/` directory
+- Validates artifact names match tag version
+
+## Best Practices
+
+1. **Always run mkrelease.sh first**
+   ```bash
+   ./scripts/mkrelease.sh v1.0.0 major
+   ```
+
+2. **Wait for CI to complete**
+   ```bash
+   gh run watch
+   ```
+
+3. **Review artifacts before release**
+   ```bash
+   ls -lh dist/
+   ```
+
+4. **Use dry-run for first-time releases**
+   ```bash
+   ./scripts/mkghrelease.sh --dry-run
+   ```
+
+5. **Keep CHANGELOG.md updated**
+   - Script extracts notes from here
+   - Better notes = better release documentation
+
+## See Also
+
+- [../scripts/mkrelease.sh](mkrelease.sh ) - Create the release (run first)
+- [../scripts/mkbld.sh](mkbld.sh ) - Build and test the package
+- [../scripts/README.md](README.md ) - Complete scripts documentation
+- [GitHub CLI documentation](https://cli.github.com/manual/)
