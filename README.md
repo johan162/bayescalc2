@@ -216,7 +216,6 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 - **Documentation**: See `docs/user_guide.md` for detailed usage instructions
 - **Developer guide**: See `docs/developer_guide.md` for how to get started to contribute and overview of key dev practices and algorithms.
 - **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/johan162/bayescalc2/issues)
-- **Discussions**: Ask questions in [GitHub Discussions](https://github.com/johan162/bayescalc2/discussions)
 
 ## Citation
 
