@@ -546,8 +546,6 @@ fi
 
 print_success "Release notes ready"
 
-exit 1
-
 # =====================================
 # PHASE 6: CREATE GITHUB RELEASE
 # =====================================

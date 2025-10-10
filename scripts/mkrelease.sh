@@ -435,7 +435,7 @@ run_command "git merge --no-ff -m \"Merge branch 'main' into 'develop' after rel
 run_command "git push origin develop" "Pushing updated develop..."
 
 # 5.2: Clean up build artifacts
-run_command "rm -rf build/ dist/ src/*.egg-info/ htmlcov/" "Cleaning up build artifacts..."
+run_command "rm -rf build/ src/*.egg-info/ htmlcov/" "Cleaning up build artifacts..."
 run_command "rm -f *.bak src/bayescalc/*.bak" "Removing backup files..."
 
 # =====================================
