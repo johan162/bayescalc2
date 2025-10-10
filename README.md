@@ -227,7 +227,7 @@ If you use BayesCalc2 in academic work, please cite:
   author={Johan Persson},
   year={2025},
   url={https://github.com/johan162/bayescalc2},
-  version={v1.0.0}
+  version={v1.0.1}
 }
 ```
 
