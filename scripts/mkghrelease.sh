@@ -261,7 +261,7 @@ print_success "GitHub CLI found: $(gh --version | head -1)"
 
 # 1.2: Check gh version
 print_step "Checking gh version..."
-GH_VERSION=$(gh --version | head -1 | sed 's/gh version \([0-9.]*\).*/\1/')
+GH_VERSION=$(gh --version | head -1 | awk '{print $3}')
 if ! compare_versions "$GH_VERSION" "$REQUIRED_GH_VERSION"; then
     print_error "GitHub CLI version $GH_VERSION is too old (need >= $REQUIRED_GH_VERSION)"
     echo "Update with: brew upgrade gh (macOS) or see https://github.com/cli/cli#installation"
