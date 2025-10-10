@@ -261,7 +261,7 @@ print_success "GitHub CLI found: $(gh --version | head -1)"
 
 # 1.2: Check gh version
 print_step "Checking gh version..."
-GH_VERSION=$(gh --version | grep -oP '(?<=gh version )[0-9.]+' | head -1)
+GH_VERSION=$(gh --version | head -1 | sed 's/gh version \([0-9.]*\).*/\1/')
 if ! compare_versions "$GH_VERSION" "$REQUIRED_GH_VERSION"; then
     print_error "GitHub CLI version $GH_VERSION is too old (need >= $REQUIRED_GH_VERSION)"
     echo "Update with: brew upgrade gh (macOS) or see https://github.com/cli/cli#installation"
@@ -488,9 +488,11 @@ fi
 
 # Extract the section for this version from CHANGELOG.md
 # Looks for ## [$VERSION] and captures until next ## or EOF
-awk "/## \[$LATEST_TAG\]/,/^## \[/" "$CHANGELOG_FILE" | sed '$d' > "$RELEASE_NOTES_FILE"
+sed -n "/^## \[$LATEST_TAG\]/,/^## \[/p" "$CHANGELOG_FILE" | sed '$d' > "$RELEASE_NOTES_FILE"
 
-if [[ ! -s "$RELEASE_NOTES_FILE" ]]; then
+EXTRACT_STATUS=$?
+
+if [[ $EXTRACT_STATUS -ne 0 ]] || [[ ! -s "$RELEASE_NOTES_FILE" ]]; then
     print_warning "Could not extract release notes for $LATEST_TAG from CHANGELOG.md"
     echo "Creating default release notes template..."
     cat > "$RELEASE_NOTES_FILE" << EOF
@@ -543,6 +545,8 @@ if [[ ! -s "$RELEASE_NOTES_FILE" ]]; then
 fi
 
 print_success "Release notes ready"
+
+exit 1
 
 # =====================================
 # PHASE 6: CREATE GITHUB RELEASE
@@ -625,8 +629,8 @@ else
     echo "Next steps:"
     echo "  1. Verify release on GitHub:"
     echo "     https://github.com/johan162/bayescalc2/releases"
-    echo "  2. Test PyPI upload (if not automated):"
-    echo "     python -m twine upload dist/*"
+    echo "  2. Verify that PyPI upload has been done or is in progress (via GitHub Actions):"
+    echo "     https://github.com/johan162/bayescalc2/actions"
     echo "  3. Announce release to users"
     echo ""
 fi

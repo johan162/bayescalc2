@@ -25,3 +25,5 @@ htmlcov/
 *.jpeg
 *.gif
 *.svg
+*.tmp
+*.log
