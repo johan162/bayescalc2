@@ -1,3 +1,14 @@
+## [v1.0.2] - 2025-10-11
+
+Release Type: patch
+
+### 🚀 Improvements
+- Updated documentation across the tree
+
+### 🛠 Internal
+- Optimize build and release scripts
+- Added GitHub release script to automate creation of GitHub releases.
+
 ## [v1.0.1] - 2025-10-11
 
 Release Focus: patch
