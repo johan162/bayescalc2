@@ -1,6 +1,6 @@
 # Build Scripts
 
-This directory contains utility scripts for building, testing, and maintaining the BayesCalc2 project.
+This directory contains utility scripts for building, testing, releasing, and maintaining the BayesCalc2 project.
 
 ## Scripts Overview
 
@@ -75,6 +75,101 @@ Automatically updates the coverage badge in README.md based on actual test cover
 [![Coverage](https://img.shields.io/badge/coverage-83%25-green.svg)](https://github.com/johan162/bayescalc2)
 ```
 
+### `mkrelease.sh` - Release Automation Script
+
+Automates the complete release process from develop to main branch.
+
+```bash
+./scripts/mkrelease.sh <version> [release_type] [OPTIONS]
+```
+
+**Arguments:**
+- `<version>` - Version tag (e.g., `v1.0.0`, `v2.1.0-rc1`)
+- `[release_type]` - Optional: `major`, `minor`, `patch` (for changelog)
+
+**Options:**
+- `--dry-run` - Preview release steps without executing
+- `--help` - Display help message
+
+**What it does:**
+1. Validates version format and prerequisites
+2. Runs complete build pipeline (`mkbld.sh`)
+3. Updates version in `__init__.py` and `pyproject.toml`
+4. Updates or creates CHANGELOG entry
+5. Commits changes on develop
+6. Merges develop → main (squash merge)
+7. Creates and pushes release tag
+8. Syncs main back to develop
+9. Cleans up build artifacts
+
+**Requirements:**
+- On `develop` branch with clean working directory
+- All tests passing
+- Version format: `vX.Y.Z` or `vX.Y.Z-rcN`
+
+**Example:**
+```bash
+# Create release candidate
+./scripts/mkrelease.sh v1.0.0-rc1 minor
+
+# Create stable release
+./scripts/mkrelease.sh v1.0.0 major
+
+# Preview what would happen
+./scripts/mkrelease.sh v1.0.1 patch --dry-run
+```
+
+### `mkghrelease.sh` - GitHub Release Creator
+
+Creates GitHub releases using the `gh` CLI tool. **Run after `mkrelease.sh` and GitHub Actions complete.**
+
+```bash
+./scripts/mkghrelease.sh [OPTIONS]
+```
+
+**Options:**
+- `--help` - Display help message
+- `--pre-release` - Force marking as pre-release
+- `--dry-run` - Preview without creating release
+
+**What it does:**
+1. Validates `gh` CLI is installed and authenticated
+2. Checks no workflows are currently running
+3. Identifies latest tag on main branch
+4. Validates tag format and artifacts in `dist/`
+5. Extracts release notes from CHANGELOG.md
+6. Opens editor for you to review/edit notes
+7. Creates GitHub release with wheel and sdist
+8. Automatically determines pre-release status from tag
+
+**Pre-release Detection:**
+- Tags ending with `-rc1`, `-rc2`, etc. → Automatically marked as pre-release
+- Other tags (e.g., `v1.0.0`) → Stable release
+- Use `--pre-release` to force pre-release status
+
+**Requirements:**
+- GitHub CLI (`gh`) version 2.0.0+ installed
+- Authenticated with GitHub (`gh auth login`)
+- On `main` branch
+- `mkrelease.sh` completed successfully
+- All GitHub Actions workflows passed
+
+**Example:**
+```bash
+# After mkrelease.sh completes and CI passes:
+./scripts/mkghrelease.sh
+
+# Force as pre-release
+./scripts/mkghrelease.sh --pre-release
+
+# Preview what would be created
+./scripts/mkghrelease.sh --dry-run
+```
+
+**Artifacts uploaded:**
+- `bayescalc2-X.Y.Z-py3-none-any.whl` (wheel)
+- `bayescalc2-X.Y.Z.tar.gz` (source distribution)
+
 ## Usage Workflows
 
 ### Development Workflow
@@ -103,6 +198,60 @@ git diff README.md
 # Commit
 git add .
 git commit -m "feat: add new feature with tests"
+```
+
+### Complete Release Workflow
+
+```bash
+# 1. Development on develop branch
+git checkout develop
+# ... make changes, add features ...
+
+# 2. Build and test
+./scripts/mkbld.sh
+
+# 3. Commit changes
+git add .
+git commit -m "feat: add new feature"
+git push origin develop
+
+# 4. Create release (merges to main, creates tag)
+./scripts/mkrelease.sh v1.0.0 major
+
+# 5. Wait for GitHub Actions to complete
+# Check: gh run list --branch main
+
+# 6. Create GitHub release
+./scripts/mkghrelease.sh
+
+# 7. Verify release
+gh release view v1.0.0
+# Or visit: https://github.com/johan162/bayescalc2/releases
+
+# 8. Optional: Upload to PyPI
+python -m twine upload dist/*
+```
+
+### Release Candidate Workflow
+
+```bash
+# Create RC release
+./scripts/mkrelease.sh v1.0.0-rc1 minor
+
+# Wait for CI to pass
+gh run watch
+
+# Create pre-release on GitHub (auto-detected as pre-release)
+./scripts/mkghrelease.sh
+
+# Test the RC...
+# If issues found, fix and create rc2:
+./scripts/mkrelease.sh v1.0.0-rc2 minor
+./scripts/mkghrelease.sh
+
+# When ready for stable:
+./scripts/mkrelease.sh v1.0.0 minor
+./scripts/mkghrelease.sh
 ```
 
 ### CI/CD Integration
