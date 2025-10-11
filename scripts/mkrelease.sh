@@ -7,7 +7,51 @@
 
 set -euo pipefail  # Exit on any error
 
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# =====================================
+# Functions to print colored output
+# =====================================
+print_step() {
+    echo -e "${BLUE}==>${NC} ${1}"
+}
+
+print_step_colored() {
+    echo -e "${BLUE}==> ${1}${NC}"
+}
+
+print_success() {
+    echo -e "${GREEN}✓${NC} ${1}"
+}
+
+print_success_colored() {
+    echo -e "${GREEN}✓ ${1}${NC}"
+}
+
+print_error() {
+    echo -e "${RED}✗${NC} ${1}" >&2
+}
+
+print_error_colored() {
+    echo -e "${RED}❌ ${1}${NC}" >&2
+}
+# Alternate non-colored glyph for error: ✗
+
+print_warning() {
+    echo -e "${YELLOW}⚠${NC} ${1}"
+}
+
+print_warning_colored() {
+    echo -e "${YELLOW}⚠ ${1}${NC}"
+}
+
+# =====================================
 # Help function
+# =====================================
 show_help() {
     cat << EOF
 🚀 BayesCalc2 Release Script
@@ -101,7 +145,7 @@ for arg in "$@"; do
             shift
             ;;
         -*)
-            echo "❌ Unknown option: $arg"
+            print_error_colored "Unknown option: $arg"
             echo "Usage: $0 <version> [major|minor|patch] [--dry-run] [--help]"
             echo "Run '$0 --help' for detailed information"
             exit 1
@@ -118,7 +162,7 @@ for arg in "$@"; do
 done
 
 if [[ -z "$VERSION" ]]; then
-    echo "❌ Error: Version required"
+    print_error_colored "Error: Version required"
     echo ""
     echo "Usage: $0 <version> [major|minor|patch] [--dry-run] [--help]"
     echo ""
@@ -131,7 +175,7 @@ if [[ -z "$VERSION" ]]; then
     exit 1
 fi
 
-# Dry run function to show commands without executing
+# Function to execute command or print it in dry-run mode
 run_command() {
     local cmd="$1"
     local description="${2:-}"
@@ -156,7 +200,7 @@ check_condition() {
         return 0  # Don't actually fail in dry-run
     else
         if ! eval "$condition"; then
-            echo "$error_msg"
+            print_error_colored "$error_msg"
             exit 1
         fi
     fi
@@ -175,12 +219,13 @@ fi
 # PHASE 1: PRE-RELEASE VALIDATION
 # =====================================
 
-echo ""
-echo "🔍 PHASE 1: Pre-release validation"
+print_step_colored ""
+print_step_colored "🔍 PHASE 1: PRE-RELEASE VALIDATION"
+print_step_colored ""
 
 # 1.1: Verify we're on develop and it's clean
-check_condition '[[ $(git symbolic-ref --short HEAD) == "develop" ]]' "❌ Must be on develop branch"
-check_condition '[[ -z $(git status --porcelain) ]]' "❌ Working directory must be clean"
+check_condition '[[ $(git symbolic-ref --short HEAD) == "develop" ]]' "Must be on develop branch"
+check_condition '[[ -z $(git status --porcelain) ]]' "Working directory must be clean"
 
 if [[ "$DRY_RUN" == "false" && -n $(git status --porcelain) ]]; then
     git status --short
@@ -190,23 +235,24 @@ fi
 run_command "git pull origin develop" "Pulling latest changes..."
 
 # 1.3: Validate version format (semver)
-check_condition '[[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc[1-9][0-9]?)?$ ]]' "❌ Version must follow semver format (x.y.z or x.y.z-rcNN)"
+check_condition '[[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc[1-9][0-9]?)?$ ]]' "Version must follow semver format (x.y.z or x.y.z-rcNN)"
 
 # 1.4: Check if version already exists
-check_condition '! git tag | grep -q "${VERSION}\$"' "❌ Version $VERSION already exists"
+check_condition '! git tag | grep -q "${VERSION}\$"' "Version $VERSION already exists"
 
 # =====================================
 # PHASE 2: COMPREHENSIVE TESTING
 # =====================================
 
-echo ""
-echo "🧪 PHASE 2: Comprehensive testing suite"
+print_step_colored ""
+print_step_colored "🧪 PHASE 2: COMPREHENSIVE TESTING"
+print_step_colored ""
 
 # 2.1: Full test suite with coverage requirements
 run_command "pytest --cov=src/bayescalc --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80"  "Running full test suite with coverage..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
-    echo "❌ Test suite failed - aborting release"
+    print_error_colored "Test suite failed - aborting release"
     exit 1
 fi
 
@@ -226,7 +272,7 @@ else
     if command -v black >/dev/null 2>&1; then
         echo "  ✓ Checking code formatting..."
         black --check --diff src/ tests/ || {
-            echo "❌ Code formatting issues found. Run: black src/ tests/"
+            print_error_colored "Code formatting issues found. Run: black src/ tests/"
             exit 1
         }
     fi
@@ -243,7 +289,7 @@ else
         if [[ -f "$network" ]]; then
             echo "    Testing: $network"
             python -m bayescalc.main "$network" --cmd "help" >/dev/null 2>&1 || {
-                echo "❌ Failed to load network: $network"
+                print_error_colored "Failed to load network: $network"
                 exit 1
             }
         fi
@@ -254,7 +300,7 @@ fi
 run_command 'python -m bayescalc.main examples/rain_sprinkler_grass.net --cmd "P(Rain=True)" | grep -q "P() = 0.200000"' "Testing CLI probability queries..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
-    echo "❌ CLI probability query test failed"
+    print_error_colored "CLI probability query test failed"
     exit 1
 fi
 
@@ -263,7 +309,7 @@ echo "CLI query output verified successfully."
 run_command 'echo "printCPT(Rain)" | python -m bayescalc.main examples/rain_sprinkler_grass.net >/dev/null 2>&1' "Testing REPL commands..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
-    echo "❌ REPL command test failed"
+    print_error_colored "REPL command test failed"
     exit 1
 fi
 
@@ -273,14 +319,14 @@ echo "REPL command output verified successfully."
 run_command "python -m build --wheel --sdist" "Testing package building..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
-    echo "❌ Package build failed"
+    print_error_colored "Package build failed"
     exit 1
 fi
 
 run_command "python -m twine check dist/*" "Verifying built packages..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
-    echo "❌ Package validation failed"
+    print_error_colored "Package validation failed"
     exit 1
 fi
 
@@ -288,8 +334,9 @@ fi
 # PHASE 3: RELEASE PREPARATION
 # =====================================
 
-echo ""
-echo "📝 PHASE 3: Release preparation"
+print_step_colored ""
+print_step_colored "📝 PHASE 3: RELEASE PREPARATION"
+print_step_colored ""
 
 # 3.1: Update version numbers
 if [[ "$DRY_RUN" == "true" ]]; then
@@ -322,6 +369,9 @@ else
 ## [$VERSION] - $CHANGELOG_DATE
 
 Release Type: $RELEASE_TYPE
+
+### 📋 Summary 
+- [Brief summary of the release]
 
 ### ✨ Additions
 - [List new features added in this release]
@@ -356,7 +406,7 @@ fi
 run_command "pytest tests/test_main.py -v" "Final validation after version updates..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
-    echo "❌ Final validation failed"
+    print_error_colored "Final validation failed"
     exit 1
 fi
 
@@ -364,8 +414,9 @@ fi
 # PHASE 4: RELEASE EXECUTION
 # =====================================
 
-echo ""
-echo "🎯 PHASE 4: Release execution"
+print_step_colored ""
+print_step_colored "🎯 PHASE 4: RELEASE EXECUTION"
+print_step_colored ""
 
 # 4.1: Commit version updates
 run_command "git add src/bayescalc/__init__.py pyproject.toml CHANGELOG.md README.md" "Staging release files..."
@@ -426,26 +477,52 @@ run_command "git push origin \"$VERSION\"" "Pushing release tag..."
 # PHASE 5: POST-RELEASE CLEANUP
 # =====================================
 
-echo ""
-echo "🧹 PHASE 5: Post-release cleanup"
+print_step_colored ""
+print_step_colored "🧹 PHASE 5: POST-RELEASE CLEANUP AND MERGE BACK TO DEVELOP"
+print_step_colored ""
 
 # 5.1: Return to develop and merge back release changes
 run_command "git checkout develop" "Switching back to develop..."
 run_command "git merge --no-ff -m \"Merge branch 'main' into 'develop' after release $VERSION\" main" "Merging release changes back to develop..."
 run_command "git push origin develop" "Pushing updated develop..."
 
-# 5.2: Clean up build artifacts
-run_command "rm -rf build/ src/*.egg-info/ htmlcov/" "Cleaning up build artifacts..."
+# 5.2: Clean up old build artifacts
+run_command "rm -rf build/ dist/ src/*.egg-info/ htmlcov/" "Cleaning up build artifacts..."
 run_command "rm -f *.bak src/bayescalc/*.bak" "Removing backup files..."
 
 # =====================================
-# RELEASE COMPLETE
+# PHASE 6: BUILD DISTRIBUTION PACKAGE
 # =====================================
+print_step_colored ""
+print_step_colored "📦 PHASE 6: PACKAGE FOR DISTRIBUTION"
+print_step_colored ""
+
+# 6.1: Package building 
+run_command "python -m build --wheel --sdist" "Testing package building..."
+
+if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
+    print_error_colored "Distribution package build failed"
+    exit 1
+fi
+
+# 6.2: Package building validation
+run_command "python -m twine check dist/*" "Verifying built packages..."
+
+if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
+    print_error_colored "Distribution package validation failed"
+    exit 1
+fi
+
+# =====================================
+# PHASE 7: RELEASE SUMMARY
+# =====================================
+
 
 echo ""
 if [[ "$DRY_RUN" == "true" ]]; then
-    echo "🔍 DRY RUN COMPLETE!"
-    echo ""
+    print_step_colored ""
+    print_step_colored "🔍 PHASE 7: DRY RUN RELEASE SUMMARY"
+    print_step_colored ""
     echo "📋 Commands that would be executed:"
     echo "   → All validation checks (repository state, version format, etc.)"
     echo "   → Full test suite with coverage requirements"
@@ -460,7 +537,10 @@ if [[ "$DRY_RUN" == "true" ]]; then
     echo "🚀 To execute for real:"
     echo "   $0 $VERSION $RELEASE_TYPE"
 else
-    echo "✅ RELEASE COMPLETE!"
+    print_step_colored ""
+    print_step_colored "✅ PHASE 7: RELEASE SUMMARY"
+    print_step_colored ""
+    print_success_colored "🎉 BayesCalc2 v$VERSION released successfully!"
     echo ""
     echo "📊 Release Summary:"
     echo "   Version:     $VERSION"
@@ -468,17 +548,18 @@ else
     echo "   Date:        $(date +%Y-%m-%d)"
     echo "   Branch:      main"
     echo "   Tag:         $VERSION"
+    echo "   Artifacts:   - $(ls dist|head -1)"
+    echo "                - $(ls dist|tail -1)"
     echo ""
     echo "🚀 Next Steps:"
-    echo "   1. Verify release on GitHub/GitLab"
-    echo "   2. Monitor CI/CD pipeline for PyPI publication"
-    echo "   3. Update documentation sites if needed"
-    echo "   4. Announce release to stakeholders"
+    echo "   1. Verify release tag on GitHub"
+    echo "   2. Run 'scripts/mkghrelease.sh' to create GitHub release (which will also upload packages to PyPI)"
+    echo "   3. Announce the release!"
     echo ""
     echo "📋 Quality Metrics Achieved:"
     echo "   ✓ Test Coverage: >80%"
     echo "   ✓ All Example Networks: Validated"
     echo "   ✓ Package Build: Successful" 
     echo "   ✓ Static Analysis: Passed"
-    echo "   ✓ Integration Tests: Passed"
+    echo "   ✓ Integration & Unit Tests: Passed"
 fi

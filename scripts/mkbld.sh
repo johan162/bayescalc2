@@ -3,10 +3,10 @@
 # mkbld.sh - Build script for BayesCalc2
 # This script runs tests, static analysis, formatting checks, and builds the package
 
-set -e  # Exit on any error
+set -euo pipefail # Exit on any error
 
 # Detect CI environment
-if [ -n "$CI" ] || [ -n "$GITHUB_ACTIONS" ]; then
+if [ -n "${CI:-}" ] || [ -n "${GITHUB_ACTIONS:-}" ]; then
     echo "🔧 Running in CI mode"
     CI_MODE=true
 else
@@ -33,9 +33,19 @@ fi
 DRY_RUN=false
 HELP=false
 
-# Function to print colored output
+# =====================================
+# Functions to print colored output
+# =====================================
 print_step() {
     echo -e "${BLUE}==>${NC} ${1}"
+}
+
+print_step_colored() {
+    echo -e "${BLUE}==> ${1}${NC}"
+}
+
+print_sub_step() {
+    echo -e "${BLUE}-->${NC} ${1}"
 }
 
 print_success() {
@@ -50,8 +60,17 @@ print_error() {
     echo -e "${RED}✗${NC} ${1}" >&2
 }
 
+print_error_colored() {
+    echo -e "${RED}❌ ${1}${NC}" >&2
+}
+# Alternate non-colored glyph for error: ✗
+
 print_warning() {
     echo -e "${YELLOW}⚠${NC} ${1}"
+}
+
+print_warning_colored() {
+    echo -e "${YELLOW}⚠ ${1}${NC}"
 }
 
 # Function to execute command or print it in dry-run mode
@@ -62,7 +81,7 @@ execute_cmd() {
     if [ "$DRY_RUN" = true ]; then
         echo -e "${YELLOW}[DRY-RUN]${NC} Would execute: ${cmd}"
     else
-        print_step "$description"
+        print_sub_step "$description"
         echo "Executing: $cmd"
         if eval "$cmd"; then
             print_success "$description completed"
@@ -158,12 +177,22 @@ echo "=========================================="
 echo "Branch: $(git branch --show-current)"
 echo "Commit: $(git rev-parse --short HEAD)"
 if [ "$DRY_RUN" = true ]; then
-    print_warning "DRY-RUN MODE: Commands will be printed but not executed"
+    print_warning ""
+    print_warning_colored "DRY-RUN MODE: Commands will be printed but not executed!"
+    print_warning ""
 fi
 echo ""
 
+# =====================================
+# PHASE 1: PRE-BUILD VALIDATION
+# =====================================
+
+print_step_colored ""
+print_step_colored "🔍 PHASE 1: PRE-BUILD VALIDATION"
+print_step_colored ""
+
 # If not in CI mode, ensure we are in a virtual environment
-print_step "Updating virtual environment if needed"
+print_sub_step "Updating virtual environment if needed"
 if [ "$CI_MODE" = false ]; then
     # Step 0: Verify we are running in a virtual environment and if not try to activate one
     if [ "$DRY_RUN" = false ]; then
@@ -183,12 +212,21 @@ if [ "$CI_MODE" = false ]; then
     fi
 fi
 
-# Step 1: Run tests with coverage
+# =====================================
+# Phase 2: Run tests with coverage
+# =====================================
+
+echo ""
+print_step_colored ""
+print_step_colored "🧪 PHASE 2: CHECKING UNIT TESTS & COVERAGE"
+print_step_colored ""
+
+# Step 2.1: Run tests with coverage
 execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-report=xml --cov-fail-under=80" "Running tests with coverage"
 
-# Step 1b: Update coverage badge in README
+# Step 2.2: Update coverage badge in README
 if [ "$CI_MODE" = false ] && [ "$DRY_RUN" = false ]; then
-    print_step "Updating coverage badge in README.md"
+    print_sub_step "Updating coverage badge in README.md"
     if [ -f "scripts/update_coverage_badge.sh" ]; then
         ./scripts/update_coverage_badge.sh
     else
@@ -196,40 +234,53 @@ if [ "$CI_MODE" = false ] && [ "$DRY_RUN" = false ]; then
     fi
 fi
 
-# Step 2: Static analysis with flake8
-print_step "Running static analysis with flake8"
+# =======================================
+# Phase 3: Static analysis and formatting
+# =======================================
+
+echo ""
+print_step_colored ""
+print_step_colored "🧪 PHASE 3: STATIC ANALYSIS WITH FLAKE8, MYPY, AND BLACK"
+print_step_colored ""
+
+# Step 3.1: Static analysis with flake8
 execute_cmd "python -m flake8 src/bayescalc tests/ --max-line-length=120 --extend-ignore=E203,W503,E501,E402" "Running flake8 static analysis"
 
-# Step 3: Type checking with mypy
-print_step "Running type checking with mypy"
+# Step 3.2: Type checking with mypy
 execute_cmd "python -m mypy src/bayescalc --ignore-missing-imports" "Running mypy type checking"
 
-# Step 4: Code formatting check with black
-print_step "Checking code formatting with black"
+# Step 3.3: Code formatting check with black
 execute_cmd "python -m black --check --diff src/bayescalc tests/" "Checking code formatting with black"
 
-# Step 5: Clean previous builds
-print_step "Cleaning previous builds"
+# =======================================
+# Phase 4: Build and validate package
+# =======================================
+
+echo ""
+print_step_colored ""
+print_step_colored "📦 PHASE 4: PACKAGE BUILD & VALIDATION"
+print_step_colored ""
+
+# Step 4.1: Clean previous builds
 execute_cmd "rm -rf dist/ build/ src/*.egg-info/" "Cleaning previous builds"
 
-# Step 6: Build package
-print_step "Building the package"
+# Step 4.2: Build package
 execute_cmd "python -m build" "Building package"
 
-# Step 7: Check package with twine
-print_step "Validating built package with twine"
+# Step 4.3: Check package with twine
 execute_cmd "python -m twine check dist/*" "Validating package with twine"
 
 if [ "$DRY_RUN" = false ]; then
-    print_success_colored ""
-    print_success_colored "=========================================="
+    echo ""
+    print_step_colored "=========================================="
     print_success_colored "Build completed successfully!"
-    print_success_colored "=========================================="
+    print_step_colored "=========================================="
     echo "Built packages:"
-    ls -la dist/
+    ls -l dist/
     echo ""
     echo "Coverage report generated in htmlcov/index.html"
 else
-    print_warning ""
-    print_warning "DRY-RUN completed. No commands were executed."
+    echo ""
+    print_warning_colored "DRY-RUN completed. No commands were executed."
+    echo ""
 fi
