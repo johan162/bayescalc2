@@ -511,12 +511,42 @@ print_step_colored ""
 
 # 5.1: Return to develop and merge back release changes
 run_command "git checkout develop" "Switching back to develop..."
-run_command "git merge --no-ff -m \"Merge branch 'main' into 'develop' after release $VERSION\" main" "Merging release changes back to develop..."
-run_command "git push origin develop" "Pushing updated develop..."
+run_command "git pull origin develop" "Pulling latest develop changes..."
 
-# 5.2: Clean up old build artifacts
-run_command "rm -rf build/ dist/ src/*.egg-info/ htmlcov/" "Cleaning up build artifacts..."
-run_command "rm -f *.bak src/bayescalc/*.bak" "Removing backup files..."
+# 5.2: Merge main into develop to reconcile squash merge
+if [[ "$DRY_RUN" == "true" ]]; then
+    echo "  [DRY-RUN] Would merge main into develop with --no-ff"
+    echo "  [DRY-RUN] This reconciles the squashed commits on main"
+else
+    echo "  ✓ Merging main into develop to sync branches..."
+    
+    # Use --no-ff to create explicit merge commit
+    git merge --no-ff -m "chore: sync develop with main after release $VERSION
+
+This merge reconciles the squash merge from develop → main.
+The squashed release commit on main ($VERSION) contains all changes
+from individual commits on develop, so this merge just records that fact.
+
+This prevents GitHub from showing 'develop ahead of main' status." main
+    
+    if [[ $? -ne 0 ]]; then
+        print_error_colored "Failed to merge main into develop"
+        echo ""
+        echo "This indicates merge conflicts. To resolve:"
+        echo "  1. git status  # See conflicting files"
+        echo "  2. Edit files to resolve conflicts"
+        echo "  3. git add <resolved-files>"
+        echo "  4. git commit -m \"chore: resolve merge conflicts after release $VERSION\""
+        echo "  5. git push origin develop"
+        echo ""
+        exit 1
+    fi
+    
+    print_success "develop synced with main"
+fi
+
+# 5.3: Push synced develop branch
+run_command "git push origin develop" "Pushing updated develop..."
 
 # =====================================
 # PHASE 6: BUILD DISTRIBUTION PACKAGE
@@ -525,7 +555,11 @@ print_step_colored ""
 print_step_colored "📦 PHASE 6: PACKAGE FOR DISTRIBUTION"
 print_step_colored ""
 
-# 6.1: Package building 
+# 6.1: Clean up old build artifacts
+run_command "rm -rf build/ dist/ src/*.egg-info/ htmlcov/" "Cleaning up build artifacts..."
+run_command "rm -f *.bak src/bayescalc/*.bak" "Removing backup files..."
+
+# 6.2: Build Package with the now updated version number
 run_command "python -m build --wheel --sdist" "Testing package building..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
@@ -533,7 +567,7 @@ if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
     exit 1
 fi
 
-# 6.2: Package building validation
+# 6.3: Package building validation
 run_command "python -m twine check dist/*" "Verifying built packages..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
