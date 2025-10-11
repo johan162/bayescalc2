@@ -24,6 +24,10 @@ print_step_colored() {
     echo -e "${BLUE}==> ${1}${NC}"
 }
 
+print_sub_step() {
+    echo -e "${BLUE}  ->${1}${NC}"
+}
+
 print_success() {
     echo -e "${GREEN}✓${NC} ${1}"
 }
@@ -184,7 +188,7 @@ run_command() {
         echo "  [DRY-RUN] $description"
         echo "  [DRY-RUN] Command: $cmd"
     else
-        echo "  ✓ $description"
+        echo "  ✓ ${BLUE}${description}${NC}"
         eval "$cmd"
     fi
 }
@@ -207,7 +211,7 @@ check_condition() {
 }
 
 if [[ "$DRY_RUN" == "true" ]]; then
-    echo "🔍 DRY RUN MODE - No commands will be executed"
+    print_warning_colored "🔍 DRY RUN MODE - No commands will be executed"
     echo "🚀 Would start BayesCalc2 v$VERSION release process..."
     echo "📋 Release type: $RELEASE_TYPE"
 else
@@ -223,7 +227,31 @@ print_step_colored ""
 print_step_colored "🔍 PHASE 1: PRE-RELEASE VALIDATION"
 print_step_colored ""
 
-# 1.1: Verify we're on develop and it's clean
+# 1.1: Ensure we are in a virtual environment and if not try to activate one
+if [ "$DRY_RUN" = false ]; then
+    if [ -z "$VIRTUAL_ENV" ]; then
+        # Activate virtual environment if exists
+        if [ -f ".venv/bin/activate" ]; then
+            print_warning "No virtual environment detected. Activating venv/bin/activate"
+            # shellcheck disable=SC1091
+            source .venv/bin/activate
+        else
+            print_error_colored "No virtual environment detected and venv/bin/activate not found. Exiting."
+            exit 2
+        fi
+    else
+        echo "Using virtual environment: $VIRTUAL_ENV"
+    fi
+else
+    if [ -z "$VIRTUAL_ENV" ]; then
+        echo "  [DRY-RUN] No virtual environment detected."
+        echo "  [DRY-RUN] Would activate .venv/bin/activate if no VIRTUAL_ENV detected"
+    else
+        echo "  [DRY-RUN] Virtual environment detected: $VIRTUAL_ENV"
+    fi
+fi
+
+# 1.2: Verify we're on develop and it's clean
 check_condition '[[ $(git symbolic-ref --short HEAD) == "develop" ]]' "Must be on develop branch"
 check_condition '[[ -z $(git status --porcelain) ]]' "Working directory must be clean"
 
@@ -231,21 +259,21 @@ if [[ "$DRY_RUN" == "false" && -n $(git status --porcelain) ]]; then
     git status --short
 fi
 
-# 1.2: Pull latest changes
+# 1.3: Pull latest changes
 run_command "git pull origin develop" "Pulling latest changes..."
 
-# 1.3: Validate version format (semver)
+# 1.4: Validate version format (semver)
 check_condition '[[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc[1-9][0-9]?)?$ ]]' "Version must follow semver format (x.y.z or x.y.z-rcNN)"
 
-# 1.4: Check if version already exists
+# 1.5: Check if version already exists
 check_condition '! git tag | grep -q "${VERSION}\$"' "Version $VERSION already exists"
 
 # =====================================
-# PHASE 2: COMPREHENSIVE TESTING
+# PHASE 2: UNIT TESTING & STATIC ANALYSIS
 # =====================================
 
 print_step_colored ""
-print_step_colored "🧪 PHASE 2: COMPREHENSIVE TESTING"
+print_step_colored "🧪 PHASE 2: UNIT TESTING & STATIC ANALYSIS"
 print_step_colored ""
 
 # 2.1: Full test suite with coverage requirements
