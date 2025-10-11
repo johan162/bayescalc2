@@ -1,3 +1,10 @@
+## [v1.0.3-rc1] - 2025-10-12
+
+Release Type: patch
+
+### 🛠 Internal
+- Improve build & release scripts with additional error checking
+
 ## [v1.0.2] - 2025-10-11
 
 Release Type: patch

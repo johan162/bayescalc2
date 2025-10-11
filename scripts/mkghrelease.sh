@@ -332,10 +332,10 @@ if [[ "$RUNNING_WORKFLOWS" -gt 0 ]]; then
     print_error "There are $RUNNING_WORKFLOWS workflow(s) currently running on main branch"
     echo ""
     echo "Running workflows:"
-    gh run list --branch main --limit 10
+    gh run list --branch main --limit 4
     echo ""
     echo "Wait for workflows to complete before creating release"
-    echo "Check status: gh run list --branch main"
+    echo "Check status: gh run list --branch main --limit 4"
     exit 1
 fi
 print_success "No workflows currently running"
