@@ -271,14 +271,36 @@ execute_cmd "python -m build" "Building package"
 execute_cmd "python -m twine check dist/*" "Validating package with twine"
 
 if [ "$DRY_RUN" = false ]; then
+    LAST_COMMIT_SHORT=$(git rev-parse --short HEAD)
+    TIMESTAMP=$(git log -1 --format=%ct)
+    LAST_COMMIT_DATE_TIME=$(TZ=UTC date -r "$TIMESTAMP" '+%Y-%m-%d %H:%M:%S UTC')
+    LAST_COMMIT_BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
     echo ""
     print_step_colored "=========================================="
     print_success_colored "Build completed successfully!"
     print_step_colored "=========================================="
-    echo "Built packages:"
-    ls -l dist/
+    echo "📊 Build Summary:"
+    echo "   Last commit: ${LAST_COMMIT_SHORT} on ${LAST_COMMIT_BRANCH_NAME}"
+    echo "   Date:        ${LAST_COMMIT_DATE_TIME}"
+    echo "   Build date:  $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
     echo ""
-    echo "Coverage report generated in htmlcov/index.html"
+    echo "📦 Artifacts:"
+    if [ -d "dist" ] && [ "$(ls -A dist)" ]; then
+        for file in dist/*; do
+            if [ -f "$file" ]; then
+                FILENAME=$(basename "$file")
+                SIZE=$(ls -lh "$file" | awk '{print $5}')
+                echo -e "   - ${FILENAME}: ${BLUE}${SIZE}${NC}"
+            fi
+        done
+    else
+        print_warning "No artifacts found in 'dist/'!"
+    fi
+    # echo "   1) echo -e $(ls -lh dist | head -2 | tail -1 | awk '{print $9 ": ${BLUE}" $5 "${NC}"}')"
+    # echo "   2) echo -e $(ls -lh dist | tail -1 | awk '{print $9 ": ${BLUE}" $5 "${NC}"}')"
+    echo ""
+    echo "📊 Coverage report:"
+    echo "   1) htmlcov/index.html"
 else
     echo ""
     print_warning_colored "DRY-RUN completed. No commands were executed."
