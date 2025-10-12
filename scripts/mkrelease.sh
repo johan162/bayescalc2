@@ -1,11 +1,16 @@
 #!/bin/bash
 # BayesCalc2 Release Script
+# Description: Automates the release process for BayesCalc2, including versioning and changelog generation.
+# CI/CD Support: No. Can not be run in CI as it requires user interaction.
 # Usage: ./scripts/release.sh <version> [major|minor|patch] [--dry-run] [--help]
+#
 # Example: ./scripts/release.sh v2.1.0 minor
 # Example: ./scripts/release.sh v2.1.0 minor --dry-run
 # Example: ./scripts/release.sh --help
 
-set -euo pipefail  # Exit on any error
+set -euo pipefail  # Exit on any error or uninitialized variable
+
+# Color codes
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -184,12 +189,17 @@ run_command() {
     local cmd="$1"
     local description="${2:-}"
     
-    if [[ "$DRY_RUN" == "true" ]]; then
-        echo "  [DRY-RUN] $description"
-        echo "  [DRY-RUN] Command: $cmd"
+     if [ "$DRY_RUN" = "true" ]; then
+        echo -e "${YELLOW}[DRY-RUN]${NC} Would execute: ${cmd}"
     else
-        echo -e "  ✓ ${BLUE}${description}${NC}"
-        eval "$cmd"
+        print_sub_step "$description"
+        echo "Executing: $cmd"
+        if eval "$cmd"; then
+            print_success "$description completed!"
+        else
+            print_error_colored "$description failed! Aborting."
+            exit 1
+        fi
     fi
 }
 
@@ -227,7 +237,10 @@ print_step_colored ""
 print_step_colored "🔍 PHASE 1: PRE-RELEASE VALIDATION"
 print_step_colored ""
 
-# 1.1: Ensure we are in a virtual environment and if not try to activate one
+# 1.1: Check if we're in the root directory (pyproject.toml must exist)
+run_command "test -f pyproject.toml" "Build script must be run from project root."
+
+# 1.2: Ensure we are in a virtual environment and if not try to activate one
 if [ "$DRY_RUN" = false ]; then
     if [ -z "$VIRTUAL_ENV" ]; then
         # Activate virtual environment if exists
@@ -251,7 +264,7 @@ else
     fi
 fi
 
-# 1.2: Verify we're on develop and it's clean
+# 1.3: Verify we're on develop and it's clean
 check_condition '[[ $(git symbolic-ref --short HEAD) == "develop" ]]' "Must be on develop branch"
 check_condition '[[ -z $(git status --porcelain) ]]' "Working directory must be clean"
 
@@ -259,13 +272,13 @@ if [[ "$DRY_RUN" == "false" && -n $(git status --porcelain) ]]; then
     git status --short
 fi
 
-# 1.3: Pull latest changes
+# 1.4: Pull latest changes
 run_command "git pull origin develop" "Pulling latest changes..."
 
-# 1.4: Validate version format (semver)
+# 1.5: Validate version format (semver)
 check_condition '[[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc[1-9][0-9]?)?$ ]]' "Version must follow semver format (x.y.z or x.y.z-rcNN)"
 
-# 1.5: Check if version already exists
+# 1.6: Check if version already exists
 check_condition '! git tag | grep -q "${VERSION}\$"' "Version $VERSION already exists"
 
 # =====================================
@@ -655,4 +668,10 @@ else
     echo "   ✓ Static Analysis: Passed"
     echo "   ✓ Integration & Unit Tests: Passed"
     echo "   ✓ CI/CD Workflows: Successful"
+    echo ""    
+    print_success_colored "Thank you for contributing to BayesCalc2! 🎉"
 fi
+
+echo ""
+exit 0
+# End of script
