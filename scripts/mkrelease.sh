@@ -188,7 +188,7 @@ run_command() {
         echo "  [DRY-RUN] $description"
         echo "  [DRY-RUN] Command: $cmd"
     else
-        echo "  ✓ ${BLUE}${description}${NC}"
+        echo -e "  ✓ ${BLUE}${description}${NC}"
         eval "$cmd"
     fi
 }
