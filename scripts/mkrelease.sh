@@ -1,6 +1,9 @@
 #!/bin/bash
 # BayesCalc2 Release Script
+# CI/CD Support: No. Can not be run in CI as it requires user interaction.
+#
 # Usage: ./scripts/release.sh <version> [major|minor|patch] [--dry-run] [--help]
+#
 # Example: ./scripts/release.sh v2.1.0 minor
 # Example: ./scripts/release.sh v2.1.0 minor --dry-run
 # Example: ./scripts/release.sh --help
@@ -657,5 +660,8 @@ else
     echo "   ✓ CI/CD Workflows: Successful"
     echo ""    
     print_success_colored "Thank you for contributing to BayesCalc2! 🎉"
-    echo ""
 fi
+
+echo ""
+exit 0
+# End of script

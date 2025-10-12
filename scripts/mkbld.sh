@@ -1,7 +1,14 @@
 #!/bin/bash
-
-# mkbld.sh - Build script for BayesCalc2
+# BayesCalc2 Build Script
+# CI/CD Support: Yes. Can be run in CI environments.
+#
 # This script runs tests, static analysis, formatting checks, and builds the package
+#
+# Usage: ./scripts/mkbld.sh [--dry-run] [--help]
+# Example: ./scripts/mkbld.sh
+# Example: ./scripts/mkbld.sh --dry-run
+# Example: ./scripts/mkbld.sh --help
+
 
 set -euo pipefail # Exit on any error
 
