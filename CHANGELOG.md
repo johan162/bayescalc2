@@ -1,3 +1,10 @@
+## [v1.0.3-rc4] - 2025-10-12
+
+Release Type: patch
+
+### 🛠 Internal
+- Harmonize all build and release scripts to have the same structure
+
 ## [v1.0.3-rc3] - 2025-10-12
 
 Release Type: patch
