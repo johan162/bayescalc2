@@ -655,4 +655,7 @@ else
     echo "   ✓ Static Analysis: Passed"
     echo "   ✓ Integration & Unit Tests: Passed"
     echo "   ✓ CI/CD Workflows: Successful"
+    echo ""    
+    print_success_colored "Thank you for contributing to BayesCalc2! 🎉"
+    echo ""
 fi
