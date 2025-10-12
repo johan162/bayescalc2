@@ -539,21 +539,47 @@ else
     print_success "develop synced with main"
 fi
 
-# 5.3: Push synced develop branch
+# =====================================
+# PHASE 6: TRIGGER CI/CD WORKFLOWS
+# =====================================
+
+print_step_colored ""
+print_step_colored " ⌛ PHASE 6: TRIGGER AND WAIT FOR CI/CD WORKFLOWS"
+print_step_colored ""
+
+# 6.1: Push synced develop branch
 run_command "git push origin develop" "Pushing updated develop..."
 
+echo -e "${BLUE}🕐${NC} Monitoring GitHub Actions..."
+echo ""
+
+if [[ "$DRY_RUN" == "false" ]]; then
+    # Watch the latest workflow run triggered by the push
+    gh run watch --exit-status
+    
+    if [[ $? -eq 0 ]]; then
+        print_success "CI workflows completed successfully!"
+    else
+        print_error "CI workflows failed!"
+        echo "View logs: gh run view --log-failed"
+        exit 1
+    fi
+else
+    echo "  [DRY-RUN] Would watch: gh run watch --exit-status"
+fi
+
 # =====================================
-# PHASE 6: BUILD DISTRIBUTION PACKAGE
+# PHASE 7: BUILD DISTRIBUTION PACKAGE
 # =====================================
 print_step_colored ""
-print_step_colored "📦 PHASE 6: PACKAGE FOR DISTRIBUTION"
+print_step_colored "📦 PHASE 7: PACKAGE FOR DISTRIBUTION"
 print_step_colored ""
 
-# 6.1: Clean up old build artifacts
+# 7.1: Clean up old build artifacts
 run_command "rm -rf build/ dist/ src/*.egg-info/ htmlcov/" "Cleaning up build artifacts..."
 run_command "rm -f *.bak src/bayescalc/*.bak" "Removing backup files..."
 
-# 6.2: Build Package with the now updated version number
+# 7.2: Build Package with the now updated version number
 run_command "python -m build --wheel --sdist" "Testing package building..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
@@ -561,7 +587,7 @@ if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
     exit 1
 fi
 
-# 6.3: Package building validation
+# 7.3: Package building validation
 run_command "python -m twine check dist/*" "Verifying built packages..."
 
 if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
@@ -570,7 +596,7 @@ if [[ "$DRY_RUN" == "false" && $? -ne 0 ]]; then
 fi
 
 # =====================================
-# PHASE 7: RELEASE SUMMARY
+# PHASE 8: RELEASE SUMMARY
 # =====================================
 
 
@@ -628,4 +654,5 @@ else
     echo "   ✓ Package Build: Successful" 
     echo "   ✓ Static Analysis: Passed"
     echo "   ✓ Integration & Unit Tests: Passed"
+    echo "   ✓ CI/CD Workflows: Successful"
 fi
