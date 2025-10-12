@@ -1,3 +1,10 @@
+## [v1.0.3-rc5] - 2025-10-12
+
+Release Type: patch
+
+### 🛠 Internal
+- Fix GitHub Release Creation Script o handle naming of pre-releases
+
 ## [v1.0.3-rc4] - 2025-10-12
 
 Release Type: patch
