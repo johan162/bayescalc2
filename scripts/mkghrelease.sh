@@ -480,13 +480,19 @@ print_success "dist/ directory exists"
 VERSION_NUMBER=${LATEST_TAG#v}
 
 # 4.3: Find expected artifacts
-print_sub_step "Locating artifacts with version $VERSION_NUMBER..."
-WHEEL_FILE=$(find "$DIST_DIR" -name "bayescalc2-${VERSION_NUMBER}-*.whl" | head -1)
-SDIST_FILE=$(find "$DIST_DIR" -name "bayescalc2-${VERSION_NUMBER}.tar.gz" | head -1)
+
+# For pre-release tags we must modify the version as the python build tools
+# strip the "-rcN" to loose the '-' sign and appends it directly on the nuber, e.g. 1.0.0rc1
+
+# Strip the '-' from the version for pre-releases
+FILE_VERSION_NUMBER=${VERSION_NUMBER//-rc/rc}
+print_sub_step "Locating artifacts with version $FILE_VERSION_NUMBER..."
+WHEEL_FILE=$(find "$DIST_DIR" -name "bayescalc2-${FILE_VERSION_NUMBER}-*.whl" | head -1)
+SDIST_FILE=$(find "$DIST_DIR" -name "bayescalc2-${FILE_VERSION_NUMBER}.tar.gz" | head -1)
 
 if [[ -z "$WHEEL_FILE" ]]; then
     print_error "Wheel file not found for version $VERSION_NUMBER"
-    echo "Expected: dist/bayescalc2-${VERSION_NUMBER}-*.whl"
+    echo "Expected: dist/bayescalc2-${FILE_VERSION_NUMBER}-*.whl"
     echo ""
     echo "Files in dist/:"
     ls -la "$DIST_DIR"
@@ -496,7 +502,7 @@ print_success "Found wheel: $(basename "$WHEEL_FILE")"
 
 if [[ -z "$SDIST_FILE" ]]; then
     print_error "Source distribution not found for version $VERSION_NUMBER"
-    echo "Expected: dist/bayescalc2-${VERSION_NUMBER}.tar.gz"
+    echo "Expected: dist/bayescalc2-${FILE_VERSION_NUMBER}.tar.gz"
     echo ""
     echo "Files in dist/:"
     ls -la "$DIST_DIR"
