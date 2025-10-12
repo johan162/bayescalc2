@@ -521,14 +521,8 @@ else
     echo "  ✓ Merging main into develop to sync branches..."
     
     # Use --no-ff to create explicit merge commit
-    git merge --no-ff -m "chore: sync develop with main after release $VERSION
+    git merge --no-ff -m "chore: sync develop with main after release $VERSION" main
 
-This merge reconciles the squash merge from develop → main.
-The squashed release commit on main ($VERSION) contains all changes
-from individual commits on develop, so this merge just records that fact.
-
-This prevents GitHub from showing 'develop ahead of main' status." main
-    
     if [[ $? -ne 0 ]]; then
         print_error_colored "Failed to merge main into develop"
         echo ""
@@ -610,8 +604,18 @@ else
     echo "   Date:        $(date +%Y-%m-%d)"
     echo "   Branch:      main"
     echo "   Tag:         $VERSION"
-    echo "   Artifacts:   - $(ls dist|head -1)"
-    echo "                - $(ls dist|tail -1)"
+    echo ""
+    echo "📦 Artifacts:"
+    echo "   - $(ls dist|head -1)"
+    echo "   - $(ls dist|tail -1)"
+    echo ""
+    echo "📊 Branch Status:"
+    echo "   GitHub will show develop as 'ahead' of main - this is expected!"
+    echo "   • develop preserves detailed commit history"
+    echo "   • main uses squash merges (one commit per release)"
+    echo "   • Code content is identical between branches"
+    echo ""
+    echo "   Verify with: git diff main develop"
     echo ""
     echo "🚀 Next Steps:"
     echo "   1. Verify release tag on GitHub"

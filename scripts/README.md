@@ -261,6 +261,26 @@ The `mkbld.sh` script automatically detects CI environments (`$CI` or `$GITHUB_A
 - Skips coverage badge update (CI should not modify README)
 - Generates XML coverage report for external services
 
+## Understanding "Ahead/Behind" Status
+
+After running `mkrelease.sh`, GitHub will show `develop` as "N commits ahead" of `main`.
+
+**This is expected and correct!**
+
+- `develop` preserves detailed commit history (individual commits)
+- `main` uses squash merges (one commit per release)
+- Both branches have **identical code**, just different history
+
+The "ahead" commits represent the detailed development work that was
+squashed into a single release commit on `main`.
+
+**To verify code is identical:**
+```bash
+git diff main develop
+# Should show no output
+```
+
+
 ## Maintenance
 
 ### Adding New Build Steps
