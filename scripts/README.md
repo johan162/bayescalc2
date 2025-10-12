@@ -2,6 +2,27 @@
 
 This directory contains utility scripts for building, testing, releasing, and maintaining the BayesCalc2 project.
 
+## Script conventions 
+
+All scripts support dry-run (with option `--dry-run`) which allows to see the commands to be executed but will not execute them.
+When a script is suitable for usage in a CI/CD pipeline (e.g. `mkbld.sh` script) it will auto-detect when
+running in a pipeline and remove colored output. Finally all scripts support an extensive `--help` function.
+
+To report on progress scripts are usually divided in phases whcih will print a header. In these headers
+the following "glyphs" are used as a visual aid to what activity is going on
+
+- 🚀 for "Starting"
+- 🔍 for "Validation"
+- 🧪 for "Testing"
+- 📝 for "Preparation"
+- 🎯 for "Execution"
+- 🧹 for "Cleanup"
+- 📦 for "Package"
+- ✅ for "Success"
+- ❌ for "Error"
+- ⚠️ for "Warning"
+- ⏳ for "Pending/Waaiting"
+
 ## Scripts Overview
 
 ### `mkbld.sh` - Main Build Script
@@ -11,6 +32,10 @@ The primary build script that runs the complete build pipeline:
 ```bash
 ./scripts/mkbld.sh [OPTIONS]
 ```
+
+This script is suitable to run regularly while developing to continuesly be aware that the system has not been broken.
+In addition this is the primary CI/CD script that is automatically run on GitHub for each push. This makes it obvious to
+detect a commit that "breaks the build". 
 
 **Pipeline Steps:**
 1. Run tests with coverage (≥80% required)
