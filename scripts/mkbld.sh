@@ -213,7 +213,7 @@ if [ "$CI_MODE" = false ]; then
 fi
 
 # =====================================
-# Phase 2: Run tests with coverage
+# PHASE 2: RUN TESTS WITH COVERAGE
 # =====================================
 
 echo ""
@@ -235,7 +235,7 @@ if [ "$CI_MODE" = false ] && [ "$DRY_RUN" = false ]; then
 fi
 
 # =======================================
-# Phase 3: Static analysis and formatting
+# PHASE 3: STATIC ANALYSIS AND FORMATTING
 # =======================================
 
 echo ""
@@ -253,7 +253,7 @@ execute_cmd "python -m mypy src/bayescalc --ignore-missing-imports" "Running myp
 execute_cmd "python -m black --check --diff src/bayescalc tests/" "Checking code formatting with black"
 
 # =======================================
-# Phase 4: Build and validate package
+# PHASE 4: BUILD AND VALIDATE PACKAGE
 # =======================================
 
 echo ""
@@ -270,6 +270,11 @@ execute_cmd "python -m build" "Building package"
 # Step 4.3: Check package with twine
 execute_cmd "python -m twine check dist/*" "Validating package with twine"
 
+
+# =======================================
+# PHASE 5: BUILD SUMMARY
+# =======================================
+
 if [ "$DRY_RUN" = false ]; then
     LAST_COMMIT_SHORT=$(git rev-parse --short HEAD)
     TIMESTAMP=$(git log -1 --format=%ct)
@@ -277,12 +282,13 @@ if [ "$DRY_RUN" = false ]; then
     LAST_COMMIT_BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
     echo ""
     print_step_colored "=========================================="
-    print_success_colored "Build completed successfully!"
+    print_success_colored "BUILD COMPLETED SUCCESSFULLY!"
     print_step_colored "=========================================="
+    echo ""
     echo "📊 Build Summary:"
-    echo "   Last commit: ${LAST_COMMIT_SHORT} on ${LAST_COMMIT_BRANCH_NAME}"
-    echo "   Date:        ${LAST_COMMIT_DATE_TIME}"
-    echo "   Build date:  $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+    echo "     Last commit: ${LAST_COMMIT_SHORT} on ${LAST_COMMIT_BRANCH_NAME}"
+    echo "     Date:        ${LAST_COMMIT_DATE_TIME}"
+    echo "     Build date:  $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
     echo ""
     echo "📦 Artifacts:"
     if [ -d "dist" ] && [ "$(ls -A dist)" ]; then
@@ -290,19 +296,20 @@ if [ "$DRY_RUN" = false ]; then
             if [ -f "$file" ]; then
                 FILENAME=$(basename "$file")
                 SIZE=$(ls -lh "$file" | awk '{print $5}')
-                echo -e "   - ${FILENAME}: ${BLUE}${SIZE}${NC}"
+                echo -e "     - ${FILENAME}: ${BLUE}${SIZE}${NC}"
             fi
         done
     else
         print_warning "No artifacts found in 'dist/'!"
     fi
-    # echo "   1) echo -e $(ls -lh dist | head -2 | tail -1 | awk '{print $9 ": ${BLUE}" $5 "${NC}"}')"
-    # echo "   2) echo -e $(ls -lh dist | tail -1 | awk '{print $9 ": ${BLUE}" $5 "${NC}"}')"
     echo ""
     echo "📊 Coverage report:"
-    echo "   1) htmlcov/index.html"
+    echo "     - [htmlcov/index.html](htmlcov/index.html)"
 else
     echo ""
     print_warning_colored "DRY-RUN completed. No commands were executed."
-    echo ""
 fi
+
+echo ""
+exit 0
+# End of script
