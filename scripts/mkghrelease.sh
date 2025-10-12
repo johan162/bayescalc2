@@ -67,24 +67,67 @@ done
 # HELPER FUNCTIONS
 # =====================================
 
+# =====================================
+# Functions to print colored output
+# =====================================
+print_step() {
+    echo -e "${BLUE}==>${NC} ${1}"
+}
+
+print_step_colored() {
+    echo -e "${BLUE}==> ${1}${NC}"
+}
+
+print_sub_step() {
+    echo -e "${BLUE}  ->${1}${NC}"
+}
+
 print_success() {
-    echo -e "${GREEN}✓${NC} $1"
+    echo -e "${GREEN}✓ Success: ${1}${NC}"
+}
+
+print_success_colored() {
+    if [ "$CI_MODE" = true ]; then
+        echo -e "✓ Success: ${1}"
+    else
+        echo -e "${GREEN}✅ Success: ${1}${NC}"
+    fi
 }
 
 print_error() {
-    echo -e "${RED}✗${NC} $1" >&2
+    echo -e "${RED}✗ Error: ${NC} ${1}" >&2
+}
+
+print_error_colored() {
+    if [ "$CI_MODE" = true ]; then
+        echo -e "✗ Error: ${1}"
+    else
+        echo -e "${RED}❌ Error: ${1}${NC}"
+    fi
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠${NC} $1"
+    echo -e "${YELLOW}⚠ Warning:${NC} ${1}"
+}
+
+print_warning_colored() {
+    if [ "$CI_MODE" = true ]; then
+        echo -e "⚠ Warning: ${1}"
+    else
+        echo -e "${YELLOW}⚠️  Warning: ${1}${NC}"
+    fi
 }
 
 print_info() {
     echo -e "${BLUE}ℹ${NC} $1"
 }
 
-print_step() {
-    echo -e "${BLUE}==>${NC} $1"
+print_info_colored() {
+    if [ "$CI_MODE" = true ]; then
+        echo -e "ℹ $1"
+    else
+        echo -e "${BLUE}ℹ️  ${1}${NC}"
+    fi
 }
 
 show_help() {
@@ -204,12 +247,12 @@ run_command() {
         return 0
     else
         if [[ -n "$description" ]]; then
-            print_step "$description"
+            print_sub_step "$description"
         fi
         if eval "$cmd"; then
             return 0
         else
-            print_error "Command failed: $cmd"
+            print_error_colored "$description failed"
             return 1
         fi
     fi
@@ -243,11 +286,15 @@ echo ""
 # PHASE 1: PREREQUISITES CHECK
 # =====================================
 
-echo "🔍 PHASE 1: Prerequisites Check"
-echo ""
+print_step_colored ""
+print_step_colored "🔍 PHASE 1: Prerequisites Check"
+print_step_colored ""
+
+# Check if we're in the root directory (pyproject.toml must exist)
+run_command "test -f pyproject.toml" "Build script must be run from project root."
 
 # 1.1: Check if gh CLI is installed
-print_step "Checking for GitHub CLI (gh)..."
+print_sub_step "Checking for GitHub CLI (gh)..."
 if ! check_command_exists gh; then
     print_error "GitHub CLI (gh) is not installed"
     echo ""
@@ -260,7 +307,7 @@ fi
 print_success "GitHub CLI found: $(gh --version | head -1)"
 
 # 1.2: Check gh version
-print_step "Checking gh version..."
+print_sub_step "Checking gh version..."
 GH_VERSION=$(gh --version | head -1 | awk '{print $3}')
 if ! compare_versions "$GH_VERSION" "$REQUIRED_GH_VERSION"; then
     print_error "GitHub CLI version $GH_VERSION is too old (need >= $REQUIRED_GH_VERSION)"
@@ -270,7 +317,7 @@ fi
 print_success "Version $GH_VERSION meets requirements"
 
 # 1.3: Check gh authentication
-print_step "Checking GitHub authentication..."
+print_sub_step "Checking GitHub authentication..."
 if ! gh auth status &> /dev/null; then
     print_error "Not authenticated with GitHub"
     echo ""
@@ -281,7 +328,7 @@ fi
 print_success "Authenticated with GitHub"
 
 # 1.4: Verify we're on main branch
-print_step "Verifying branch..."
+print_sub_step "Verifying branch..."
 CURRENT_BRANCH=$(git branch --show-current)
 if [[ "$CURRENT_BRANCH" != "main" ]]; then
     print_error "Must be on 'main' branch (currently on '$CURRENT_BRANCH')"
@@ -291,7 +338,7 @@ fi
 print_success "On main branch"
 
 # 1.5: Check for uncommitted changes
-print_step "Checking for uncommitted changes..."
+print_sub_step "Checking for uncommitted changes..."
 if [[ -n $(git status --porcelain) ]]; then
     print_error "Working directory has uncommitted changes"
     echo ""
@@ -303,7 +350,7 @@ fi
 print_success "Working directory clean"
 
 # 1.6: Check if we're up to date with remote
-print_step "Checking sync with remote..."
+print_sub_step "Checking sync with remote..."
 git fetch origin main --quiet
 LOCAL_COMMIT=$(git rev-parse main)
 REMOTE_COMMIT=$(git rev-parse origin/main)
@@ -322,10 +369,11 @@ print_success "In sync with origin/main"
 # =====================================
 
 echo ""
-echo "⚙️  PHASE 2: GitHub Workflows Check"
-echo ""
+print_step_colored ""
+print_step_colored "⚙️  PHASE 2: GitHub Workflows Check"
+print_step_colored ""
 
-print_step "Checking for running workflows..."
+print_sub_step "Checking for running workflows..."
 RUNNING_WORKFLOWS=$(gh run list --branch main --limit 5 --json status,conclusion | jq -r '.[] | select(.status=="in_progress" or .status=="queued") | .status' | wc -l)
 
 if [[ "$RUNNING_WORKFLOWS" -gt 0 ]]; then
@@ -340,7 +388,7 @@ if [[ "$RUNNING_WORKFLOWS" -gt 0 ]]; then
 fi
 print_success "No workflows currently running"
 
-print_step "Checking latest workflow status..."
+print_sub_step "Checking latest workflow status..."
 LATEST_WORKFLOW_STATUS=$(gh run list --branch main --limit 1 --json conclusion | jq -r '.[0].conclusion')
 if [[ "$LATEST_WORKFLOW_STATUS" != "success" ]]; then
     print_error "Latest workflow did not succeed (status: $LATEST_WORKFLOW_STATUS)"
@@ -358,11 +406,12 @@ print_success "Latest workflow succeeded"
 # =====================================
 
 echo ""
-echo "🏷️  PHASE 3: Version Validation"
-echo ""
+print_step_colored ""
+print_step_colored "🏷️  PHASE 3: Version Validation"
+print_step_colored ""
 
 # 3.1: Get latest tag
-print_step "Getting latest tag on main branch..."
+print_sub_step "Getting latest tag on main branch..."
 LATEST_TAG=$(git describe --tags --abbrev=0 main 2>/dev/null || echo "")
 if [[ -z "$LATEST_TAG" ]]; then
     print_error "No tags found on main branch"
@@ -372,7 +421,7 @@ fi
 print_success "Latest tag: $LATEST_TAG"
 
 # 3.2: Validate tag format
-print_step "Validating tag format..."
+print_sub_step "Validating tag format..."
 if [[ ! "$LATEST_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]{1,2})?$ ]]; then
     print_error "Invalid tag format: $LATEST_TAG"
     echo "Expected format: vX.Y.Z or vX.Y.Z-rcN"
@@ -382,7 +431,7 @@ fi
 print_success "Tag format valid"
 
 # 3.3: Determine if pre-release
-print_step "Determining release type..."
+print_sub_step "Determining release type..."
 IS_PRE_RELEASE=false
 if [[ "$FORCE_PRE_RELEASE" == "true" ]]; then
     IS_PRE_RELEASE=true
@@ -397,7 +446,7 @@ fi
 print_success "Release type: $RELEASE_TYPE"
 
 # 3.4: Check if release already exists
-print_step "Checking if release already exists..."
+print_sub_step "Checking if release already exists..."
 if gh release view "$LATEST_TAG" &> /dev/null; then
     print_error "Release $LATEST_TAG already exists on GitHub"
     echo ""
@@ -413,11 +462,13 @@ print_success "Release does not exist yet"
 # =====================================
 
 echo ""
-echo "📦 PHASE 4: Artifacts Validation"
-echo ""
+print_step_colored ""
+print_step_colored "📦 PHASE 4: Artifacts Validation"
+print_step_colored ""
+
 
 # 4.1: Check dist directory exists
-print_step "Checking dist directory..."
+print_sub_step "Checking dist directory..."
 if [[ ! -d "$DIST_DIR" ]]; then
     print_error "dist/ directory not found"
     echo "Run mkrelease.sh first to build the package"
@@ -429,7 +480,7 @@ print_success "dist/ directory exists"
 VERSION_NUMBER=${LATEST_TAG#v}
 
 # 4.3: Find expected artifacts
-print_step "Locating artifacts with version $VERSION_NUMBER..."
+print_sub_step "Locating artifacts with version $VERSION_NUMBER..."
 WHEEL_FILE=$(find "$DIST_DIR" -name "bayescalc2-${VERSION_NUMBER}-*.whl" | head -1)
 SDIST_FILE=$(find "$DIST_DIR" -name "bayescalc2-${VERSION_NUMBER}.tar.gz" | head -1)
 
@@ -454,7 +505,7 @@ fi
 print_success "Found sdist: $(basename "$SDIST_FILE")"
 
 # 4.4: Validate artifact sizes
-print_step "Validating artifact sizes..."
+print_sub_step "Validating artifact sizes..."
 WHEEL_SIZE=$(stat -f%z "$WHEEL_FILE" 2>/dev/null || stat -c%s "$WHEEL_FILE" 2>/dev/null)
 SDIST_SIZE=$(stat -f%z "$SDIST_FILE" 2>/dev/null || stat -c%s "$SDIST_FILE" 2>/dev/null)
 
@@ -476,11 +527,12 @@ print_success "Sdist size: $(numfmt --to=iec-i --suffix=B "$SDIST_SIZE" 2>/dev/n
 # =====================================
 
 echo ""
-echo "📝 PHASE 5: Release Notes Preparation"
-echo ""
+print_step_colored ""
+print_step_colored "📝 PHASE 5: Release Notes Preparation"
+print_step_colored ""
 
 # 5.1: Extract release notes from CHANGELOG.md
-print_step "Extracting release notes from CHANGELOG.md..."
+print_sub_step "Extracting release notes from CHANGELOG.md..."
 if [[ ! -f "$CHANGELOG_FILE" ]]; then
     print_error "CHANGELOG.md not found"
     exit 1
@@ -551,8 +603,9 @@ print_success "Release notes ready"
 # =====================================
 
 echo ""
-echo "🚀 PHASE 6: Creating GitHub Release"
-echo ""
+print_step_colored ""
+print_step_colored "🚀 PHASE 6: Creating GitHub Release"
+print_step_colored ""
 
 # 6.1: Construct gh release create command
 GH_RELEASE_CMD="gh release create \"$LATEST_TAG\" \
@@ -566,7 +619,7 @@ if [[ "$IS_PRE_RELEASE" == "true" ]]; then
 fi
 
 # 6.2: Create the release
-print_step "Creating GitHub release $LATEST_TAG..."
+print_sub_step "Creating GitHub release $LATEST_TAG..."
 if [[ "$DRY_RUN" == "true" ]]; then
     print_warning "[DRY-RUN] Would execute:"
     echo "$GH_RELEASE_CMD"
@@ -588,8 +641,10 @@ fi
 # =====================================
 
 echo ""
-echo "🧹 PHASE 7: Cleanup"
-echo ""
+print_step_colored ""
+print_step_colored "🧹 PHASE 7: Cleanup"
+print_step_colored ""
+
 
 if [[ "$DRY_RUN" == "false" ]]; then
     print_step "Removing temporary release notes file..."

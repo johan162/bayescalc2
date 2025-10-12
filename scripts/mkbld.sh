@@ -1,16 +1,14 @@
 #!/bin/bash
 # BayesCalc2 Build Script
+# Description: Automates testing, static analysis, formatting checks, and package building for BayesCalc2.
 # CI/CD Support: Yes. Can be run in CI environments.
-#
-# This script runs tests, static analysis, formatting checks, and builds the package
-#
 # Usage: ./scripts/mkbld.sh [--dry-run] [--help]
+#
 # Example: ./scripts/mkbld.sh
 # Example: ./scripts/mkbld.sh --dry-run
 # Example: ./scripts/mkbld.sh --help
 
-
-set -euo pipefail # Exit on any error
+set -euo pipefail # Exit on any error or uninitialized variable
 
 # Detect CI environment
 if [ -n "${CI:-}" ] || [ -n "${GITHUB_ACTIONS:-}" ]; then
@@ -52,36 +50,59 @@ print_step_colored() {
 }
 
 print_sub_step() {
-    echo -e "${BLUE}-->${NC} ${1}"
+    echo -e "${BLUE}  ->${1}${NC}"
 }
 
 print_success() {
-    echo -e "${GREEN}✓${NC} ${1}"
+    echo -e "${GREEN}✓ Success: ${1}${NC}"
 }
 
 print_success_colored() {
-    echo -e "${GREEN}✓ ${1}${NC}"
+    if [ "$CI_MODE" = true ]; then
+        echo -e "✓ Success: ${1}"
+    else
+        echo -e "${GREEN}✅ Success: ${1}${NC}"
+    fi
 }
 
 print_error() {
-    echo -e "${RED}✗${NC} ${1}" >&2
+    echo -e "${RED}✗ Error: ${NC} ${1}" >&2
 }
 
 print_error_colored() {
-    echo -e "${RED}❌ ${1}${NC}" >&2
+    if [ "$CI_MODE" = true ]; then
+        echo -e "✗ Error: ${1}"
+    else
+        echo -e "${RED}❌ Error: ${1}${NC}"
+    fi
 }
-# Alternate non-colored glyph for error: ✗
 
 print_warning() {
-    echo -e "${YELLOW}⚠${NC} ${1}"
+    echo -e "${YELLOW}⚠ Warning:${NC} ${1}"
 }
 
 print_warning_colored() {
-    echo -e "${YELLOW}⚠ ${1}${NC}"
+    if [ "$CI_MODE" = true ]; then
+        echo -e "⚠ Warning: ${1}"
+    else
+        echo -e "${YELLOW}⚠️  Warning: ${1}${NC}"
+    fi
+}
+
+print_info() {
+    echo -e "${BLUE}ℹ${NC} $1"
+}
+
+print_info_colored() {
+    if [ "$CI_MODE" = true ]; then
+        echo -e "ℹ $1"
+    else
+        echo -e "${BLUE}ℹ️  ${1}${NC}"
+    fi
 }
 
 # Function to execute command or print it in dry-run mode
-execute_cmd() {
+run_command() {
     local cmd="$1"
     local description="$2"
     
@@ -91,9 +112,9 @@ execute_cmd() {
         print_sub_step "$description"
         echo "Executing: $cmd"
         if eval "$cmd"; then
-            print_success "$description completed"
+            print_success_colored "$description completed"
         else
-            print_error "$description failed"
+            print_error_colored "$description failed"
             exit 1
         fi
     fi
@@ -164,19 +185,7 @@ if [ "$HELP" = true ]; then
     exit 0
 fi
 
-# Check if we're in the right directory
-if [ ! -f "pyproject.toml" ]; then
-    print_error "Error: pyproject.toml not found. Please run this script from the project root directory."
-    exit 2
-fi
 
-# Check if dev dependencies are available
-if [ "$DRY_RUN" = false ]; then
-    if ! command -v pytest &> /dev/null; then
-        print_error "Error: pytest not found. Please install dev dependencies: pip install -e \".[dev]\""
-        exit 2
-    fi
-fi
 
 echo "=========================================="
 echo "  BayesCalc2 Build Script"
@@ -197,6 +206,17 @@ echo ""
 print_step_colored ""
 print_step_colored "🔍 PHASE 1: PRE-BUILD VALIDATION"
 print_step_colored ""
+
+# Check if we're in the root directory (pyproject.toml must exist)
+run_command "test -f pyproject.toml" "Build script must be run from project root."
+
+# Check if dev dependencies are available
+if [ "$DRY_RUN" = false ]; then
+    if ! command -v pytest &> /dev/null; then
+        print_error "Error: pytest not found. Please install dev dependencies: pip install -e \".[dev]\""
+        exit 2
+    fi
+fi
 
 # If not in CI mode, ensure we are in a virtual environment
 print_sub_step "Updating virtual environment if needed"
@@ -229,13 +249,13 @@ print_step_colored "🧪 PHASE 2: CHECKING UNIT TESTS & COVERAGE"
 print_step_colored ""
 
 # Step 2.1: Run tests with coverage
-execute_cmd "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-report=xml --cov-fail-under=80" "Running tests with coverage"
+run_command "python -m pytest tests/ --cov=src/bayescalc --cov-report=term-missing --cov-report=html --cov-report=xml --cov-fail-under=80" "Running tests with coverage"
 
 # Step 2.2: Update coverage badge in README
 if [ "$CI_MODE" = false ] && [ "$DRY_RUN" = false ]; then
     print_sub_step "Updating coverage badge in README.md"
-    if [ -f "scripts/update_coverage_badge.sh" ]; then
-        ./scripts/update_coverage_badge.sh
+    if [ -f "scripts/mkcovupd.sh" ]; then
+        ./scripts/mkcovupd.sh
     else
         print_warning "Coverage badge update script not found"
     fi
@@ -251,13 +271,13 @@ print_step_colored "🧪 PHASE 3: STATIC ANALYSIS WITH FLAKE8, MYPY, AND BLACK"
 print_step_colored ""
 
 # Step 3.1: Static analysis with flake8
-execute_cmd "python -m flake8 src/bayescalc tests/ --max-line-length=120 --extend-ignore=E203,W503,E501,E402" "Running flake8 static analysis"
+run_command "python -m flake8 src/bayescalc tests/ --max-line-length=120 --extend-ignore=E203,W503,E501,E402" "Running flake8 static analysis"
 
 # Step 3.2: Type checking with mypy
-execute_cmd "python -m mypy src/bayescalc --ignore-missing-imports" "Running mypy type checking"
+run_command "python -m mypy src/bayescalc --ignore-missing-imports" "Running mypy type checking"
 
 # Step 3.3: Code formatting check with black
-execute_cmd "python -m black --check --diff src/bayescalc tests/" "Checking code formatting with black"
+run_command "python -m black --check --diff src/bayescalc tests/" "Checking code formatting with black"
 
 # =======================================
 # PHASE 4: BUILD AND VALIDATE PACKAGE
@@ -269,13 +289,13 @@ print_step_colored "📦 PHASE 4: PACKAGE BUILD & VALIDATION"
 print_step_colored ""
 
 # Step 4.1: Clean previous builds
-execute_cmd "rm -rf dist/ build/ src/*.egg-info/" "Cleaning previous builds"
+run_command "rm -rf dist/ build/ src/*.egg-info/" "Cleaning previous builds"
 
 # Step 4.2: Build package
-execute_cmd "python -m build" "Building package"
+run_command "python -m build" "Building package"
 
 # Step 4.3: Check package with twine
-execute_cmd "python -m twine check dist/*" "Validating package with twine"
+run_command "python -m twine check dist/*" "Validating package with twine"
 
 
 # =======================================
