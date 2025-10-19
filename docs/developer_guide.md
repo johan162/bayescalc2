@@ -4,7 +4,7 @@ Purpose: A guide for developers contributing to the BayesCalc2 Bayesian Network 
 
 ## Table of Contents
 
-0. [Setup for Development](#setup-for-development)
+0. [Setup for Development](#tldr-quick-setup-for-development
 1. [Codebase Overview](#codebase-overview)
 2. [Architecture and Design](#architecture-and-design)
 3. [Testing Framework](#testing-framework)
@@ -2491,7 +2491,13 @@ All changes should be done via `mkrelease.sh` before running this script.
 
 ## See Also
 
-- [../scripts/mkrelease.sh](mkrelease.sh ) - Create the release (run first)
-- [../scripts/mkbld.sh](mkbld.sh ) - Build and test the package
-- [../scripts/README.md](README.md ) - Complete scripts documentation
+In the `scripts/` directory:
+
+- `mkrelease.sh` - Create the release (run first)
+- `mkbld.sh` - Build and test the package
+- `README.md` - Complete scripts documentation
+
+
+For using `gh` CLI:
+
 - [GitHub CLI documentation](https://cli.github.com/manual/)

@@ -8,6 +8,7 @@ __pycache__/
 .venv/
 env/
 dist/
+site/
 build/
 bayescalc.egg-info/
 .pytest_cache/
@@ -27,3 +28,5 @@ htmlcov/
 *.svg
 *.tmp
 *.log
+docs/CHANGELOG.md
+

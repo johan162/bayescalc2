@@ -195,6 +195,31 @@ Creates GitHub releases using the `gh` CLI tool. **Run after `mkrelease.sh` and 
 - `bayescalc2-X.Y.Z-py3-none-any.whl` (wheel)
 - `bayescalc2-X.Y.Z.tar.gz` (source distribution)
 
+### `mkdocs.sh` - Documentation Automation Script
+
+Creates HTML documentation from the `docs/` directory using [MkDocs](https://www.mkdocs.org/).
+
+```bash
+./scripts/mkdocs.sh [OPTIONS]
+```
+
+Creates static HTML site with the help of [MkDocs](https://www.mkdocs.org/), [Material theme](https://squidfunk.github.io/mkdocs-material/).
+
+
+**Options:**
+- `--help` - Display help message
+- `build` - Build static site to `site/`
+- `serve` - Start development server (http://127.0.0.1:8000)
+- `deploy` - Deploy to GitHub Pages (maintainers only)
+- `clean` - Clean built documentation
+
+**Requirements:**
+- `pip install -e ".[docs]"`
+
+**Artifacts created:**
+- Static site: `site/`
+
+
 ## Usage Workflows
 
 ### Development Workflow

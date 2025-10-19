@@ -1,0 +1,121 @@
+site_name: BayesCalc2 Documentation
+site_description: A powerful Bayesian network calculator with interactive REPL
+site_author: BayesCalc2 Contributors
+site_url: https://johan162.github.io/bayescalc2
+
+repo_name: johan162/bayescalc2
+repo_url: https://github.com/johan162/bayescalc2
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - User Guide: user_guide.md
+  - Developer Guide: developer_guide.md
+  - Examples: examples.md
+  - API Reference:
+      - Overview: api/index.md
+      - Core:
+          - Network Model: api/network_model.md
+          - Parser: api/parser.md
+          - Lexer: api/lexer.md
+      - Inference:
+          - Inference Engine: api/inference.md
+      - Query Processing:
+          - Query Parser: api/queries.md
+          - Expression Parser: api/expression_parser.md
+      - Interactive:
+          - REPL: api/repl.md
+          - Commands: api/commands.md
+          - Completer: api/completer.md
+      - Batch Processing:
+          - Batch Runner: api/batch.md
+  - Changelog: CHANGELOG.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            docstring_section_style: table
+            show_root_heading: true
+            show_source: true
+            show_bases: true
+            show_inheritance_diagram: true
+            members_order: source
+            group_by_category: true
+            show_category_heading: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            signature_crossrefs: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/johan162/bayescalc2
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/bayescalc2/
+  version:
+    provider: mike
