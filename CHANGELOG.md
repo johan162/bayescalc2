@@ -1,12 +1,18 @@
-## [v1.0.3-rc6] - 2025-10-19
+## [v1.0.3] - 2025-10-19
 
 Release Type: minor
 
 ### 📋 Summary 
-- Add new documentation portal [Bayescalc2 Documentation](https://johan162.github.io/bayescalc2/)
+- New documentation site [Bayescalc2 Documentation](https://johan162.github.io/bayescalc2/) together with generic documentation updates. 
+
+### ✨ Additions
+- New documentation site built with MkDocs (https://www.mkdocs.org/)
 
 ### 🛠 Internal
 - Fix GitHub Release Creation Script o handle naming of pre-releases
+- Added `mkdocs.sh` documentation build and deploy script
+- Added all necessary MkDocs dependencies to `pyproject.toml`
+- New GitHub workflow to deploy documentation to GitHub Pages via `gh_pages` branch
 - Harmonize all build and release scripts to have the same structure
 
 ## [v1.0.2] - 2025-10-11

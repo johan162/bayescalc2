@@ -209,23 +209,14 @@ pip install -e ".[dev]"  # Quotes needed for zsh shell
 python -m pytest tests/
 ```
 
-## Documentation
+## Documentation & Support
 
-The documentation is automatically built and deployed to GitHub Pages when changes are pushed to the `main` branch.
-
-- **Live Documentation**: https://johan162.github.io/bayescalc2/
-- **User Guide**: Complete usage guide with examples
-- **Developer Guide**: Architecture and development workflow
-- **API Reference**: Auto-generated from docstrings using mkdocstrings
+- **Documentation**: See the [online documentation](https://johan162.github.io/bayescalc2/) for both user and developer guides.
+- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/johan162/bayescalc2/issues)
 
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
-
-## Support
-
-- **Documentation**: See the [online documentation](https://johan162.github.io/bayescalc2/) for both user and developer guides.
-- **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/johan162/bayescalc2/issues)
 
 ## Citation
 
@@ -237,7 +228,7 @@ If you use BayesCalc2 in academic work, please cite:
   author={Johan Persson},
   year={2025},
   url={https://github.com/johan162/bayescalc2},
-  version={v1.0.3-rc6}
+  version={v1.0.3}
 }
 ```
 
