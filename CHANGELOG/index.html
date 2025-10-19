@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#v103-rc6-2025-10-19" class="md-skip">
+        <a href="#v103-2025-10-19" class="md-skip">
           Skip to content
         </a>
       
@@ -1096,19 +1096,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#v103-rc6-2025-10-19" class="md-nav__link">
+  <a href="#v103-2025-10-19" class="md-nav__link">
     <span class="md-ellipsis">
-      [v1.0.3-rc6] - 2025-10-19
+      [v1.0.3] - 2025-10-19
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="[v1.0.3-rc6] - 2025-10-19">
+    <nav class="md-nav" aria-label="[v1.0.3] - 2025-10-19">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
       📋 Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additions" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✨ Additions
     </span>
   </a>
   
@@ -1214,7 +1223,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#additions" class="md-nav__link">
+  <a href="#additions_1" class="md-nav__link">
     <span class="md-ellipsis">
       ✨ Additions
     </span>
@@ -1256,7 +1265,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#additions_1" class="md-nav__link">
+  <a href="#additions_2" class="md-nav__link">
     <span class="md-ellipsis">
       ✨ Additions
     </span>
@@ -1302,19 +1311,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#v103-rc6-2025-10-19" class="md-nav__link">
+  <a href="#v103-2025-10-19" class="md-nav__link">
     <span class="md-ellipsis">
-      [v1.0.3-rc6] - 2025-10-19
+      [v1.0.3] - 2025-10-19
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="[v1.0.3-rc6] - 2025-10-19">
+    <nav class="md-nav" aria-label="[v1.0.3] - 2025-10-19">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#summary" class="md-nav__link">
     <span class="md-ellipsis">
       📋 Summary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additions" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✨ Additions
     </span>
   </a>
   
@@ -1420,7 +1438,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#additions" class="md-nav__link">
+  <a href="#additions_1" class="md-nav__link">
     <span class="md-ellipsis">
       ✨ Additions
     </span>
@@ -1462,7 +1480,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#additions_1" class="md-nav__link">
+  <a href="#additions_2" class="md-nav__link">
     <span class="md-ellipsis">
       ✨ Additions
     </span>
@@ -1496,15 +1514,22 @@
 
   <h1>Changelog</h1>
 
-<h2 id="v103-rc6-2025-10-19">[v1.0.3-rc6] - 2025-10-19<a class="headerlink" href="#v103-rc6-2025-10-19" title="Permanent link">&para;</a></h2>
+<h2 id="v103-2025-10-19">[v1.0.3] - 2025-10-19<a class="headerlink" href="#v103-2025-10-19" title="Permanent link">&para;</a></h2>
 <p>Release Type: minor</p>
 <h3 id="summary">📋 Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Add new documentation portal <a href="https://johan162.github.io/bayescalc2/">Bayescalc2 Documentation</a></li>
+<li>New documentation site <a href="https://johan162.github.io/bayescalc2/">Bayescalc2 Documentation</a> together with generic documentation updates. </li>
+</ul>
+<h3 id="additions">✨ Additions<a class="headerlink" href="#additions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>New documentation site built with MkDocs (https://www.mkdocs.org/)</li>
 </ul>
 <h3 id="internal">🛠 Internal<a class="headerlink" href="#internal" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Fix GitHub Release Creation Script o handle naming of pre-releases</li>
+<li>Added <code>mkdocs.sh</code> documentation build and deploy script</li>
+<li>Added all necessary MkDocs dependencies to <code>pyproject.toml</code></li>
+<li>New GitHub workflow to deploy documentation to GitHub Pages via <code>gh_pages</code> branch</li>
 <li>Harmonize all build and release scripts to have the same structure</li>
 </ul>
 <h2 id="v102-2025-10-11">[v1.0.2] - 2025-10-11<a class="headerlink" href="#v102-2025-10-11" title="Permanent link">&para;</a></h2>
@@ -1537,7 +1562,7 @@ It also has a better CLI interface with pop-up auto-completion and command histo
 The network specification grammar has also been improved to better handle boolean variables
 and the specification of the JPT for the nodes to use a more compact methematical syntax.
 Finally the documentation have been improved with both a user guide and a developer guide.</p>
-<h3 id="additions">✨ Additions<a class="headerlink" href="#additions" title="Permanent link">&para;</a></h3>
+<h3 id="additions_1">✨ Additions<a class="headerlink" href="#additions_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added <code>load()</code> command to load a network while in interactive mode</li>
 <li>Added graphic visualization of network graph (PNG, PDF, SVG) format</li>
@@ -1560,7 +1585,7 @@ Finally the documentation have been improved with both a user guide and a develo
 </ul>
 <h2 id="010-2025-09-30">[0.1.0] - 2025-09-30<a class="headerlink" href="#010-2025-09-30" title="Permanent link">&para;</a></h2>
 <p>Relase type: alpha</p>
-<h3 id="additions_1">✨ Additions<a class="headerlink" href="#additions_1" title="Permanent link">&para;</a></h3>
+<h3 id="additions_2">✨ Additions<a class="headerlink" href="#additions_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Complete rewrite of Bayescalc with new inference engine based on a variable elimination algorithm</li>
 <li>Use prompt_toolkit which gives both Tab-completion (with pop-up window) and command history</li>
