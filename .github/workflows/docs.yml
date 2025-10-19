@@ -45,7 +45,7 @@ jobs:
 
       - name: Create CHANGELOG symlink
         run: |
-          ln -sf CHANGELOG.md docs/CHANGELOG.md
+          ln -sf  ../CHANGELOG.md docs/CHANGELOG.md
 
       - name: Build documentation
         run: |
@@ -81,7 +81,7 @@ jobs:
 
       - name: Create CHANGELOG symlink
         run: |
-          ln -sf CHANGELOG.md docs/CHANGELOG.md
+          ln -sf  ../CHANGELOG.md docs/CHANGELOG.md
 
       - name: Configure Git
         run: |
