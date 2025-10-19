@@ -211,30 +211,6 @@ python -m pytest tests/
 
 ## Documentation
 
-### Building the Documentation
-
-The project uses [MkDocs](https://www.mkdocs.org/) with the [Material theme](https://squidfunk.github.io/mkdocs-material/) for documentation.
-
-Install documentation dependencies:
-```bash
-pip install -e ".[docs]"
-```
-
-Build and serve documentation locally:
-```bash
-# Start development server (http://127.0.0.1:8000)
-./scripts/mkdocs.sh serve
-
-# Build static site to site/
-./scripts/mkdocs.sh build
-
-# Deploy to GitHub Pages (maintainers only)
-./scripts/mkdocs.sh deploy
-
-# Clean built documentation
-./scripts/mkdocs.sh clean
-```
-
 The documentation is automatically built and deployed to GitHub Pages when changes are pushed to the `main` branch.
 
 - **Live Documentation**: https://johan162.github.io/bayescalc2/
@@ -248,8 +224,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 ## Support
 
-- **Documentation**: See the [online documentation](https://johan162.github.io/bayescalc2/) or `docs/user_guide.md` for detailed usage instructions
-- **Developer guide**: See `docs/developer_guide.md` for how to get started to contribute and overview of key dev practices and algorithms.
+- **Documentation**: See the [online documentation](https://johan162.github.io/bayescalc2/) for both user and developer guides.
 - **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/johan162/bayescalc2/issues)
 
 ## Citation

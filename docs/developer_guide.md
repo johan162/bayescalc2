@@ -14,9 +14,10 @@ Purpose: A guide for developers contributing to the BayesCalc2 Bayesian Network 
 7. [Development Workflow](#development-workflow)
 8. [Pull Request Guidelines](#pull-request-guidelines)
 9. [Debugging and Performance](#debugging-and-performance)
-10. [Release Process](#release-process)
-11. [Appendix A: Variable Elimination Algorithm](#appendix-a-variable-elimination-algorithm---detailed-implementation-guide)
-12. [Appendix B: GitHub Release Script Documentation](#appendix-b-github-release-script-documentation)
+10. [Building the documentation](#building-the-documentation)
+11. [Release Process](#release-process)
+12. [Appendix A: Variable Elimination Algorithm](#appendix-a-variable-elimination-algorithm---detailed-implementation-guide)
+13. [Appendix B: GitHub Release Script Documentation](#appendix-b-github-release-script-documentation)
 
 ---
 
@@ -1549,6 +1550,35 @@ def analyze_memory_usage(network: BayesianNetwork) -> Dict[str, Any]:
     
     return analysis
 ```
+
+---
+
+## Building the Documentation
+
+The project uses [MkDocs](https://www.mkdocs.org/) with the [Material theme](https://squidfunk.github.io/mkdocs-material/) for documentation.
+
+Install documentation dependencies:
+```bash
+pip install -e ".[docs]"
+```
+
+Build and serve documentation locally:
+```bash
+# Start development server (http://127.0.0.1:8000)
+./scripts/mkdocs.sh serve
+
+# Build static site to site/
+./scripts/mkdocs.sh build
+
+# Deploy to GitHub Pages (maintainers only)
+./scripts/mkdocs.sh deploy
+
+# Clean built documentation
+./scripts/mkdocs.sh clean
+```
+
+The documentation is automatically built by the `docs.yml` GitHub workflow. It is built for each push (and PR) on `develop` and `main` branches. A new site is deployed only when a push to the `main` branch is made. The site is then pushed to the `gh-pages` branch which is automatically mapped to GitHub pages on [johan162.github.io/bayescalc2](https://johan162.github.io/bayescalc2).
+
 
 ---
 
