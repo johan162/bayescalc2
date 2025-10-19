@@ -5,4 +5,4 @@ This package provides tools for defining Bayesian networks, calculating
 probabilities, and performing various probabilistic operations.
 """
 
-__version__ = "v1.0.3-rc5"
+__version__ = "v1.0.3-rc6"

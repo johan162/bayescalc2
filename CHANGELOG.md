@@ -1,37 +1,13 @@
-## [v1.0.3-rc5] - 2025-10-12
+## [v1.0.3-rc6] - 2025-10-19
 
-Release Type: patch
+Release Type: minor
+
+### 📋 Summary 
+- Add new documentation portal [Bayescalc2 Documentation](https://johan162.github.io/bayescalc2/)
 
 ### 🛠 Internal
 - Fix GitHub Release Creation Script o handle naming of pre-releases
-
-## [v1.0.3-rc4] - 2025-10-12
-
-Release Type: patch
-
-### 🛠 Internal
 - Harmonize all build and release scripts to have the same structure
-
-## [v1.0.3-rc3] - 2025-10-12
-
-Release Type: patch
-
-### 🛠 Internal
-- Improve build & release scripts
-
-## [v1.0.3-rc2] - 2025-10-12
-
-Release Type: patch
-
-### 🛠 Internal
-- Improve build & release scripts
-
-## [v1.0.3-rc1] - 2025-10-12
-
-Release Type: patch
-
-### 🛠 Internal
-- Improve build & release scripts with additional error checking
 
 ## [v1.0.2] - 2025-10-11
 
