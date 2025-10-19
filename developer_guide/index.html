@@ -1634,6 +1634,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#building-the-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Building the Documentation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#release-process" class="md-nav__link">
     <span class="md-ellipsis">
       Release Process
@@ -3584,6 +3593,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#building-the-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Building the Documentation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#release-process" class="md-nav__link">
     <span class="md-ellipsis">
       Release Process
@@ -3762,7 +3780,7 @@
 <p>Purpose: A guide for developers contributing to the BayesCalc2 Bayesian Network Calculator project.</p>
 <h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
 <ol>
-<li><a href="#setup-for-development">Setup for Development</a></li>
+<li>[Setup for Development](#tldr-quick-setup-for-development</li>
 <li><a href="#codebase-overview">Codebase Overview</a></li>
 <li><a href="#architecture-and-design">Architecture and Design</a></li>
 <li><a href="#testing-framework">Testing Framework</a></li>
@@ -3772,6 +3790,7 @@
 <li><a href="#development-workflow">Development Workflow</a></li>
 <li><a href="#pull-request-guidelines">Pull Request Guidelines</a></li>
 <li><a href="#debugging-and-performance">Debugging and Performance</a></li>
+<li><a href="#building-the-documentation">Building the documentation</a></li>
 <li><a href="#release-process">Release Process</a></li>
 <li><a href="#appendix-a-variable-elimination-algorithm---detailed-implementation-guide">Appendix A: Variable Elimination Algorithm</a></li>
 <li><a href="#appendix-b-github-release-script-documentation">Appendix B: GitHub Release Script Documentation</a></li>
@@ -5126,6 +5145,26 @@ Every PR must include tests that cover:
 </span><span id="__span-50-31"><a id="__codelineno-50-31" name="__codelineno-50-31" href="#__codelineno-50-31"></a>    <span class="k">return</span> <span class="n">analysis</span>
 </span></code></pre></div>
 <hr />
+<h2 id="building-the-documentation">Building the Documentation<a class="headerlink" href="#building-the-documentation" title="Permanent link">&para;</a></h2>
+<p>The project uses <a href="https://www.mkdocs.org/">MkDocs</a> with the <a href="https://squidfunk.github.io/mkdocs-material/">Material theme</a> for documentation.</p>
+<p>Install documentation dependencies:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[docs]&quot;</span>
+</span></code></pre></div></p>
+<p>Build and serve documentation locally:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="c1"># Start development server (http://127.0.0.1:8000)</span>
+</span><span id="__span-52-2"><a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a>./scripts/mkdocs.sh<span class="w"> </span>serve
+</span><span id="__span-52-3"><a id="__codelineno-52-3" name="__codelineno-52-3" href="#__codelineno-52-3"></a>
+</span><span id="__span-52-4"><a id="__codelineno-52-4" name="__codelineno-52-4" href="#__codelineno-52-4"></a><span class="c1"># Build static site to site/</span>
+</span><span id="__span-52-5"><a id="__codelineno-52-5" name="__codelineno-52-5" href="#__codelineno-52-5"></a>./scripts/mkdocs.sh<span class="w"> </span>build
+</span><span id="__span-52-6"><a id="__codelineno-52-6" name="__codelineno-52-6" href="#__codelineno-52-6"></a>
+</span><span id="__span-52-7"><a id="__codelineno-52-7" name="__codelineno-52-7" href="#__codelineno-52-7"></a><span class="c1"># Deploy to GitHub Pages (maintainers only)</span>
+</span><span id="__span-52-8"><a id="__codelineno-52-8" name="__codelineno-52-8" href="#__codelineno-52-8"></a>./scripts/mkdocs.sh<span class="w"> </span>deploy
+</span><span id="__span-52-9"><a id="__codelineno-52-9" name="__codelineno-52-9" href="#__codelineno-52-9"></a>
+</span><span id="__span-52-10"><a id="__codelineno-52-10" name="__codelineno-52-10" href="#__codelineno-52-10"></a><span class="c1"># Clean built documentation</span>
+</span><span id="__span-52-11"><a id="__codelineno-52-11" name="__codelineno-52-11" href="#__codelineno-52-11"></a>./scripts/mkdocs.sh<span class="w"> </span>clean
+</span></code></pre></div></p>
+<p>The documentation is automatically built by the <code>docs.yml</code> GitHub workflow. It is built for each push (and PR) on <code>develop</code> and <code>main</code> branches. A new site is deployed only when a push to the <code>main</code> branch is made. The site is then pushed to the <code>gh-pages</code> branch which is automatically mapped to GitHub pages on <a href="https://johan162.github.io/bayescalc2">johan162.github.io/bayescalc2</a>.</p>
+<hr />
 <h2 id="release-process">Release Process<a class="headerlink" href="#release-process" title="Permanent link">&para;</a></h2>
 <h3 id="version-management">Version Management<a class="headerlink" href="#version-management" title="Permanent link">&para;</a></h3>
 <h4 id="semantic-versioning">Semantic Versioning<a class="headerlink" href="#semantic-versioning" title="Permanent link">&para;</a></h4>
@@ -5149,18 +5188,18 @@ Every PR must include tests that cover:
 <p>To make the workflow clearer, here are separate diagrams for each major proces.</p>
 <p><strong>1. High-Level Overview</strong></p>
 <p>This diagram shows the main relationship between the <code>develop</code> and <code>main</code> branches. Features are integrated into <code>develop</code>.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>main   &lt;------------------ develop
-</span><span id="__span-51-2"><a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a>                              ^
-</span><span id="__span-51-3"><a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a>                              |
-</span><span id="__span-51-4"><a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a>                              &#39;---- feature/bugfix/refactor/etc.
+<div class="language-text highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>main   &lt;------------------ develop
+</span><span id="__span-53-2"><a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a>                              ^
+</span><span id="__span-53-3"><a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a>                              |
+</span><span id="__span-53-4"><a id="__codelineno-53-4" name="__codelineno-53-4" href="#__codelineno-53-4"></a>                              &#39;---- feature/bugfix/refactor/etc.
 </span></code></pre></div>
 <p><strong>2. Feature/Bugfix/Refactor Branch Workflow</strong></p>
 <p>Feature/bugfix/refactor branches are for developing new features and bugfixes. They are created from <code>develop</code> and merged back into <code>develop</code>.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-52-1"><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a>           (start work)
-</span><span id="__span-52-2"><a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a>develop ------------------.----------------------------------.------------&gt;
-</span><span id="__span-52-3"><a id="__codelineno-52-3" name="__codelineno-52-3" href="#__codelineno-52-3"></a>                           \                                / (merge PR)
-</span><span id="__span-52-4"><a id="__codelineno-52-4" name="__codelineno-52-4" href="#__codelineno-52-4"></a>                            `---( feature/new-feature )----`
-</span><span id="__span-52-5"><a id="__codelineno-52-5" name="__codelineno-52-5" href="#__codelineno-52-5"></a>                                (commit 1) (commit 2)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>           (start work)
+</span><span id="__span-54-2"><a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>develop ------------------.----------------------------------.------------&gt;
+</span><span id="__span-54-3"><a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a>                           \                                / (merge PR)
+</span><span id="__span-54-4"><a id="__codelineno-54-4" name="__codelineno-54-4" href="#__codelineno-54-4"></a>                            `---( feature/new-feature )----`
+</span><span id="__span-54-5"><a id="__codelineno-54-5" name="__codelineno-54-5" href="#__codelineno-54-5"></a>                                (commit 1) (commit 2)
 </span></code></pre></div>
 <h3 id="branch-types-and-purposes">Branch Types and Purposes<a class="headerlink" href="#branch-types-and-purposes" title="Permanent link">&para;</a></h3>
 <p><strong><code>main</code> Branch</strong> (Production)
@@ -5200,9 +5239,9 @@ Every PR must include tests that cover:
    merge back changes from main onto develop. </p>
 <p>Usage: </p>
 <p><code>./scripts/mkrelease.sh &lt;version&gt; [major|minor|patch] [--dry-run] [--help]</code></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-53-1"><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>$ ./scripts/mkrelease.sh 2.1.0 minor
-</span><span id="__span-53-2"><a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a>$ ./scripts/mkrelease.sh 2.1.0 minor --dry-run
-</span><span id="__span-53-3"><a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a>$ ./scripts/mkrelease.sh --help
+<div class="language-text highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>$ ./scripts/mkrelease.sh 2.1.0 minor
+</span><span id="__span-55-2"><a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a>$ ./scripts/mkrelease.sh 2.1.0 minor --dry-run
+</span><span id="__span-55-3"><a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a>$ ./scripts/mkrelease.sh --help
 </span></code></pre></div>
 <p><strong>Quality Gates Enforced:</strong>
 - ✅ <strong>80%+ test coverage</strong> requirement
@@ -5219,10 +5258,10 @@ Every PR must include tests that cover:
 <p>After a succesful run of the git/branch release script it is time to create the GitHub release. using the script <code>scripts/mkghrelease.sh</code>. This will use the latest tag created and name a new release with this name. The GitHub release will be made with an updated release note and the latest artifacts. Due to the CI/CD workflow this will also trigger a release to be pushed to PyPI with the given version number.</p>
 <p>Usage:</p>
 <p><code>./scripts/mkghrelease.sh [--dry-run] [--help] [--pre-release]</code></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-54-1"><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>$ ./scripts/mkghrelease.sh
-</span><span id="__span-54-2"><a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>$ ./scripts/mkghrelease.sh --dry-run
-</span><span id="__span-54-3"><a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a>$ ./scripts/mkghrelease.sh --help
-</span><span id="__span-54-4"><a id="__codelineno-54-4" name="__codelineno-54-4" href="#__codelineno-54-4"></a>$ ./scripts/mkghrelease.sh --pre-release
+<div class="language-text highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>$ ./scripts/mkghrelease.sh
+</span><span id="__span-56-2"><a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a>$ ./scripts/mkghrelease.sh --dry-run
+</span><span id="__span-56-3"><a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a>$ ./scripts/mkghrelease.sh --help
+</span><span id="__span-56-4"><a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a>$ ./scripts/mkghrelease.sh --pre-release
 </span></code></pre></div>
 <p><strong>Quality Gates Enforced:</strong>
 - ✅ <strong>Authenticated</strong> That the user is authenticated to use <code>gh</code>
@@ -5283,75 +5322,75 @@ Every PR must include tests that cover:
 <h2 id="detailed-example-rain-sprinkler-grasswet-network">Detailed Example: Rain-Sprinkler-GrassWet Network<a class="headerlink" href="#detailed-example-rain-sprinkler-grasswet-network" title="Permanent link">&para;</a></h2>
 <p>Let's work through computing <strong>P(Rain | GrassWet=True)</strong> step by step.</p>
 <h3 id="network-definition">Network Definition<a class="headerlink" href="#network-definition" title="Permanent link">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-55-1"><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>Variables:
-</span><span id="__span-55-2"><a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a>- Rain ∈ {True, False}
-</span><span id="__span-55-3"><a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a>- Sprinkler ∈ {True, False}  
-</span><span id="__span-55-4"><a id="__codelineno-55-4" name="__codelineno-55-4" href="#__codelineno-55-4"></a>- GrassWet ∈ {True, False}
-</span><span id="__span-55-5"><a id="__codelineno-55-5" name="__codelineno-55-5" href="#__codelineno-55-5"></a>
-</span><span id="__span-55-6"><a id="__codelineno-55-6" name="__codelineno-55-6" href="#__codelineno-55-6"></a>Structure:
-</span><span id="__span-55-7"><a id="__codelineno-55-7" name="__codelineno-55-7" href="#__codelineno-55-7"></a>Rain → Sprinkler
-</span><span id="__span-55-8"><a id="__codelineno-55-8" name="__codelineno-55-8" href="#__codelineno-55-8"></a>Rain → GrassWet
-</span><span id="__span-55-9"><a id="__codelineno-55-9" name="__codelineno-55-9" href="#__codelineno-55-9"></a>Sprinkler → GrassWet
-</span><span id="__span-55-10"><a id="__codelineno-55-10" name="__codelineno-55-10" href="#__codelineno-55-10"></a>
-</span><span id="__span-55-11"><a id="__codelineno-55-11" name="__codelineno-55-11" href="#__codelineno-55-11"></a>CPTs:
-</span><span id="__span-55-12"><a id="__codelineno-55-12" name="__codelineno-55-12" href="#__codelineno-55-12"></a>P(Rain=True) = 0.2
-</span><span id="__span-55-13"><a id="__codelineno-55-13" name="__codelineno-55-13" href="#__codelineno-55-13"></a>P(Rain=False) = 0.8
-</span><span id="__span-55-14"><a id="__codelineno-55-14" name="__codelineno-55-14" href="#__codelineno-55-14"></a>
-</span><span id="__span-55-15"><a id="__codelineno-55-15" name="__codelineno-55-15" href="#__codelineno-55-15"></a>P(Sprinkler=True | Rain=True) = 0.01
-</span><span id="__span-55-16"><a id="__codelineno-55-16" name="__codelineno-55-16" href="#__codelineno-55-16"></a>P(Sprinkler=True | Rain=False) = 0.4
-</span><span id="__span-55-17"><a id="__codelineno-55-17" name="__codelineno-55-17" href="#__codelineno-55-17"></a>P(Sprinkler=False | Rain=True) = 0.99
-</span><span id="__span-55-18"><a id="__codelineno-55-18" name="__codelineno-55-18" href="#__codelineno-55-18"></a>P(Sprinkler=False | Rain=False) = 0.6
-</span><span id="__span-55-19"><a id="__codelineno-55-19" name="__codelineno-55-19" href="#__codelineno-55-19"></a>
-</span><span id="__span-55-20"><a id="__codelineno-55-20" name="__codelineno-55-20" href="#__codelineno-55-20"></a>P(GrassWet=True | Rain=True, Sprinkler=True) = 0.99
-</span><span id="__span-55-21"><a id="__codelineno-55-21" name="__codelineno-55-21" href="#__codelineno-55-21"></a>P(GrassWet=True | Rain=True, Sprinkler=False) = 0.8
-</span><span id="__span-55-22"><a id="__codelineno-55-22" name="__codelineno-55-22" href="#__codelineno-55-22"></a>P(GrassWet=True | Rain=False, Sprinkler=True) = 0.9
-</span><span id="__span-55-23"><a id="__codelineno-55-23" name="__codelineno-55-23" href="#__codelineno-55-23"></a>P(GrassWet=True | Rain=False, Sprinkler=False) = 0.1
-</span><span id="__span-55-24"><a id="__codelineno-55-24" name="__codelineno-55-24" href="#__codelineno-55-24"></a>P(GrassWet=False | Rain=True, Sprinkler=True) = 0.01
-</span><span id="__span-55-25"><a id="__codelineno-55-25" name="__codelineno-55-25" href="#__codelineno-55-25"></a>P(GrassWet=False | Rain=True, Sprinkler=False) = 0.2
-</span><span id="__span-55-26"><a id="__codelineno-55-26" name="__codelineno-55-26" href="#__codelineno-55-26"></a>P(GrassWet=False | Rain=False, Sprinkler=True) = 0.1
-</span><span id="__span-55-27"><a id="__codelineno-55-27" name="__codelineno-55-27" href="#__codelineno-55-27"></a>P(GrassWet=False | Rain=False, Sprinkler=False) = 0.9
+<div class="language-text highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>Variables:
+</span><span id="__span-57-2"><a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a>- Rain ∈ {True, False}
+</span><span id="__span-57-3"><a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a>- Sprinkler ∈ {True, False}  
+</span><span id="__span-57-4"><a id="__codelineno-57-4" name="__codelineno-57-4" href="#__codelineno-57-4"></a>- GrassWet ∈ {True, False}
+</span><span id="__span-57-5"><a id="__codelineno-57-5" name="__codelineno-57-5" href="#__codelineno-57-5"></a>
+</span><span id="__span-57-6"><a id="__codelineno-57-6" name="__codelineno-57-6" href="#__codelineno-57-6"></a>Structure:
+</span><span id="__span-57-7"><a id="__codelineno-57-7" name="__codelineno-57-7" href="#__codelineno-57-7"></a>Rain → Sprinkler
+</span><span id="__span-57-8"><a id="__codelineno-57-8" name="__codelineno-57-8" href="#__codelineno-57-8"></a>Rain → GrassWet
+</span><span id="__span-57-9"><a id="__codelineno-57-9" name="__codelineno-57-9" href="#__codelineno-57-9"></a>Sprinkler → GrassWet
+</span><span id="__span-57-10"><a id="__codelineno-57-10" name="__codelineno-57-10" href="#__codelineno-57-10"></a>
+</span><span id="__span-57-11"><a id="__codelineno-57-11" name="__codelineno-57-11" href="#__codelineno-57-11"></a>CPTs:
+</span><span id="__span-57-12"><a id="__codelineno-57-12" name="__codelineno-57-12" href="#__codelineno-57-12"></a>P(Rain=True) = 0.2
+</span><span id="__span-57-13"><a id="__codelineno-57-13" name="__codelineno-57-13" href="#__codelineno-57-13"></a>P(Rain=False) = 0.8
+</span><span id="__span-57-14"><a id="__codelineno-57-14" name="__codelineno-57-14" href="#__codelineno-57-14"></a>
+</span><span id="__span-57-15"><a id="__codelineno-57-15" name="__codelineno-57-15" href="#__codelineno-57-15"></a>P(Sprinkler=True | Rain=True) = 0.01
+</span><span id="__span-57-16"><a id="__codelineno-57-16" name="__codelineno-57-16" href="#__codelineno-57-16"></a>P(Sprinkler=True | Rain=False) = 0.4
+</span><span id="__span-57-17"><a id="__codelineno-57-17" name="__codelineno-57-17" href="#__codelineno-57-17"></a>P(Sprinkler=False | Rain=True) = 0.99
+</span><span id="__span-57-18"><a id="__codelineno-57-18" name="__codelineno-57-18" href="#__codelineno-57-18"></a>P(Sprinkler=False | Rain=False) = 0.6
+</span><span id="__span-57-19"><a id="__codelineno-57-19" name="__codelineno-57-19" href="#__codelineno-57-19"></a>
+</span><span id="__span-57-20"><a id="__codelineno-57-20" name="__codelineno-57-20" href="#__codelineno-57-20"></a>P(GrassWet=True | Rain=True, Sprinkler=True) = 0.99
+</span><span id="__span-57-21"><a id="__codelineno-57-21" name="__codelineno-57-21" href="#__codelineno-57-21"></a>P(GrassWet=True | Rain=True, Sprinkler=False) = 0.8
+</span><span id="__span-57-22"><a id="__codelineno-57-22" name="__codelineno-57-22" href="#__codelineno-57-22"></a>P(GrassWet=True | Rain=False, Sprinkler=True) = 0.9
+</span><span id="__span-57-23"><a id="__codelineno-57-23" name="__codelineno-57-23" href="#__codelineno-57-23"></a>P(GrassWet=True | Rain=False, Sprinkler=False) = 0.1
+</span><span id="__span-57-24"><a id="__codelineno-57-24" name="__codelineno-57-24" href="#__codelineno-57-24"></a>P(GrassWet=False | Rain=True, Sprinkler=True) = 0.01
+</span><span id="__span-57-25"><a id="__codelineno-57-25" name="__codelineno-57-25" href="#__codelineno-57-25"></a>P(GrassWet=False | Rain=True, Sprinkler=False) = 0.2
+</span><span id="__span-57-26"><a id="__codelineno-57-26" name="__codelineno-57-26" href="#__codelineno-57-26"></a>P(GrassWet=False | Rain=False, Sprinkler=True) = 0.1
+</span><span id="__span-57-27"><a id="__codelineno-57-27" name="__codelineno-57-27" href="#__codelineno-57-27"></a>P(GrassWet=False | Rain=False, Sprinkler=False) = 0.9
 </span></code></pre></div>
 <h3 id="phase-1-preparation">Phase 1: Preparation<a class="headerlink" href="#phase-1-preparation" title="Permanent link">&para;</a></h3>
 <p><strong>Step 1.1: Extract Initial Factors</strong></p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-56-1"><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="n">Factor</span><span class="err">₁</span><span class="p">:</span> <span class="n">φ</span><span class="err">₁</span><span class="p">(</span><span class="n">Rain</span><span class="p">)</span>
-</span><span id="__span-56-2"><a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">]</span>
-</span><span id="__span-56-3"><a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-56-4"><a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,):</span> <span class="mf">0.2</span><span class="p">,</span>
-</span><span id="__span-56-5"><a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,):</span> <span class="mf">0.8</span>
-</span><span id="__span-56-6"><a id="__codelineno-56-6" name="__codelineno-56-6" href="#__codelineno-56-6"></a><span class="p">}</span>
-</span><span id="__span-56-7"><a id="__codelineno-56-7" name="__codelineno-56-7" href="#__codelineno-56-7"></a>
-</span><span id="__span-56-8"><a id="__codelineno-56-8" name="__codelineno-56-8" href="#__codelineno-56-8"></a><span class="n">Factor</span><span class="err">₂</span><span class="p">:</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="n">Sprinkler</span><span class="p">,</span> <span class="n">Rain</span><span class="p">)</span>
-</span><span id="__span-56-9"><a id="__codelineno-56-9" name="__codelineno-56-9" href="#__codelineno-56-9"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Sprinkler</span><span class="p">,</span> <span class="n">Rain</span><span class="p">]</span>
-</span><span id="__span-56-10"><a id="__codelineno-56-10" name="__codelineno-56-10" href="#__codelineno-56-10"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-56-11"><a id="__codelineno-56-11" name="__codelineno-56-11" href="#__codelineno-56-11"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.01</span><span class="p">,</span>
-</span><span id="__span-56-12"><a id="__codelineno-56-12" name="__codelineno-56-12" href="#__codelineno-56-12"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.4</span><span class="p">,</span>
-</span><span id="__span-56-13"><a id="__codelineno-56-13" name="__codelineno-56-13" href="#__codelineno-56-13"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.99</span><span class="p">,</span>
-</span><span id="__span-56-14"><a id="__codelineno-56-14" name="__codelineno-56-14" href="#__codelineno-56-14"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.6</span>
-</span><span id="__span-56-15"><a id="__codelineno-56-15" name="__codelineno-56-15" href="#__codelineno-56-15"></a><span class="p">}</span>
-</span><span id="__span-56-16"><a id="__codelineno-56-16" name="__codelineno-56-16" href="#__codelineno-56-16"></a>
-</span><span id="__span-56-17"><a id="__codelineno-56-17" name="__codelineno-56-17" href="#__codelineno-56-17"></a><span class="n">Factor</span><span class="err">₃</span><span class="p">:</span> <span class="n">φ</span><span class="err">₃</span><span class="p">(</span><span class="n">GrassWet</span><span class="p">,</span> <span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">)</span>
-</span><span id="__span-56-18"><a id="__codelineno-56-18" name="__codelineno-56-18" href="#__codelineno-56-18"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">GrassWet</span><span class="p">,</span> <span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">]</span>
-</span><span id="__span-56-19"><a id="__codelineno-56-19" name="__codelineno-56-19" href="#__codelineno-56-19"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-56-20"><a id="__codelineno-56-20" name="__codelineno-56-20" href="#__codelineno-56-20"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.99</span><span class="p">,</span>
-</span><span id="__span-56-21"><a id="__codelineno-56-21" name="__codelineno-56-21" href="#__codelineno-56-21"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.8</span><span class="p">,</span>
-</span><span id="__span-56-22"><a id="__codelineno-56-22" name="__codelineno-56-22" href="#__codelineno-56-22"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.9</span><span class="p">,</span>
-</span><span id="__span-56-23"><a id="__codelineno-56-23" name="__codelineno-56-23" href="#__codelineno-56-23"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.1</span><span class="p">,</span>
-</span><span id="__span-56-24"><a id="__codelineno-56-24" name="__codelineno-56-24" href="#__codelineno-56-24"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.01</span><span class="p">,</span>
-</span><span id="__span-56-25"><a id="__codelineno-56-25" name="__codelineno-56-25" href="#__codelineno-56-25"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.2</span><span class="p">,</span>
-</span><span id="__span-56-26"><a id="__codelineno-56-26" name="__codelineno-56-26" href="#__codelineno-56-26"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.1</span><span class="p">,</span>
-</span><span id="__span-56-27"><a id="__codelineno-56-27" name="__codelineno-56-27" href="#__codelineno-56-27"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.9</span>
-</span><span id="__span-56-28"><a id="__codelineno-56-28" name="__codelineno-56-28" href="#__codelineno-56-28"></a><span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="n">Factor</span><span class="err">₁</span><span class="p">:</span> <span class="n">φ</span><span class="err">₁</span><span class="p">(</span><span class="n">Rain</span><span class="p">)</span>
+</span><span id="__span-58-2"><a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">]</span>
+</span><span id="__span-58-3"><a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-58-4"><a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,):</span> <span class="mf">0.2</span><span class="p">,</span>
+</span><span id="__span-58-5"><a id="__codelineno-58-5" name="__codelineno-58-5" href="#__codelineno-58-5"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,):</span> <span class="mf">0.8</span>
+</span><span id="__span-58-6"><a id="__codelineno-58-6" name="__codelineno-58-6" href="#__codelineno-58-6"></a><span class="p">}</span>
+</span><span id="__span-58-7"><a id="__codelineno-58-7" name="__codelineno-58-7" href="#__codelineno-58-7"></a>
+</span><span id="__span-58-8"><a id="__codelineno-58-8" name="__codelineno-58-8" href="#__codelineno-58-8"></a><span class="n">Factor</span><span class="err">₂</span><span class="p">:</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="n">Sprinkler</span><span class="p">,</span> <span class="n">Rain</span><span class="p">)</span>
+</span><span id="__span-58-9"><a id="__codelineno-58-9" name="__codelineno-58-9" href="#__codelineno-58-9"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Sprinkler</span><span class="p">,</span> <span class="n">Rain</span><span class="p">]</span>
+</span><span id="__span-58-10"><a id="__codelineno-58-10" name="__codelineno-58-10" href="#__codelineno-58-10"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-58-11"><a id="__codelineno-58-11" name="__codelineno-58-11" href="#__codelineno-58-11"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.01</span><span class="p">,</span>
+</span><span id="__span-58-12"><a id="__codelineno-58-12" name="__codelineno-58-12" href="#__codelineno-58-12"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.4</span><span class="p">,</span>
+</span><span id="__span-58-13"><a id="__codelineno-58-13" name="__codelineno-58-13" href="#__codelineno-58-13"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.99</span><span class="p">,</span>
+</span><span id="__span-58-14"><a id="__codelineno-58-14" name="__codelineno-58-14" href="#__codelineno-58-14"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.6</span>
+</span><span id="__span-58-15"><a id="__codelineno-58-15" name="__codelineno-58-15" href="#__codelineno-58-15"></a><span class="p">}</span>
+</span><span id="__span-58-16"><a id="__codelineno-58-16" name="__codelineno-58-16" href="#__codelineno-58-16"></a>
+</span><span id="__span-58-17"><a id="__codelineno-58-17" name="__codelineno-58-17" href="#__codelineno-58-17"></a><span class="n">Factor</span><span class="err">₃</span><span class="p">:</span> <span class="n">φ</span><span class="err">₃</span><span class="p">(</span><span class="n">GrassWet</span><span class="p">,</span> <span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">)</span>
+</span><span id="__span-58-18"><a id="__codelineno-58-18" name="__codelineno-58-18" href="#__codelineno-58-18"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">GrassWet</span><span class="p">,</span> <span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">]</span>
+</span><span id="__span-58-19"><a id="__codelineno-58-19" name="__codelineno-58-19" href="#__codelineno-58-19"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-58-20"><a id="__codelineno-58-20" name="__codelineno-58-20" href="#__codelineno-58-20"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.99</span><span class="p">,</span>
+</span><span id="__span-58-21"><a id="__codelineno-58-21" name="__codelineno-58-21" href="#__codelineno-58-21"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.8</span><span class="p">,</span>
+</span><span id="__span-58-22"><a id="__codelineno-58-22" name="__codelineno-58-22" href="#__codelineno-58-22"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.9</span><span class="p">,</span>
+</span><span id="__span-58-23"><a id="__codelineno-58-23" name="__codelineno-58-23" href="#__codelineno-58-23"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.1</span><span class="p">,</span>
+</span><span id="__span-58-24"><a id="__codelineno-58-24" name="__codelineno-58-24" href="#__codelineno-58-24"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.01</span><span class="p">,</span>
+</span><span id="__span-58-25"><a id="__codelineno-58-25" name="__codelineno-58-25" href="#__codelineno-58-25"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.2</span><span class="p">,</span>
+</span><span id="__span-58-26"><a id="__codelineno-58-26" name="__codelineno-58-26" href="#__codelineno-58-26"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.1</span><span class="p">,</span>
+</span><span id="__span-58-27"><a id="__codelineno-58-27" name="__codelineno-58-27" href="#__codelineno-58-27"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.9</span>
+</span><span id="__span-58-28"><a id="__codelineno-58-28" name="__codelineno-58-28" href="#__codelineno-58-28"></a><span class="p">}</span>
 </span></code></pre></div>
 <p><strong>Step 1.2: Apply Evidence (GrassWet=True)</strong></p>
 <p>We reduce Factor₃ by eliminating rows where GrassWet ≠ True:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-57-1"><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="n">Factor</span><span class="err">₃</span><span class="s1">&#39;: φ₃&#39;</span><span class="p">(</span><span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">)</span>  <span class="c1"># GrassWet eliminated by evidence</span>
-</span><span id="__span-57-2"><a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">]</span>
-</span><span id="__span-57-3"><a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-57-4"><a id="__codelineno-57-4" name="__codelineno-57-4" href="#__codelineno-57-4"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.99</span><span class="p">,</span>     <span class="c1"># was (True, True, True)</span>
-</span><span id="__span-57-5"><a id="__codelineno-57-5" name="__codelineno-57-5" href="#__codelineno-57-5"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.8</span><span class="p">,</span>     <span class="c1"># was (True, True, False)</span>
-</span><span id="__span-57-6"><a id="__codelineno-57-6" name="__codelineno-57-6" href="#__codelineno-57-6"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.9</span><span class="p">,</span>     <span class="c1"># was (True, False, True)</span>
-</span><span id="__span-57-7"><a id="__codelineno-57-7" name="__codelineno-57-7" href="#__codelineno-57-7"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.1</span>     <span class="c1"># was (True, False, False)</span>
-</span><span id="__span-57-8"><a id="__codelineno-57-8" name="__codelineno-57-8" href="#__codelineno-57-8"></a><span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="n">Factor</span><span class="err">₃</span><span class="s1">&#39;: φ₃&#39;</span><span class="p">(</span><span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">)</span>  <span class="c1"># GrassWet eliminated by evidence</span>
+</span><span id="__span-59-2"><a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">]</span>
+</span><span id="__span-59-3"><a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-59-4"><a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.99</span><span class="p">,</span>     <span class="c1"># was (True, True, True)</span>
+</span><span id="__span-59-5"><a id="__codelineno-59-5" name="__codelineno-59-5" href="#__codelineno-59-5"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.8</span><span class="p">,</span>     <span class="c1"># was (True, True, False)</span>
+</span><span id="__span-59-6"><a id="__codelineno-59-6" name="__codelineno-59-6" href="#__codelineno-59-6"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.9</span><span class="p">,</span>     <span class="c1"># was (True, False, True)</span>
+</span><span id="__span-59-7"><a id="__codelineno-59-7" name="__codelineno-59-7" href="#__codelineno-59-7"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.1</span>     <span class="c1"># was (True, False, False)</span>
+</span><span id="__span-59-8"><a id="__codelineno-59-8" name="__codelineno-59-8" href="#__codelineno-59-8"></a><span class="p">}</span>
 </span></code></pre></div>
 <p><strong>Step 1.3: Identify Variables to Eliminate</strong></p>
 <ul>
@@ -5366,145 +5405,145 @@ Every PR must include tests that cover:
 - Factor₃': φ₃'(Rain, Sprinkler)</p>
 <p><strong>Join Factor₂ and Factor₃':</strong></p>
 <p>The join operation multiplies factors. For each combination of Rain and Sprinkler values:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-58-1"><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="c1"># Join: φ₄(Rain, Sprinkler) = φ₂(Sprinkler, Rain) × φ₃&#39;(Rain, Sprinkler)</span>
-</span><span id="__span-58-2"><a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a>
-</span><span id="__span-58-3"><a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₃</span><span class="s1">&#39;(True, True)</span>
-</span><span id="__span-58-4"><a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a>                <span class="o">=</span> <span class="mf">0.01</span> <span class="err">×</span> <span class="mf">0.99</span> <span class="o">=</span> <span class="mf">0.0099</span>
-</span><span id="__span-58-5"><a id="__codelineno-58-5" name="__codelineno-58-5" href="#__codelineno-58-5"></a>
-</span><span id="__span-58-6"><a id="__codelineno-58-6" name="__codelineno-58-6" href="#__codelineno-58-6"></a><span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₃</span><span class="s1">&#39;(True, False)  </span>
-</span><span id="__span-58-7"><a id="__codelineno-58-7" name="__codelineno-58-7" href="#__codelineno-58-7"></a>                 <span class="o">=</span> <span class="mf">0.99</span> <span class="err">×</span> <span class="mf">0.8</span> <span class="o">=</span> <span class="mf">0.792</span>
-</span><span id="__span-58-8"><a id="__codelineno-58-8" name="__codelineno-58-8" href="#__codelineno-58-8"></a>
-</span><span id="__span-58-9"><a id="__codelineno-58-9" name="__codelineno-58-9" href="#__codelineno-58-9"></a><span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₃</span><span class="s1">&#39;(False, True)</span>
-</span><span id="__span-58-10"><a id="__codelineno-58-10" name="__codelineno-58-10" href="#__codelineno-58-10"></a>                 <span class="o">=</span> <span class="mf">0.4</span> <span class="err">×</span> <span class="mf">0.9</span> <span class="o">=</span> <span class="mf">0.36</span>
-</span><span id="__span-58-11"><a id="__codelineno-58-11" name="__codelineno-58-11" href="#__codelineno-58-11"></a>
-</span><span id="__span-58-12"><a id="__codelineno-58-12" name="__codelineno-58-12" href="#__codelineno-58-12"></a><span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₃</span><span class="s1">&#39;(False, False)</span>
-</span><span id="__span-58-13"><a id="__codelineno-58-13" name="__codelineno-58-13" href="#__codelineno-58-13"></a>                  <span class="o">=</span> <span class="mf">0.6</span> <span class="err">×</span> <span class="mf">0.1</span> <span class="o">=</span> <span class="mf">0.06</span>
-</span><span id="__span-58-14"><a id="__codelineno-58-14" name="__codelineno-58-14" href="#__codelineno-58-14"></a>
-</span><span id="__span-58-15"><a id="__codelineno-58-15" name="__codelineno-58-15" href="#__codelineno-58-15"></a><span class="n">Factor</span><span class="err">₄</span><span class="p">:</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">)</span>
-</span><span id="__span-58-16"><a id="__codelineno-58-16" name="__codelineno-58-16" href="#__codelineno-58-16"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">]</span>
-</span><span id="__span-58-17"><a id="__codelineno-58-17" name="__codelineno-58-17" href="#__codelineno-58-17"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-58-18"><a id="__codelineno-58-18" name="__codelineno-58-18" href="#__codelineno-58-18"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.0099</span><span class="p">,</span>
-</span><span id="__span-58-19"><a id="__codelineno-58-19" name="__codelineno-58-19" href="#__codelineno-58-19"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.792</span><span class="p">,</span>
-</span><span id="__span-58-20"><a id="__codelineno-58-20" name="__codelineno-58-20" href="#__codelineno-58-20"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.36</span><span class="p">,</span>
-</span><span id="__span-58-21"><a id="__codelineno-58-21" name="__codelineno-58-21" href="#__codelineno-58-21"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.06</span>
-</span><span id="__span-58-22"><a id="__codelineno-58-22" name="__codelineno-58-22" href="#__codelineno-58-22"></a><span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-60-1"><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="c1"># Join: φ₄(Rain, Sprinkler) = φ₂(Sprinkler, Rain) × φ₃&#39;(Rain, Sprinkler)</span>
+</span><span id="__span-60-2"><a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a>
+</span><span id="__span-60-3"><a id="__codelineno-60-3" name="__codelineno-60-3" href="#__codelineno-60-3"></a><span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₃</span><span class="s1">&#39;(True, True)</span>
+</span><span id="__span-60-4"><a id="__codelineno-60-4" name="__codelineno-60-4" href="#__codelineno-60-4"></a>                <span class="o">=</span> <span class="mf">0.01</span> <span class="err">×</span> <span class="mf">0.99</span> <span class="o">=</span> <span class="mf">0.0099</span>
+</span><span id="__span-60-5"><a id="__codelineno-60-5" name="__codelineno-60-5" href="#__codelineno-60-5"></a>
+</span><span id="__span-60-6"><a id="__codelineno-60-6" name="__codelineno-60-6" href="#__codelineno-60-6"></a><span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₃</span><span class="s1">&#39;(True, False)  </span>
+</span><span id="__span-60-7"><a id="__codelineno-60-7" name="__codelineno-60-7" href="#__codelineno-60-7"></a>                 <span class="o">=</span> <span class="mf">0.99</span> <span class="err">×</span> <span class="mf">0.8</span> <span class="o">=</span> <span class="mf">0.792</span>
+</span><span id="__span-60-8"><a id="__codelineno-60-8" name="__codelineno-60-8" href="#__codelineno-60-8"></a>
+</span><span id="__span-60-9"><a id="__codelineno-60-9" name="__codelineno-60-9" href="#__codelineno-60-9"></a><span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₃</span><span class="s1">&#39;(False, True)</span>
+</span><span id="__span-60-10"><a id="__codelineno-60-10" name="__codelineno-60-10" href="#__codelineno-60-10"></a>                 <span class="o">=</span> <span class="mf">0.4</span> <span class="err">×</span> <span class="mf">0.9</span> <span class="o">=</span> <span class="mf">0.36</span>
+</span><span id="__span-60-11"><a id="__codelineno-60-11" name="__codelineno-60-11" href="#__codelineno-60-11"></a>
+</span><span id="__span-60-12"><a id="__codelineno-60-12" name="__codelineno-60-12" href="#__codelineno-60-12"></a><span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₂</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₃</span><span class="s1">&#39;(False, False)</span>
+</span><span id="__span-60-13"><a id="__codelineno-60-13" name="__codelineno-60-13" href="#__codelineno-60-13"></a>                  <span class="o">=</span> <span class="mf">0.6</span> <span class="err">×</span> <span class="mf">0.1</span> <span class="o">=</span> <span class="mf">0.06</span>
+</span><span id="__span-60-14"><a id="__codelineno-60-14" name="__codelineno-60-14" href="#__codelineno-60-14"></a>
+</span><span id="__span-60-15"><a id="__codelineno-60-15" name="__codelineno-60-15" href="#__codelineno-60-15"></a><span class="n">Factor</span><span class="err">₄</span><span class="p">:</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">)</span>
+</span><span id="__span-60-16"><a id="__codelineno-60-16" name="__codelineno-60-16" href="#__codelineno-60-16"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">,</span> <span class="n">Sprinkler</span><span class="p">]</span>
+</span><span id="__span-60-17"><a id="__codelineno-60-17" name="__codelineno-60-17" href="#__codelineno-60-17"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-60-18"><a id="__codelineno-60-18" name="__codelineno-60-18" href="#__codelineno-60-18"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.0099</span><span class="p">,</span>
+</span><span id="__span-60-19"><a id="__codelineno-60-19" name="__codelineno-60-19" href="#__codelineno-60-19"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.792</span><span class="p">,</span>
+</span><span id="__span-60-20"><a id="__codelineno-60-20" name="__codelineno-60-20" href="#__codelineno-60-20"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span> <span class="mf">0.36</span><span class="p">,</span>
+</span><span id="__span-60-21"><a id="__codelineno-60-21" name="__codelineno-60-21" href="#__codelineno-60-21"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span> <span class="mf">0.06</span>
+</span><span id="__span-60-22"><a id="__codelineno-60-22" name="__codelineno-60-22" href="#__codelineno-60-22"></a><span class="p">}</span>
 </span></code></pre></div>
 <p><strong>Sum out Sprinkler from Factor₄:</strong></p>
 <p>The marginalization operation sums over all values of the eliminated variable:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-59-1"><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="c1"># Marginalize: φ₅(Rain) = ∑_{Sprinkler} φ₄(Rain, Sprinkler)</span>
-</span><span id="__span-59-2"><a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a>
-</span><span id="__span-59-3"><a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a><span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-</span><span id="__span-59-4"><a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a>         <span class="o">=</span> <span class="mf">0.0099</span> <span class="o">+</span> <span class="mf">0.792</span> <span class="o">=</span> <span class="mf">0.8019</span>
-</span><span id="__span-59-5"><a id="__codelineno-59-5" name="__codelineno-59-5" href="#__codelineno-59-5"></a>
-</span><span id="__span-59-6"><a id="__codelineno-59-6" name="__codelineno-59-6" href="#__codelineno-59-6"></a><span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-</span><span id="__span-59-7"><a id="__codelineno-59-7" name="__codelineno-59-7" href="#__codelineno-59-7"></a>          <span class="o">=</span> <span class="mf">0.36</span> <span class="o">+</span> <span class="mf">0.06</span> <span class="o">=</span> <span class="mf">0.42</span>
-</span><span id="__span-59-8"><a id="__codelineno-59-8" name="__codelineno-59-8" href="#__codelineno-59-8"></a>
-</span><span id="__span-59-9"><a id="__codelineno-59-9" name="__codelineno-59-9" href="#__codelineno-59-9"></a><span class="n">Factor</span><span class="err">₅</span><span class="p">:</span> <span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="n">Rain</span><span class="p">)</span>
-</span><span id="__span-59-10"><a id="__codelineno-59-10" name="__codelineno-59-10" href="#__codelineno-59-10"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">]</span>
-</span><span id="__span-59-11"><a id="__codelineno-59-11" name="__codelineno-59-11" href="#__codelineno-59-11"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-59-12"><a id="__codelineno-59-12" name="__codelineno-59-12" href="#__codelineno-59-12"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,):</span> <span class="mf">0.8019</span><span class="p">,</span>
-</span><span id="__span-59-13"><a id="__codelineno-59-13" name="__codelineno-59-13" href="#__codelineno-59-13"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,):</span> <span class="mf">0.42</span>
-</span><span id="__span-59-14"><a id="__codelineno-59-14" name="__codelineno-59-14" href="#__codelineno-59-14"></a><span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-61-1"><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="c1"># Marginalize: φ₅(Rain) = ∑_{Sprinkler} φ₄(Rain, Sprinkler)</span>
+</span><span id="__span-61-2"><a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a>
+</span><span id="__span-61-3"><a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a><span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+</span><span id="__span-61-4"><a id="__codelineno-61-4" name="__codelineno-61-4" href="#__codelineno-61-4"></a>         <span class="o">=</span> <span class="mf">0.0099</span> <span class="o">+</span> <span class="mf">0.792</span> <span class="o">=</span> <span class="mf">0.8019</span>
+</span><span id="__span-61-5"><a id="__codelineno-61-5" name="__codelineno-61-5" href="#__codelineno-61-5"></a>
+</span><span id="__span-61-6"><a id="__codelineno-61-6" name="__codelineno-61-6" href="#__codelineno-61-6"></a><span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">φ</span><span class="err">₄</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+</span><span id="__span-61-7"><a id="__codelineno-61-7" name="__codelineno-61-7" href="#__codelineno-61-7"></a>          <span class="o">=</span> <span class="mf">0.36</span> <span class="o">+</span> <span class="mf">0.06</span> <span class="o">=</span> <span class="mf">0.42</span>
+</span><span id="__span-61-8"><a id="__codelineno-61-8" name="__codelineno-61-8" href="#__codelineno-61-8"></a>
+</span><span id="__span-61-9"><a id="__codelineno-61-9" name="__codelineno-61-9" href="#__codelineno-61-9"></a><span class="n">Factor</span><span class="err">₅</span><span class="p">:</span> <span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="n">Rain</span><span class="p">)</span>
+</span><span id="__span-61-10"><a id="__codelineno-61-10" name="__codelineno-61-10" href="#__codelineno-61-10"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">]</span>
+</span><span id="__span-61-11"><a id="__codelineno-61-11" name="__codelineno-61-11" href="#__codelineno-61-11"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-61-12"><a id="__codelineno-61-12" name="__codelineno-61-12" href="#__codelineno-61-12"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,):</span> <span class="mf">0.8019</span><span class="p">,</span>
+</span><span id="__span-61-13"><a id="__codelineno-61-13" name="__codelineno-61-13" href="#__codelineno-61-13"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,):</span> <span class="mf">0.42</span>
+</span><span id="__span-61-14"><a id="__codelineno-61-14" name="__codelineno-61-14" href="#__codelineno-61-14"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="phase-3-final-computation_1">Phase 3: Final Computation<a class="headerlink" href="#phase-3-final-computation_1" title="Permanent link">&para;</a></h3>
 <p><strong>Step 3.1: Join Remaining Factors</strong></p>
 <p>Remaining factors: Factor₁ (φ₁(Rain)) and Factor₅ (φ₅(Rain))</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-60-1"><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a><span class="c1"># Join: φ₆(Rain) = φ₁(Rain) × φ₅(Rain)</span>
-</span><span id="__span-60-2"><a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a>
-</span><span id="__span-60-3"><a id="__codelineno-60-3" name="__codelineno-60-3" href="#__codelineno-60-3"></a><span class="n">φ</span><span class="err">₆</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₁</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="err">×</span> <span class="mf">0.8019</span> <span class="o">=</span> <span class="mf">0.16038</span>
-</span><span id="__span-60-4"><a id="__codelineno-60-4" name="__codelineno-60-4" href="#__codelineno-60-4"></a><span class="n">φ</span><span class="err">₆</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₁</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="err">×</span> <span class="mf">0.42</span> <span class="o">=</span> <span class="mf">0.336</span>
-</span><span id="__span-60-5"><a id="__codelineno-60-5" name="__codelineno-60-5" href="#__codelineno-60-5"></a>
-</span><span id="__span-60-6"><a id="__codelineno-60-6" name="__codelineno-60-6" href="#__codelineno-60-6"></a><span class="n">Factor</span><span class="err">₆</span><span class="p">:</span> <span class="n">φ</span><span class="err">₆</span><span class="p">(</span><span class="n">Rain</span><span class="p">)</span>  <span class="c1"># Unnormalized</span>
-</span><span id="__span-60-7"><a id="__codelineno-60-7" name="__codelineno-60-7" href="#__codelineno-60-7"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">]</span>
-</span><span id="__span-60-8"><a id="__codelineno-60-8" name="__codelineno-60-8" href="#__codelineno-60-8"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-60-9"><a id="__codelineno-60-9" name="__codelineno-60-9" href="#__codelineno-60-9"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,):</span> <span class="mf">0.16038</span><span class="p">,</span>
-</span><span id="__span-60-10"><a id="__codelineno-60-10" name="__codelineno-60-10" href="#__codelineno-60-10"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,):</span> <span class="mf">0.336</span>
-</span><span id="__span-60-11"><a id="__codelineno-60-11" name="__codelineno-60-11" href="#__codelineno-60-11"></a><span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-62-1"><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="c1"># Join: φ₆(Rain) = φ₁(Rain) × φ₅(Rain)</span>
+</span><span id="__span-62-2"><a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a>
+</span><span id="__span-62-3"><a id="__codelineno-62-3" name="__codelineno-62-3" href="#__codelineno-62-3"></a><span class="n">φ</span><span class="err">₆</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₁</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="err">×</span> <span class="mf">0.8019</span> <span class="o">=</span> <span class="mf">0.16038</span>
+</span><span id="__span-62-4"><a id="__codelineno-62-4" name="__codelineno-62-4" href="#__codelineno-62-4"></a><span class="n">φ</span><span class="err">₆</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="n">φ</span><span class="err">₁</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="err">×</span> <span class="n">φ</span><span class="err">₅</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="err">×</span> <span class="mf">0.42</span> <span class="o">=</span> <span class="mf">0.336</span>
+</span><span id="__span-62-5"><a id="__codelineno-62-5" name="__codelineno-62-5" href="#__codelineno-62-5"></a>
+</span><span id="__span-62-6"><a id="__codelineno-62-6" name="__codelineno-62-6" href="#__codelineno-62-6"></a><span class="n">Factor</span><span class="err">₆</span><span class="p">:</span> <span class="n">φ</span><span class="err">₆</span><span class="p">(</span><span class="n">Rain</span><span class="p">)</span>  <span class="c1"># Unnormalized</span>
+</span><span id="__span-62-7"><a id="__codelineno-62-7" name="__codelineno-62-7" href="#__codelineno-62-7"></a><span class="n">Variables</span><span class="p">:</span> <span class="p">[</span><span class="n">Rain</span><span class="p">]</span>
+</span><span id="__span-62-8"><a id="__codelineno-62-8" name="__codelineno-62-8" href="#__codelineno-62-8"></a><span class="n">Probabilities</span><span class="p">:</span> <span class="p">{</span>
+</span><span id="__span-62-9"><a id="__codelineno-62-9" name="__codelineno-62-9" href="#__codelineno-62-9"></a>    <span class="p">(</span><span class="kc">True</span><span class="p">,):</span> <span class="mf">0.16038</span><span class="p">,</span>
+</span><span id="__span-62-10"><a id="__codelineno-62-10" name="__codelineno-62-10" href="#__codelineno-62-10"></a>    <span class="p">(</span><span class="kc">False</span><span class="p">,):</span> <span class="mf">0.336</span>
+</span><span id="__span-62-11"><a id="__codelineno-62-11" name="__codelineno-62-11" href="#__codelineno-62-11"></a><span class="p">}</span>
 </span></code></pre></div>
 <p><strong>Step 3.2: Normalize</strong></p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-61-1"><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="c1"># Normalization: Convert to conditional probabilities</span>
-</span><span id="__span-61-2"><a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a><span class="n">total</span> <span class="o">=</span> <span class="mf">0.16038</span> <span class="o">+</span> <span class="mf">0.336</span> <span class="o">=</span> <span class="mf">0.49638</span>
-</span><span id="__span-61-3"><a id="__codelineno-61-3" name="__codelineno-61-3" href="#__codelineno-61-3"></a>
-</span><span id="__span-61-4"><a id="__codelineno-61-4" name="__codelineno-61-4" href="#__codelineno-61-4"></a><span class="n">P</span><span class="p">(</span><span class="n">Rain</span><span class="o">=</span><span class="kc">True</span> <span class="o">|</span> <span class="n">GrassWet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.16038</span> <span class="o">/</span> <span class="mf">0.49638</span> <span class="err">≈</span> <span class="mf">0.323</span>
-</span><span id="__span-61-5"><a id="__codelineno-61-5" name="__codelineno-61-5" href="#__codelineno-61-5"></a><span class="n">P</span><span class="p">(</span><span class="n">Rain</span><span class="o">=</span><span class="kc">False</span> <span class="o">|</span> <span class="n">GrassWet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.336</span> <span class="o">/</span> <span class="mf">0.49638</span> <span class="err">≈</span> <span class="mf">0.677</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-63-1"><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="c1"># Normalization: Convert to conditional probabilities</span>
+</span><span id="__span-63-2"><a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a><span class="n">total</span> <span class="o">=</span> <span class="mf">0.16038</span> <span class="o">+</span> <span class="mf">0.336</span> <span class="o">=</span> <span class="mf">0.49638</span>
+</span><span id="__span-63-3"><a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a>
+</span><span id="__span-63-4"><a id="__codelineno-63-4" name="__codelineno-63-4" href="#__codelineno-63-4"></a><span class="n">P</span><span class="p">(</span><span class="n">Rain</span><span class="o">=</span><span class="kc">True</span> <span class="o">|</span> <span class="n">GrassWet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.16038</span> <span class="o">/</span> <span class="mf">0.49638</span> <span class="err">≈</span> <span class="mf">0.323</span>
+</span><span id="__span-63-5"><a id="__codelineno-63-5" name="__codelineno-63-5" href="#__codelineno-63-5"></a><span class="n">P</span><span class="p">(</span><span class="n">Rain</span><span class="o">=</span><span class="kc">False</span> <span class="o">|</span> <span class="n">GrassWet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.336</span> <span class="o">/</span> <span class="mf">0.49638</span> <span class="err">≈</span> <span class="mf">0.677</span>
 </span></code></pre></div>
 <h3 id="final-result">Final Result<a class="headerlink" href="#final-result" title="Permanent link">&para;</a></h3>
 <p><strong>P(Rain | GrassWet=True) = {True: 0.323, False: 0.677}</strong></p>
 <p>This means that given the grass is wet, there's approximately a 32.3% chance it rained and a 67.7% chance it didn't rain.</p>
 <h2 id="implementation-details">Implementation Details<a class="headerlink" href="#implementation-details" title="Permanent link">&para;</a></h2>
 <h3 id="factor-data-structure">Factor Data Structure<a class="headerlink" href="#factor-data-structure" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-62-1"><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="nd">@dataclass</span>
-</span><span id="__span-62-2"><a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Factor</span><span class="p">:</span>
-</span><span id="__span-62-3"><a id="__codelineno-62-3" name="__codelineno-62-3" href="#__codelineno-62-3"></a>    <span class="n">variables</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
-</span><span id="__span-62-4"><a id="__codelineno-62-4" name="__codelineno-62-4" href="#__codelineno-62-4"></a>    <span class="n">probabilities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
-</span><span id="__span-62-5"><a id="__codelineno-62-5" name="__codelineno-62-5" href="#__codelineno-62-5"></a>
-</span><span id="__span-62-6"><a id="__codelineno-62-6" name="__codelineno-62-6" href="#__codelineno-62-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="__span-62-7"><a id="__codelineno-62-7" name="__codelineno-62-7" href="#__codelineno-62-7"></a>        <span class="c1"># Ensure probabilities are normalized for each parent configuration</span>
-</span><span id="__span-62-8"><a id="__codelineno-62-8" name="__codelineno-62-8" href="#__codelineno-62-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_probabilities</span><span class="p">()</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-64-1"><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="nd">@dataclass</span>
+</span><span id="__span-64-2"><a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">Factor</span><span class="p">:</span>
+</span><span id="__span-64-3"><a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a>    <span class="n">variables</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Variable</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+</span><span id="__span-64-4"><a id="__codelineno-64-4" name="__codelineno-64-4" href="#__codelineno-64-4"></a>    <span class="n">probabilities</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+</span><span id="__span-64-5"><a id="__codelineno-64-5" name="__codelineno-64-5" href="#__codelineno-64-5"></a>
+</span><span id="__span-64-6"><a id="__codelineno-64-6" name="__codelineno-64-6" href="#__codelineno-64-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-64-7"><a id="__codelineno-64-7" name="__codelineno-64-7" href="#__codelineno-64-7"></a>        <span class="c1"># Ensure probabilities are normalized for each parent configuration</span>
+</span><span id="__span-64-8"><a id="__codelineno-64-8" name="__codelineno-64-8" href="#__codelineno-64-8"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_probabilities</span><span class="p">()</span>
 </span></code></pre></div>
 <h3 id="join-operation-implementation">Join Operation Implementation<a class="headerlink" href="#join-operation-implementation" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-63-1"><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_join_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor1</span><span class="p">:</span> <span class="n">Factor</span><span class="p">,</span> <span class="n">factor2</span><span class="p">:</span> <span class="n">Factor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Factor</span><span class="p">:</span>
-</span><span id="__span-63-2"><a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Join two factors by multiplication.&quot;&quot;&quot;</span>
-</span><span id="__span-63-3"><a id="__codelineno-63-3" name="__codelineno-63-3" href="#__codelineno-63-3"></a>    <span class="c1"># Union of variables</span>
-</span><span id="__span-63-4"><a id="__codelineno-63-4" name="__codelineno-63-4" href="#__codelineno-63-4"></a>    <span class="n">vars1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">factor1</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
-</span><span id="__span-63-5"><a id="__codelineno-63-5" name="__codelineno-63-5" href="#__codelineno-63-5"></a>    <span class="n">vars2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">factor2</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
-</span><span id="__span-63-6"><a id="__codelineno-63-6" name="__codelineno-63-6" href="#__codelineno-63-6"></a>    <span class="n">new_vars</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">vars1</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">vars2</span><span class="p">))</span>
-</span><span id="__span-63-7"><a id="__codelineno-63-7" name="__codelineno-63-7" href="#__codelineno-63-7"></a>
-</span><span id="__span-63-8"><a id="__codelineno-63-8" name="__codelineno-63-8" href="#__codelineno-63-8"></a>    <span class="c1"># Create mapping from new variable order to old orders</span>
-</span><span id="__span-63-9"><a id="__codelineno-63-9" name="__codelineno-63-9" href="#__codelineno-63-9"></a>    <span class="n">map1</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_vars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor1</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
-</span><span id="__span-63-10"><a id="__codelineno-63-10" name="__codelineno-63-10" href="#__codelineno-63-10"></a>    <span class="n">map2</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_vars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor2</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
-</span><span id="__span-63-11"><a id="__codelineno-63-11" name="__codelineno-63-11" href="#__codelineno-63-11"></a>
-</span><span id="__span-63-12"><a id="__codelineno-63-12" name="__codelineno-63-12" href="#__codelineno-63-12"></a>    <span class="n">new_factor</span> <span class="o">=</span> <span class="n">Factor</span><span class="p">(</span><span class="n">new_vars</span><span class="p">)</span>
-</span><span id="__span-63-13"><a id="__codelineno-63-13" name="__codelineno-63-13" href="#__codelineno-63-13"></a>
-</span><span id="__span-63-14"><a id="__codelineno-63-14" name="__codelineno-63-14" href="#__codelineno-63-14"></a>    <span class="c1"># Generate all possible assignments to new variables</span>
-</span><span id="__span-63-15"><a id="__codelineno-63-15" name="__codelineno-63-15" href="#__codelineno-63-15"></a>    <span class="n">domains</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">domain</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_vars</span><span class="p">]</span>
-</span><span id="__span-63-16"><a id="__codelineno-63-16" name="__codelineno-63-16" href="#__codelineno-63-16"></a>    <span class="k">for</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">domains</span><span class="p">):</span>
-</span><span id="__span-63-17"><a id="__codelineno-63-17" name="__codelineno-63-17" href="#__codelineno-63-17"></a>        <span class="c1"># Extract sub-assignments for each original factor</span>
-</span><span id="__span-63-18"><a id="__codelineno-63-18" name="__codelineno-63-18" href="#__codelineno-63-18"></a>        <span class="n">ass1</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">assignment</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">map1</span><span class="p">)</span>
-</span><span id="__span-63-19"><a id="__codelineno-63-19" name="__codelineno-63-19" href="#__codelineno-63-19"></a>        <span class="n">ass2</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">assignment</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">map2</span><span class="p">)</span>
-</span><span id="__span-63-20"><a id="__codelineno-63-20" name="__codelineno-63-20" href="#__codelineno-63-20"></a>
-</span><span id="__span-63-21"><a id="__codelineno-63-21" name="__codelineno-63-21" href="#__codelineno-63-21"></a>        <span class="c1"># Multiply probabilities (default to 1.0 if not present)</span>
-</span><span id="__span-63-22"><a id="__codelineno-63-22" name="__codelineno-63-22" href="#__codelineno-63-22"></a>        <span class="n">prob1</span> <span class="o">=</span> <span class="n">factor1</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ass1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-</span><span id="__span-63-23"><a id="__codelineno-63-23" name="__codelineno-63-23" href="#__codelineno-63-23"></a>        <span class="n">prob2</span> <span class="o">=</span> <span class="n">factor2</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ass2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-</span><span id="__span-63-24"><a id="__codelineno-63-24" name="__codelineno-63-24" href="#__codelineno-63-24"></a>        <span class="n">new_factor</span><span class="o">.</span><span class="n">probabilities</span><span class="p">[</span><span class="n">assignment</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob1</span> <span class="o">*</span> <span class="n">prob2</span>
-</span><span id="__span-63-25"><a id="__codelineno-63-25" name="__codelineno-63-25" href="#__codelineno-63-25"></a>
-</span><span id="__span-63-26"><a id="__codelineno-63-26" name="__codelineno-63-26" href="#__codelineno-63-26"></a>    <span class="k">return</span> <span class="n">new_factor</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-65-1"><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_join_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor1</span><span class="p">:</span> <span class="n">Factor</span><span class="p">,</span> <span class="n">factor2</span><span class="p">:</span> <span class="n">Factor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Factor</span><span class="p">:</span>
+</span><span id="__span-65-2"><a id="__codelineno-65-2" name="__codelineno-65-2" href="#__codelineno-65-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Join two factors by multiplication.&quot;&quot;&quot;</span>
+</span><span id="__span-65-3"><a id="__codelineno-65-3" name="__codelineno-65-3" href="#__codelineno-65-3"></a>    <span class="c1"># Union of variables</span>
+</span><span id="__span-65-4"><a id="__codelineno-65-4" name="__codelineno-65-4" href="#__codelineno-65-4"></a>    <span class="n">vars1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">factor1</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+</span><span id="__span-65-5"><a id="__codelineno-65-5" name="__codelineno-65-5" href="#__codelineno-65-5"></a>    <span class="n">vars2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">factor2</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span>
+</span><span id="__span-65-6"><a id="__codelineno-65-6" name="__codelineno-65-6" href="#__codelineno-65-6"></a>    <span class="n">new_vars</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">vars1</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">vars2</span><span class="p">))</span>
+</span><span id="__span-65-7"><a id="__codelineno-65-7" name="__codelineno-65-7" href="#__codelineno-65-7"></a>
+</span><span id="__span-65-8"><a id="__codelineno-65-8" name="__codelineno-65-8" href="#__codelineno-65-8"></a>    <span class="c1"># Create mapping from new variable order to old orders</span>
+</span><span id="__span-65-9"><a id="__codelineno-65-9" name="__codelineno-65-9" href="#__codelineno-65-9"></a>    <span class="n">map1</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_vars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor1</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
+</span><span id="__span-65-10"><a id="__codelineno-65-10" name="__codelineno-65-10" href="#__codelineno-65-10"></a>    <span class="n">map2</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_vars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor2</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
+</span><span id="__span-65-11"><a id="__codelineno-65-11" name="__codelineno-65-11" href="#__codelineno-65-11"></a>
+</span><span id="__span-65-12"><a id="__codelineno-65-12" name="__codelineno-65-12" href="#__codelineno-65-12"></a>    <span class="n">new_factor</span> <span class="o">=</span> <span class="n">Factor</span><span class="p">(</span><span class="n">new_vars</span><span class="p">)</span>
+</span><span id="__span-65-13"><a id="__codelineno-65-13" name="__codelineno-65-13" href="#__codelineno-65-13"></a>
+</span><span id="__span-65-14"><a id="__codelineno-65-14" name="__codelineno-65-14" href="#__codelineno-65-14"></a>    <span class="c1"># Generate all possible assignments to new variables</span>
+</span><span id="__span-65-15"><a id="__codelineno-65-15" name="__codelineno-65-15" href="#__codelineno-65-15"></a>    <span class="n">domains</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">domain</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_vars</span><span class="p">]</span>
+</span><span id="__span-65-16"><a id="__codelineno-65-16" name="__codelineno-65-16" href="#__codelineno-65-16"></a>    <span class="k">for</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">domains</span><span class="p">):</span>
+</span><span id="__span-65-17"><a id="__codelineno-65-17" name="__codelineno-65-17" href="#__codelineno-65-17"></a>        <span class="c1"># Extract sub-assignments for each original factor</span>
+</span><span id="__span-65-18"><a id="__codelineno-65-18" name="__codelineno-65-18" href="#__codelineno-65-18"></a>        <span class="n">ass1</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">assignment</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">map1</span><span class="p">)</span>
+</span><span id="__span-65-19"><a id="__codelineno-65-19" name="__codelineno-65-19" href="#__codelineno-65-19"></a>        <span class="n">ass2</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">assignment</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">map2</span><span class="p">)</span>
+</span><span id="__span-65-20"><a id="__codelineno-65-20" name="__codelineno-65-20" href="#__codelineno-65-20"></a>
+</span><span id="__span-65-21"><a id="__codelineno-65-21" name="__codelineno-65-21" href="#__codelineno-65-21"></a>        <span class="c1"># Multiply probabilities (default to 1.0 if not present)</span>
+</span><span id="__span-65-22"><a id="__codelineno-65-22" name="__codelineno-65-22" href="#__codelineno-65-22"></a>        <span class="n">prob1</span> <span class="o">=</span> <span class="n">factor1</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ass1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+</span><span id="__span-65-23"><a id="__codelineno-65-23" name="__codelineno-65-23" href="#__codelineno-65-23"></a>        <span class="n">prob2</span> <span class="o">=</span> <span class="n">factor2</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ass2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+</span><span id="__span-65-24"><a id="__codelineno-65-24" name="__codelineno-65-24" href="#__codelineno-65-24"></a>        <span class="n">new_factor</span><span class="o">.</span><span class="n">probabilities</span><span class="p">[</span><span class="n">assignment</span><span class="p">]</span> <span class="o">=</span> <span class="n">prob1</span> <span class="o">*</span> <span class="n">prob2</span>
+</span><span id="__span-65-25"><a id="__codelineno-65-25" name="__codelineno-65-25" href="#__codelineno-65-25"></a>
+</span><span id="__span-65-26"><a id="__codelineno-65-26" name="__codelineno-65-26" href="#__codelineno-65-26"></a>    <span class="k">return</span> <span class="n">new_factor</span>
 </span></code></pre></div>
 <h3 id="marginalization-implementation">Marginalization Implementation<a class="headerlink" href="#marginalization-implementation" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-64-1"><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_sum_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="n">Factor</span><span class="p">,</span> <span class="n">var_to_eliminate</span><span class="p">:</span> <span class="n">Variable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Factor</span><span class="p">:</span>
-</span><span id="__span-64-2"><a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum out (marginalize) a variable from a factor.&quot;&quot;&quot;</span>
-</span><span id="__span-64-3"><a id="__codelineno-64-3" name="__codelineno-64-3" href="#__codelineno-64-3"></a>    <span class="k">if</span> <span class="n">var_to_eliminate</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">factor</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
-</span><span id="__span-64-4"><a id="__codelineno-64-4" name="__codelineno-64-4" href="#__codelineno-64-4"></a>        <span class="k">return</span> <span class="n">factor</span>
-</span><span id="__span-64-5"><a id="__codelineno-64-5" name="__codelineno-64-5" href="#__codelineno-64-5"></a>
-</span><span id="__span-64-6"><a id="__codelineno-64-6" name="__codelineno-64-6" href="#__codelineno-64-6"></a>    <span class="c1"># New variables exclude the eliminated variable</span>
-</span><span id="__span-64-7"><a id="__codelineno-64-7" name="__codelineno-64-7" href="#__codelineno-64-7"></a>    <span class="n">var_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">factor</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">var_to_eliminate</span><span class="p">)</span>
-</span><span id="__span-64-8"><a id="__codelineno-64-8" name="__codelineno-64-8" href="#__codelineno-64-8"></a>    <span class="n">new_vars</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">var_to_eliminate</span><span class="p">)</span>
-</span><span id="__span-64-9"><a id="__codelineno-64-9" name="__codelineno-64-9" href="#__codelineno-64-9"></a>
-</span><span id="__span-64-10"><a id="__codelineno-64-10" name="__codelineno-64-10" href="#__codelineno-64-10"></a>    <span class="n">new_factor</span> <span class="o">=</span> <span class="n">Factor</span><span class="p">(</span><span class="n">new_vars</span><span class="p">)</span>
-</span><span id="__span-64-11"><a id="__codelineno-64-11" name="__codelineno-64-11" href="#__codelineno-64-11"></a>
-</span><span id="__span-64-12"><a id="__codelineno-64-12" name="__codelineno-64-12" href="#__codelineno-64-12"></a>    <span class="c1"># Sum over all values of the eliminated variable</span>
-</span><span id="__span-64-13"><a id="__codelineno-64-13" name="__codelineno-64-13" href="#__codelineno-64-13"></a>    <span class="k">for</span> <span class="n">old_assignment</span><span class="p">,</span> <span class="n">prob</span> <span class="ow">in</span> <span class="n">factor</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="__span-64-14"><a id="__codelineno-64-14" name="__codelineno-64-14" href="#__codelineno-64-14"></a>        <span class="c1"># Create new assignment by removing the eliminated variable&#39;s value</span>
-</span><span id="__span-64-15"><a id="__codelineno-64-15" name="__codelineno-64-15" href="#__codelineno-64-15"></a>        <span class="n">new_assignment</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
-</span><span id="__span-64-16"><a id="__codelineno-64-16" name="__codelineno-64-16" href="#__codelineno-64-16"></a>            <span class="n">old_assignment</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">old_assignment</span><span class="p">))</span> 
-</span><span id="__span-64-17"><a id="__codelineno-64-17" name="__codelineno-64-17" href="#__codelineno-64-17"></a>            <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">var_index</span>
-</span><span id="__span-64-18"><a id="__codelineno-64-18" name="__codelineno-64-18" href="#__codelineno-64-18"></a>        <span class="p">)</span>
-</span><span id="__span-64-19"><a id="__codelineno-64-19" name="__codelineno-64-19" href="#__codelineno-64-19"></a>
-</span><span id="__span-64-20"><a id="__codelineno-64-20" name="__codelineno-64-20" href="#__codelineno-64-20"></a>        <span class="c1"># Accumulate probability</span>
-</span><span id="__span-64-21"><a id="__codelineno-64-21" name="__codelineno-64-21" href="#__codelineno-64-21"></a>        <span class="n">current_prob</span> <span class="o">=</span> <span class="n">new_factor</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">new_assignment</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-</span><span id="__span-64-22"><a id="__codelineno-64-22" name="__codelineno-64-22" href="#__codelineno-64-22"></a>        <span class="n">new_factor</span><span class="o">.</span><span class="n">probabilities</span><span class="p">[</span><span class="n">new_assignment</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_prob</span> <span class="o">+</span> <span class="n">prob</span>
-</span><span id="__span-64-23"><a id="__codelineno-64-23" name="__codelineno-64-23" href="#__codelineno-64-23"></a>
-</span><span id="__span-64-24"><a id="__codelineno-64-24" name="__codelineno-64-24" href="#__codelineno-64-24"></a>    <span class="k">return</span> <span class="n">new_factor</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-66-1"><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_sum_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">:</span> <span class="n">Factor</span><span class="p">,</span> <span class="n">var_to_eliminate</span><span class="p">:</span> <span class="n">Variable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Factor</span><span class="p">:</span>
+</span><span id="__span-66-2"><a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum out (marginalize) a variable from a factor.&quot;&quot;&quot;</span>
+</span><span id="__span-66-3"><a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a>    <span class="k">if</span> <span class="n">var_to_eliminate</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">factor</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+</span><span id="__span-66-4"><a id="__codelineno-66-4" name="__codelineno-66-4" href="#__codelineno-66-4"></a>        <span class="k">return</span> <span class="n">factor</span>
+</span><span id="__span-66-5"><a id="__codelineno-66-5" name="__codelineno-66-5" href="#__codelineno-66-5"></a>
+</span><span id="__span-66-6"><a id="__codelineno-66-6" name="__codelineno-66-6" href="#__codelineno-66-6"></a>    <span class="c1"># New variables exclude the eliminated variable</span>
+</span><span id="__span-66-7"><a id="__codelineno-66-7" name="__codelineno-66-7" href="#__codelineno-66-7"></a>    <span class="n">var_index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">factor</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">var_to_eliminate</span><span class="p">)</span>
+</span><span id="__span-66-8"><a id="__codelineno-66-8" name="__codelineno-66-8" href="#__codelineno-66-8"></a>    <span class="n">new_vars</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor</span><span class="o">.</span><span class="n">variables</span> <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="n">var_to_eliminate</span><span class="p">)</span>
+</span><span id="__span-66-9"><a id="__codelineno-66-9" name="__codelineno-66-9" href="#__codelineno-66-9"></a>
+</span><span id="__span-66-10"><a id="__codelineno-66-10" name="__codelineno-66-10" href="#__codelineno-66-10"></a>    <span class="n">new_factor</span> <span class="o">=</span> <span class="n">Factor</span><span class="p">(</span><span class="n">new_vars</span><span class="p">)</span>
+</span><span id="__span-66-11"><a id="__codelineno-66-11" name="__codelineno-66-11" href="#__codelineno-66-11"></a>
+</span><span id="__span-66-12"><a id="__codelineno-66-12" name="__codelineno-66-12" href="#__codelineno-66-12"></a>    <span class="c1"># Sum over all values of the eliminated variable</span>
+</span><span id="__span-66-13"><a id="__codelineno-66-13" name="__codelineno-66-13" href="#__codelineno-66-13"></a>    <span class="k">for</span> <span class="n">old_assignment</span><span class="p">,</span> <span class="n">prob</span> <span class="ow">in</span> <span class="n">factor</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-66-14"><a id="__codelineno-66-14" name="__codelineno-66-14" href="#__codelineno-66-14"></a>        <span class="c1"># Create new assignment by removing the eliminated variable&#39;s value</span>
+</span><span id="__span-66-15"><a id="__codelineno-66-15" name="__codelineno-66-15" href="#__codelineno-66-15"></a>        <span class="n">new_assignment</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+</span><span id="__span-66-16"><a id="__codelineno-66-16" name="__codelineno-66-16" href="#__codelineno-66-16"></a>            <span class="n">old_assignment</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">old_assignment</span><span class="p">))</span> 
+</span><span id="__span-66-17"><a id="__codelineno-66-17" name="__codelineno-66-17" href="#__codelineno-66-17"></a>            <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">var_index</span>
+</span><span id="__span-66-18"><a id="__codelineno-66-18" name="__codelineno-66-18" href="#__codelineno-66-18"></a>        <span class="p">)</span>
+</span><span id="__span-66-19"><a id="__codelineno-66-19" name="__codelineno-66-19" href="#__codelineno-66-19"></a>
+</span><span id="__span-66-20"><a id="__codelineno-66-20" name="__codelineno-66-20" href="#__codelineno-66-20"></a>        <span class="c1"># Accumulate probability</span>
+</span><span id="__span-66-21"><a id="__codelineno-66-21" name="__codelineno-66-21" href="#__codelineno-66-21"></a>        <span class="n">current_prob</span> <span class="o">=</span> <span class="n">new_factor</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">new_assignment</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+</span><span id="__span-66-22"><a id="__codelineno-66-22" name="__codelineno-66-22" href="#__codelineno-66-22"></a>        <span class="n">new_factor</span><span class="o">.</span><span class="n">probabilities</span><span class="p">[</span><span class="n">new_assignment</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_prob</span> <span class="o">+</span> <span class="n">prob</span>
+</span><span id="__span-66-23"><a id="__codelineno-66-23" name="__codelineno-66-23" href="#__codelineno-66-23"></a>
+</span><span id="__span-66-24"><a id="__codelineno-66-24" name="__codelineno-66-24" href="#__codelineno-66-24"></a>    <span class="k">return</span> <span class="n">new_factor</span>
 </span></code></pre></div>
 <h2 id="optimization-strategies">Optimization Strategies<a class="headerlink" href="#optimization-strategies" title="Permanent link">&para;</a></h2>
 <h3 id="elimination-order-selection">Elimination Order Selection<a class="headerlink" href="#elimination-order-selection" title="Permanent link">&para;</a></h3>
 <p>The order in which variables are eliminated significantly affects performance. BayesCalc2 uses a simple heuristic:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-65-1"><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_select_elimination_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables_to_eliminate</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="__span-65-2"><a id="__codelineno-65-2" name="__codelineno-65-2" href="#__codelineno-65-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Select elimination order using min-fill heuristic.&quot;&quot;&quot;</span>
-</span><span id="__span-65-3"><a id="__codelineno-65-3" name="__codelineno-65-3" href="#__codelineno-65-3"></a>    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
-</span><span id="__span-65-4"><a id="__codelineno-65-4" name="__codelineno-65-4" href="#__codelineno-65-4"></a>        <span class="n">variables_to_eliminate</span><span class="p">,</span>
-</span><span id="__span-65-5"><a id="__codelineno-65-5" name="__codelineno-65-5" href="#__codelineno-65-5"></a>        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">var</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">variable_names</span><span class="p">)</span>
-</span><span id="__span-65-6"><a id="__codelineno-65-6" name="__codelineno-65-6" href="#__codelineno-65-6"></a>    <span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-67-1"><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_select_elimination_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables_to_eliminate</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+</span><span id="__span-67-2"><a id="__codelineno-67-2" name="__codelineno-67-2" href="#__codelineno-67-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Select elimination order using min-fill heuristic.&quot;&quot;&quot;</span>
+</span><span id="__span-67-3"><a id="__codelineno-67-3" name="__codelineno-67-3" href="#__codelineno-67-3"></a>    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
+</span><span id="__span-67-4"><a id="__codelineno-67-4" name="__codelineno-67-4" href="#__codelineno-67-4"></a>        <span class="n">variables_to_eliminate</span><span class="p">,</span>
+</span><span id="__span-67-5"><a id="__codelineno-67-5" name="__codelineno-67-5" href="#__codelineno-67-5"></a>        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">var</span><span class="p">:</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">factors</span> <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">variable_names</span><span class="p">)</span>
+</span><span id="__span-67-6"><a id="__codelineno-67-6" name="__codelineno-67-6" href="#__codelineno-67-6"></a>    <span class="p">)</span>
 </span></code></pre></div>
 <p><strong>Better heuristics</strong> (for future implementation):
 - <strong>Min-fill</strong>: Choose variable that adds fewest edges to moral graph
@@ -5523,79 +5562,79 @@ Every PR must include tests that cover:
 <h2 id="common-implementation-pitfalls">Common Implementation Pitfalls<a class="headerlink" href="#common-implementation-pitfalls" title="Permanent link">&para;</a></h2>
 <h3 id="1-factor-alignment-issues">1. Factor Alignment Issues<a class="headerlink" href="#1-factor-alignment-issues" title="Permanent link">&para;</a></h3>
 <p><strong>Problem</strong>: Variables in different orders between factors
-<div class="language-python highlight"><pre><span></span><code><span id="__span-66-1"><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="c1"># Wrong - assumes same variable order</span>
-</span><span id="__span-66-2"><a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a><span class="n">factor1_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">]</span>  
-</span><span id="__span-66-3"><a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a><span class="n">factor2_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">B</span><span class="p">,</span> <span class="n">A</span><span class="p">]</span>  <span class="c1"># Different order!</span>
-</span><span id="__span-66-4"><a id="__codelineno-66-4" name="__codelineno-66-4" href="#__codelineno-66-4"></a><span class="n">result</span> <span class="o">=</span> <span class="n">factor1</span><span class="o">.</span><span class="n">prob</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor2</span><span class="o">.</span><span class="n">prob</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Incorrect alignment</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-68-1"><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a><span class="c1"># Wrong - assumes same variable order</span>
+</span><span id="__span-68-2"><a id="__codelineno-68-2" name="__codelineno-68-2" href="#__codelineno-68-2"></a><span class="n">factor1_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">]</span>  
+</span><span id="__span-68-3"><a id="__codelineno-68-3" name="__codelineno-68-3" href="#__codelineno-68-3"></a><span class="n">factor2_vars</span> <span class="o">=</span> <span class="p">[</span><span class="n">B</span><span class="p">,</span> <span class="n">A</span><span class="p">]</span>  <span class="c1"># Different order!</span>
+</span><span id="__span-68-4"><a id="__codelineno-68-4" name="__codelineno-68-4" href="#__codelineno-68-4"></a><span class="n">result</span> <span class="o">=</span> <span class="n">factor1</span><span class="o">.</span><span class="n">prob</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">factor2</span><span class="o">.</span><span class="n">prob</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Incorrect alignment</span>
 </span></code></pre></div></p>
 <p><strong>Solution</strong>: Use variable mapping
-<div class="language-python highlight"><pre><span></span><code><span id="__span-67-1"><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="c1"># Correct - map variables properly</span>
-</span><span id="__span-67-2"><a id="__codelineno-67-2" name="__codelineno-67-2" href="#__codelineno-67-2"></a><span class="n">map1</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_vars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor1</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
-</span><span id="__span-67-3"><a id="__codelineno-67-3" name="__codelineno-67-3" href="#__codelineno-67-3"></a><span class="n">map2</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_vars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor2</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-69-1"><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="c1"># Correct - map variables properly</span>
+</span><span id="__span-69-2"><a id="__codelineno-69-2" name="__codelineno-69-2" href="#__codelineno-69-2"></a><span class="n">map1</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_vars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor1</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
+</span><span id="__span-69-3"><a id="__codelineno-69-3" name="__codelineno-69-3" href="#__codelineno-69-3"></a><span class="n">map2</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_vars</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">factor2</span><span class="o">.</span><span class="n">variables</span><span class="p">]</span>
 </span></code></pre></div></p>
 <h3 id="2-evidence-handling-errors">2. Evidence Handling Errors<a class="headerlink" href="#2-evidence-handling-errors" title="Permanent link">&para;</a></h3>
 <p><strong>Problem</strong>: Not properly reducing factors with evidence
-<div class="language-python highlight"><pre><span></span><code><span id="__span-68-1"><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a><span class="c1"># Wrong - evidence not applied consistently</span>
-</span><span id="__span-68-2"><a id="__codelineno-68-2" name="__codelineno-68-2" href="#__codelineno-68-2"></a><span class="k">if</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">evidence</span> <span class="ow">and</span> <span class="n">assignment</span><span class="p">[</span><span class="n">var_idx</span><span class="p">]</span> <span class="o">!=</span> <span class="n">evidence</span><span class="p">[</span><span class="n">var_name</span><span class="p">]:</span>
-</span><span id="__span-68-3"><a id="__codelineno-68-3" name="__codelineno-68-3" href="#__codelineno-68-3"></a>    <span class="k">continue</span>  <span class="c1"># Skip inconsistent assignments</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-70-1"><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="c1"># Wrong - evidence not applied consistently</span>
+</span><span id="__span-70-2"><a id="__codelineno-70-2" name="__codelineno-70-2" href="#__codelineno-70-2"></a><span class="k">if</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">evidence</span> <span class="ow">and</span> <span class="n">assignment</span><span class="p">[</span><span class="n">var_idx</span><span class="p">]</span> <span class="o">!=</span> <span class="n">evidence</span><span class="p">[</span><span class="n">var_name</span><span class="p">]:</span>
+</span><span id="__span-70-3"><a id="__codelineno-70-3" name="__codelineno-70-3" href="#__codelineno-70-3"></a>    <span class="k">continue</span>  <span class="c1"># Skip inconsistent assignments</span>
 </span></code></pre></div></p>
 <p><strong>Solution</strong>: Normalize evidence values consistently
-<div class="language-python highlight"><pre><span></span><code><span id="__span-69-1"><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a><span class="c1"># Correct - handle T/F vs True/False</span>
-</span><span id="__span-69-2"><a id="__codelineno-69-2" name="__codelineno-69-2" href="#__codelineno-69-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">normalize_value</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
-</span><span id="__span-69-3"><a id="__codelineno-69-3" name="__codelineno-69-3" href="#__codelineno-69-3"></a>    <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;True&quot;</span><span class="p">]:</span> <span class="k">return</span> <span class="s2">&quot;True&quot;</span>
-</span><span id="__span-69-4"><a id="__codelineno-69-4" name="__codelineno-69-4" href="#__codelineno-69-4"></a>    <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;False&quot;</span><span class="p">]:</span> <span class="k">return</span> <span class="s2">&quot;False&quot;</span>  
-</span><span id="__span-69-5"><a id="__codelineno-69-5" name="__codelineno-69-5" href="#__codelineno-69-5"></a>    <span class="k">return</span> <span class="n">value</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-71-1"><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a><span class="c1"># Correct - handle T/F vs True/False</span>
+</span><span id="__span-71-2"><a id="__codelineno-71-2" name="__codelineno-71-2" href="#__codelineno-71-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">normalize_value</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+</span><span id="__span-71-3"><a id="__codelineno-71-3" name="__codelineno-71-3" href="#__codelineno-71-3"></a>    <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;True&quot;</span><span class="p">]:</span> <span class="k">return</span> <span class="s2">&quot;True&quot;</span>
+</span><span id="__span-71-4"><a id="__codelineno-71-4" name="__codelineno-71-4" href="#__codelineno-71-4"></a>    <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;False&quot;</span><span class="p">]:</span> <span class="k">return</span> <span class="s2">&quot;False&quot;</span>  
+</span><span id="__span-71-5"><a id="__codelineno-71-5" name="__codelineno-71-5" href="#__codelineno-71-5"></a>    <span class="k">return</span> <span class="n">value</span>
 </span></code></pre></div></p>
 <h3 id="3-numerical-precision-issues">3. Numerical Precision Issues<a class="headerlink" href="#3-numerical-precision-issues" title="Permanent link">&para;</a></h3>
 <p><strong>Problem</strong>: Floating point errors accumulate
-<div class="language-python highlight"><pre><span></span><code><span id="__span-70-1"><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a><span class="c1"># May have precision issues</span>
-</span><span id="__span-70-2"><a id="__codelineno-70-2" name="__codelineno-70-2" href="#__codelineno-70-2"></a><span class="k">if</span> <span class="n">total_probability</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>  <span class="c1"># Exact comparison problematic</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-72-1"><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="c1"># May have precision issues</span>
+</span><span id="__span-72-2"><a id="__codelineno-72-2" name="__codelineno-72-2" href="#__codelineno-72-2"></a><span class="k">if</span> <span class="n">total_probability</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>  <span class="c1"># Exact comparison problematic</span>
 </span></code></pre></div></p>
 <p><strong>Solution</strong>: Use appropriate tolerances
-<div class="language-python highlight"><pre><span></span><code><span id="__span-71-1"><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a><span class="c1"># Better - use epsilon for comparisons</span>
-</span><span id="__span-71-2"><a id="__codelineno-71-2" name="__codelineno-71-2" href="#__codelineno-71-2"></a><span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">total_probability</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-9</span><span class="p">:</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-73-1"><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="c1"># Better - use epsilon for comparisons</span>
+</span><span id="__span-73-2"><a id="__codelineno-73-2" name="__codelineno-73-2" href="#__codelineno-73-2"></a><span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">total_probability</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-9</span><span class="p">:</span>
 </span></code></pre></div></p>
 <h2 id="testing-variable-elimination">Testing Variable Elimination<a class="headerlink" href="#testing-variable-elimination" title="Permanent link">&para;</a></h2>
 <h3 id="unit-test-structure">Unit Test Structure<a class="headerlink" href="#unit-test-structure" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-72-1"><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_variable_elimination_step_by_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="__span-72-2"><a id="__codelineno-72-2" name="__codelineno-72-2" href="#__codelineno-72-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Test each step of variable elimination.&quot;&quot;&quot;</span>
-</span><span id="__span-72-3"><a id="__codelineno-72-3" name="__codelineno-72-3" href="#__codelineno-72-3"></a>    <span class="c1"># Setup</span>
-</span><span id="__span-72-4"><a id="__codelineno-72-4" name="__codelineno-72-4" href="#__codelineno-72-4"></a>    <span class="n">network</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_rain_sprinkler_network</span><span class="p">()</span>
-</span><span id="__span-72-5"><a id="__codelineno-72-5" name="__codelineno-72-5" href="#__codelineno-72-5"></a>    <span class="n">inference</span> <span class="o">=</span> <span class="n">Inference</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
-</span><span id="__span-72-6"><a id="__codelineno-72-6" name="__codelineno-72-6" href="#__codelineno-72-6"></a>
-</span><span id="__span-72-7"><a id="__codelineno-72-7" name="__codelineno-72-7" href="#__codelineno-72-7"></a>    <span class="c1"># Test factor extraction</span>
-</span><span id="__span-72-8"><a id="__codelineno-72-8" name="__codelineno-72-8" href="#__codelineno-72-8"></a>    <span class="n">factors</span> <span class="o">=</span> <span class="n">inference</span><span class="o">.</span><span class="n">_extract_factors</span><span class="p">()</span>
-</span><span id="__span-72-9"><a id="__codelineno-72-9" name="__codelineno-72-9" href="#__codelineno-72-9"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
-</span><span id="__span-72-10"><a id="__codelineno-72-10" name="__codelineno-72-10" href="#__codelineno-72-10"></a>
-</span><span id="__span-72-11"><a id="__codelineno-72-11" name="__codelineno-72-11" href="#__codelineno-72-11"></a>    <span class="c1"># Test evidence reduction  </span>
-</span><span id="__span-72-12"><a id="__codelineno-72-12" name="__codelineno-72-12" href="#__codelineno-72-12"></a>    <span class="n">evidence</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;GrassWet&quot;</span><span class="p">:</span> <span class="s2">&quot;True&quot;</span><span class="p">}</span>
-</span><span id="__span-72-13"><a id="__codelineno-72-13" name="__codelineno-72-13" href="#__codelineno-72-13"></a>    <span class="n">reduced_factors</span> <span class="o">=</span> <span class="n">inference</span><span class="o">.</span><span class="n">_apply_evidence</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="n">evidence</span><span class="p">)</span>
-</span><span id="__span-72-14"><a id="__codelineno-72-14" name="__codelineno-72-14" href="#__codelineno-72-14"></a>
-</span><span id="__span-72-15"><a id="__codelineno-72-15" name="__codelineno-72-15" href="#__codelineno-72-15"></a>    <span class="c1"># Verify evidence was applied correctly</span>
-</span><span id="__span-72-16"><a id="__codelineno-72-16" name="__codelineno-72-16" href="#__codelineno-72-16"></a>    <span class="n">grass_factor</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">reduced_factors</span> <span class="k">if</span> <span class="s2">&quot;GrassWet&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">variable_names</span><span class="p">)</span>
-</span><span id="__span-72-17"><a id="__codelineno-72-17" name="__codelineno-72-17" href="#__codelineno-72-17"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="s2">&quot;True&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">assignment</span><span class="p">)</span> <span class="k">for</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">grass_factor</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-</span><span id="__span-72-18"><a id="__codelineno-72-18" name="__codelineno-72-18" href="#__codelineno-72-18"></a>
-</span><span id="__span-72-19"><a id="__codelineno-72-19" name="__codelineno-72-19" href="#__codelineno-72-19"></a>    <span class="c1"># Test variable elimination</span>
-</span><span id="__span-72-20"><a id="__codelineno-72-20" name="__codelineno-72-20" href="#__codelineno-72-20"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">inference</span><span class="o">.</span><span class="n">variable_elimination</span><span class="p">([</span><span class="s2">&quot;Rain&quot;</span><span class="p">],</span> <span class="n">evidence</span><span class="p">)</span>
-</span><span id="__span-72-21"><a id="__codelineno-72-21" name="__codelineno-72-21" href="#__codelineno-72-21"></a>
-</span><span id="__span-72-22"><a id="__codelineno-72-22" name="__codelineno-72-22" href="#__codelineno-72-22"></a>    <span class="c1"># Verify normalization</span>
-</span><span id="__span-72-23"><a id="__codelineno-72-23" name="__codelineno-72-23" href="#__codelineno-72-23"></a>    <span class="n">total_prob</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-</span><span id="__span-72-24"><a id="__codelineno-72-24" name="__codelineno-72-24" href="#__codelineno-72-24"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">total_prob</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-74-1"><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_variable_elimination_step_by_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-74-2"><a id="__codelineno-74-2" name="__codelineno-74-2" href="#__codelineno-74-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Test each step of variable elimination.&quot;&quot;&quot;</span>
+</span><span id="__span-74-3"><a id="__codelineno-74-3" name="__codelineno-74-3" href="#__codelineno-74-3"></a>    <span class="c1"># Setup</span>
+</span><span id="__span-74-4"><a id="__codelineno-74-4" name="__codelineno-74-4" href="#__codelineno-74-4"></a>    <span class="n">network</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_rain_sprinkler_network</span><span class="p">()</span>
+</span><span id="__span-74-5"><a id="__codelineno-74-5" name="__codelineno-74-5" href="#__codelineno-74-5"></a>    <span class="n">inference</span> <span class="o">=</span> <span class="n">Inference</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
+</span><span id="__span-74-6"><a id="__codelineno-74-6" name="__codelineno-74-6" href="#__codelineno-74-6"></a>
+</span><span id="__span-74-7"><a id="__codelineno-74-7" name="__codelineno-74-7" href="#__codelineno-74-7"></a>    <span class="c1"># Test factor extraction</span>
+</span><span id="__span-74-8"><a id="__codelineno-74-8" name="__codelineno-74-8" href="#__codelineno-74-8"></a>    <span class="n">factors</span> <span class="o">=</span> <span class="n">inference</span><span class="o">.</span><span class="n">_extract_factors</span><span class="p">()</span>
+</span><span id="__span-74-9"><a id="__codelineno-74-9" name="__codelineno-74-9" href="#__codelineno-74-9"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">factors</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+</span><span id="__span-74-10"><a id="__codelineno-74-10" name="__codelineno-74-10" href="#__codelineno-74-10"></a>
+</span><span id="__span-74-11"><a id="__codelineno-74-11" name="__codelineno-74-11" href="#__codelineno-74-11"></a>    <span class="c1"># Test evidence reduction  </span>
+</span><span id="__span-74-12"><a id="__codelineno-74-12" name="__codelineno-74-12" href="#__codelineno-74-12"></a>    <span class="n">evidence</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;GrassWet&quot;</span><span class="p">:</span> <span class="s2">&quot;True&quot;</span><span class="p">}</span>
+</span><span id="__span-74-13"><a id="__codelineno-74-13" name="__codelineno-74-13" href="#__codelineno-74-13"></a>    <span class="n">reduced_factors</span> <span class="o">=</span> <span class="n">inference</span><span class="o">.</span><span class="n">_apply_evidence</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="n">evidence</span><span class="p">)</span>
+</span><span id="__span-74-14"><a id="__codelineno-74-14" name="__codelineno-74-14" href="#__codelineno-74-14"></a>
+</span><span id="__span-74-15"><a id="__codelineno-74-15" name="__codelineno-74-15" href="#__codelineno-74-15"></a>    <span class="c1"># Verify evidence was applied correctly</span>
+</span><span id="__span-74-16"><a id="__codelineno-74-16" name="__codelineno-74-16" href="#__codelineno-74-16"></a>    <span class="n">grass_factor</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">reduced_factors</span> <span class="k">if</span> <span class="s2">&quot;GrassWet&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">variable_names</span><span class="p">)</span>
+</span><span id="__span-74-17"><a id="__codelineno-74-17" name="__codelineno-74-17" href="#__codelineno-74-17"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="s2">&quot;True&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">assignment</span><span class="p">)</span> <span class="k">for</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">grass_factor</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</span><span id="__span-74-18"><a id="__codelineno-74-18" name="__codelineno-74-18" href="#__codelineno-74-18"></a>
+</span><span id="__span-74-19"><a id="__codelineno-74-19" name="__codelineno-74-19" href="#__codelineno-74-19"></a>    <span class="c1"># Test variable elimination</span>
+</span><span id="__span-74-20"><a id="__codelineno-74-20" name="__codelineno-74-20" href="#__codelineno-74-20"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">inference</span><span class="o">.</span><span class="n">variable_elimination</span><span class="p">([</span><span class="s2">&quot;Rain&quot;</span><span class="p">],</span> <span class="n">evidence</span><span class="p">)</span>
+</span><span id="__span-74-21"><a id="__codelineno-74-21" name="__codelineno-74-21" href="#__codelineno-74-21"></a>
+</span><span id="__span-74-22"><a id="__codelineno-74-22" name="__codelineno-74-22" href="#__codelineno-74-22"></a>    <span class="c1"># Verify normalization</span>
+</span><span id="__span-74-23"><a id="__codelineno-74-23" name="__codelineno-74-23" href="#__codelineno-74-23"></a>    <span class="n">total_prob</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">probabilities</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+</span><span id="__span-74-24"><a id="__codelineno-74-24" name="__codelineno-74-24" href="#__codelineno-74-24"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">total_prob</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="integration-tests">Integration Tests<a class="headerlink" href="#integration-tests" title="Permanent link">&para;</a></h3>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-73-1"><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_inference_against_hand_calculation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="__span-73-2"><a id="__codelineno-73-2" name="__codelineno-73-2" href="#__codelineno-73-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify inference results match hand calculations.&quot;&quot;&quot;</span>
-</span><span id="__span-73-3"><a id="__codelineno-73-3" name="__codelineno-73-3" href="#__codelineno-73-3"></a>    <span class="n">known_results</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="__span-73-4"><a id="__codelineno-73-4" name="__codelineno-73-4" href="#__codelineno-73-4"></a>        <span class="s2">&quot;P(Rain=True | GrassWet=True)&quot;</span><span class="p">:</span> <span class="mf">0.323</span><span class="p">,</span>
-</span><span id="__span-73-5"><a id="__codelineno-73-5" name="__codelineno-73-5" href="#__codelineno-73-5"></a>        <span class="s2">&quot;P(Rain=False | GrassWet=True)&quot;</span><span class="p">:</span> <span class="mf">0.677</span><span class="p">,</span>
-</span><span id="__span-73-6"><a id="__codelineno-73-6" name="__codelineno-73-6" href="#__codelineno-73-6"></a>        <span class="s2">&quot;P(Sprinkler=True | GrassWet=True)&quot;</span><span class="p">:</span> <span class="mf">0.429</span><span class="p">,</span>
-</span><span id="__span-73-7"><a id="__codelineno-73-7" name="__codelineno-73-7" href="#__codelineno-73-7"></a>        <span class="s2">&quot;P(Sprinkler=False | GrassWet=True)&quot;</span><span class="p">:</span> <span class="mf">0.571</span>
-</span><span id="__span-73-8"><a id="__codelineno-73-8" name="__codelineno-73-8" href="#__codelineno-73-8"></a>    <span class="p">}</span>
-</span><span id="__span-73-9"><a id="__codelineno-73-9" name="__codelineno-73-9" href="#__codelineno-73-9"></a>
-</span><span id="__span-73-10"><a id="__codelineno-73-10" name="__codelineno-73-10" href="#__codelineno-73-10"></a>    <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">known_results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-</span><span id="__span-73-11"><a id="__codelineno-73-11" name="__codelineno-73-11" href="#__codelineno-73-11"></a>        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">compute_probability</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
-</span><span id="__span-73-12"><a id="__codelineno-73-12" name="__codelineno-73-12" href="#__codelineno-73-12"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
-</span><span id="__span-73-13"><a id="__codelineno-73-13" name="__codelineno-73-13" href="#__codelineno-73-13"></a>                             <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed for query: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-75-1"><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_inference_against_hand_calculation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-75-2"><a id="__codelineno-75-2" name="__codelineno-75-2" href="#__codelineno-75-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify inference results match hand calculations.&quot;&quot;&quot;</span>
+</span><span id="__span-75-3"><a id="__codelineno-75-3" name="__codelineno-75-3" href="#__codelineno-75-3"></a>    <span class="n">known_results</span> <span class="o">=</span> <span class="p">{</span>
+</span><span id="__span-75-4"><a id="__codelineno-75-4" name="__codelineno-75-4" href="#__codelineno-75-4"></a>        <span class="s2">&quot;P(Rain=True | GrassWet=True)&quot;</span><span class="p">:</span> <span class="mf">0.323</span><span class="p">,</span>
+</span><span id="__span-75-5"><a id="__codelineno-75-5" name="__codelineno-75-5" href="#__codelineno-75-5"></a>        <span class="s2">&quot;P(Rain=False | GrassWet=True)&quot;</span><span class="p">:</span> <span class="mf">0.677</span><span class="p">,</span>
+</span><span id="__span-75-6"><a id="__codelineno-75-6" name="__codelineno-75-6" href="#__codelineno-75-6"></a>        <span class="s2">&quot;P(Sprinkler=True | GrassWet=True)&quot;</span><span class="p">:</span> <span class="mf">0.429</span><span class="p">,</span>
+</span><span id="__span-75-7"><a id="__codelineno-75-7" name="__codelineno-75-7" href="#__codelineno-75-7"></a>        <span class="s2">&quot;P(Sprinkler=False | GrassWet=True)&quot;</span><span class="p">:</span> <span class="mf">0.571</span>
+</span><span id="__span-75-8"><a id="__codelineno-75-8" name="__codelineno-75-8" href="#__codelineno-75-8"></a>    <span class="p">}</span>
+</span><span id="__span-75-9"><a id="__codelineno-75-9" name="__codelineno-75-9" href="#__codelineno-75-9"></a>
+</span><span id="__span-75-10"><a id="__codelineno-75-10" name="__codelineno-75-10" href="#__codelineno-75-10"></a>    <span class="k">for</span> <span class="n">query</span><span class="p">,</span> <span class="n">expected</span> <span class="ow">in</span> <span class="n">known_results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+</span><span id="__span-75-11"><a id="__codelineno-75-11" name="__codelineno-75-11" href="#__codelineno-75-11"></a>        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inference</span><span class="o">.</span><span class="n">compute_probability</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</span><span id="__span-75-12"><a id="__codelineno-75-12" name="__codelineno-75-12" href="#__codelineno-75-12"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">places</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> 
+</span><span id="__span-75-13"><a id="__codelineno-75-13" name="__codelineno-75-13" href="#__codelineno-75-13"></a>                             <span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Failed for query: </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 <p>This detailed implementation guide provides everything needed to understand, modify, and extend the Variable Elimination algorithm in BayesCalc2. The step-by-step example demonstrates the algorithm's mechanics, while the implementation details show how theory translates to working code.</p>
 <hr />
@@ -5604,41 +5643,41 @@ Every PR must include tests that cover:
 <p><code>mkghrelease.sh</code> automates GitHub release creation using the <code>gh</code> CLI tool. It's designed to be run <strong>after</strong> <code>mkrelease.sh</code> completes and all GitHub Actions workflows pass.</p>
 <h2 id="installation-prerequisites">Installation Prerequisites<a class="headerlink" href="#installation-prerequisites" title="Permanent link">&para;</a></h2>
 <h3 id="install-github-cli">Install GitHub CLI<a class="headerlink" href="#install-github-cli" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-74-1"><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a><span class="c1"># macOS</span>
-</span><span id="__span-74-2"><a id="__codelineno-74-2" name="__codelineno-74-2" href="#__codelineno-74-2"></a>brew<span class="w"> </span>install<span class="w"> </span>gh
-</span><span id="__span-74-3"><a id="__codelineno-74-3" name="__codelineno-74-3" href="#__codelineno-74-3"></a>
-</span><span id="__span-74-4"><a id="__codelineno-74-4" name="__codelineno-74-4" href="#__codelineno-74-4"></a><span class="c1"># Ubuntu/Debian</span>
-</span><span id="__span-74-5"><a id="__codelineno-74-5" name="__codelineno-74-5" href="#__codelineno-74-5"></a>sudo<span class="w"> </span>apt-key<span class="w"> </span>adv<span class="w"> </span>--keyserver<span class="w"> </span>keyserver.ubuntu.com<span class="w"> </span>--recv-key<span class="w"> </span>C99B11DEB97541F0
-</span><span id="__span-74-6"><a id="__codelineno-74-6" name="__codelineno-74-6" href="#__codelineno-74-6"></a>sudo<span class="w"> </span>apt-add-repository<span class="w"> </span>https://cli.github.com/packages
-</span><span id="__span-74-7"><a id="__codelineno-74-7" name="__codelineno-74-7" href="#__codelineno-74-7"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
-</span><span id="__span-74-8"><a id="__codelineno-74-8" name="__codelineno-74-8" href="#__codelineno-74-8"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>gh
-</span><span id="__span-74-9"><a id="__codelineno-74-9" name="__codelineno-74-9" href="#__codelineno-74-9"></a>
-</span><span id="__span-74-10"><a id="__codelineno-74-10" name="__codelineno-74-10" href="#__codelineno-74-10"></a><span class="c1"># Fedora</span>
-</span><span id="__span-74-11"><a id="__codelineno-74-11" name="__codelineno-74-11" href="#__codelineno-74-11"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>gh
-</span><span id="__span-74-12"><a id="__codelineno-74-12" name="__codelineno-74-12" href="#__codelineno-74-12"></a>
-</span><span id="__span-74-13"><a id="__codelineno-74-13" name="__codelineno-74-13" href="#__codelineno-74-13"></a><span class="c1"># Windows</span>
-</span><span id="__span-74-14"><a id="__codelineno-74-14" name="__codelineno-74-14" href="#__codelineno-74-14"></a>winget<span class="w"> </span>install<span class="w"> </span>--id<span class="w"> </span>GitHub.cli
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-76-1"><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a><span class="c1"># macOS</span>
+</span><span id="__span-76-2"><a id="__codelineno-76-2" name="__codelineno-76-2" href="#__codelineno-76-2"></a>brew<span class="w"> </span>install<span class="w"> </span>gh
+</span><span id="__span-76-3"><a id="__codelineno-76-3" name="__codelineno-76-3" href="#__codelineno-76-3"></a>
+</span><span id="__span-76-4"><a id="__codelineno-76-4" name="__codelineno-76-4" href="#__codelineno-76-4"></a><span class="c1"># Ubuntu/Debian</span>
+</span><span id="__span-76-5"><a id="__codelineno-76-5" name="__codelineno-76-5" href="#__codelineno-76-5"></a>sudo<span class="w"> </span>apt-key<span class="w"> </span>adv<span class="w"> </span>--keyserver<span class="w"> </span>keyserver.ubuntu.com<span class="w"> </span>--recv-key<span class="w"> </span>C99B11DEB97541F0
+</span><span id="__span-76-6"><a id="__codelineno-76-6" name="__codelineno-76-6" href="#__codelineno-76-6"></a>sudo<span class="w"> </span>apt-add-repository<span class="w"> </span>https://cli.github.com/packages
+</span><span id="__span-76-7"><a id="__codelineno-76-7" name="__codelineno-76-7" href="#__codelineno-76-7"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update
+</span><span id="__span-76-8"><a id="__codelineno-76-8" name="__codelineno-76-8" href="#__codelineno-76-8"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>gh
+</span><span id="__span-76-9"><a id="__codelineno-76-9" name="__codelineno-76-9" href="#__codelineno-76-9"></a>
+</span><span id="__span-76-10"><a id="__codelineno-76-10" name="__codelineno-76-10" href="#__codelineno-76-10"></a><span class="c1"># Fedora</span>
+</span><span id="__span-76-11"><a id="__codelineno-76-11" name="__codelineno-76-11" href="#__codelineno-76-11"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>gh
+</span><span id="__span-76-12"><a id="__codelineno-76-12" name="__codelineno-76-12" href="#__codelineno-76-12"></a>
+</span><span id="__span-76-13"><a id="__codelineno-76-13" name="__codelineno-76-13" href="#__codelineno-76-13"></a><span class="c1"># Windows</span>
+</span><span id="__span-76-14"><a id="__codelineno-76-14" name="__codelineno-76-14" href="#__codelineno-76-14"></a>winget<span class="w"> </span>install<span class="w"> </span>--id<span class="w"> </span>GitHub.cli
 </span></code></pre></div>
 <h3 id="authenticate-with-github">Authenticate with GitHub<a class="headerlink" href="#authenticate-with-github" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-75-1"><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a><span class="c1"># Interactive authentication</span>
-</span><span id="__span-75-2"><a id="__codelineno-75-2" name="__codelineno-75-2" href="#__codelineno-75-2"></a>gh<span class="w"> </span>auth<span class="w"> </span>login
-</span><span id="__span-75-3"><a id="__codelineno-75-3" name="__codelineno-75-3" href="#__codelineno-75-3"></a>
-</span><span id="__span-75-4"><a id="__codelineno-75-4" name="__codelineno-75-4" href="#__codelineno-75-4"></a><span class="c1"># Select: GitHub.com</span>
-</span><span id="__span-75-5"><a id="__codelineno-75-5" name="__codelineno-75-5" href="#__codelineno-75-5"></a><span class="c1"># Select: HTTPS</span>
-</span><span id="__span-75-6"><a id="__codelineno-75-6" name="__codelineno-75-6" href="#__codelineno-75-6"></a><span class="c1"># Authenticate with: Login with a web browser</span>
-</span><span id="__span-75-7"><a id="__codelineno-75-7" name="__codelineno-75-7" href="#__codelineno-75-7"></a><span class="c1"># Follow the prompts</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-77-1"><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a><span class="c1"># Interactive authentication</span>
+</span><span id="__span-77-2"><a id="__codelineno-77-2" name="__codelineno-77-2" href="#__codelineno-77-2"></a>gh<span class="w"> </span>auth<span class="w"> </span>login
+</span><span id="__span-77-3"><a id="__codelineno-77-3" name="__codelineno-77-3" href="#__codelineno-77-3"></a>
+</span><span id="__span-77-4"><a id="__codelineno-77-4" name="__codelineno-77-4" href="#__codelineno-77-4"></a><span class="c1"># Select: GitHub.com</span>
+</span><span id="__span-77-5"><a id="__codelineno-77-5" name="__codelineno-77-5" href="#__codelineno-77-5"></a><span class="c1"># Select: HTTPS</span>
+</span><span id="__span-77-6"><a id="__codelineno-77-6" name="__codelineno-77-6" href="#__codelineno-77-6"></a><span class="c1"># Authenticate with: Login with a web browser</span>
+</span><span id="__span-77-7"><a id="__codelineno-77-7" name="__codelineno-77-7" href="#__codelineno-77-7"></a><span class="c1"># Follow the prompts</span>
 </span></code></pre></div>
 <h3 id="verify-installation">Verify Installation<a class="headerlink" href="#verify-installation" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-76-1"><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a>gh<span class="w"> </span>--version
-</span><span id="__span-76-2"><a id="__codelineno-76-2" name="__codelineno-76-2" href="#__codelineno-76-2"></a><span class="c1"># Should show: gh version 2.0.0 or higher</span>
-</span><span id="__span-76-3"><a id="__codelineno-76-3" name="__codelineno-76-3" href="#__codelineno-76-3"></a>
-</span><span id="__span-76-4"><a id="__codelineno-76-4" name="__codelineno-76-4" href="#__codelineno-76-4"></a>gh<span class="w"> </span>auth<span class="w"> </span>status
-</span><span id="__span-76-5"><a id="__codelineno-76-5" name="__codelineno-76-5" href="#__codelineno-76-5"></a><span class="c1"># Should show: Logged in to github.com as &lt;username&gt;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-78-1"><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a>gh<span class="w"> </span>--version
+</span><span id="__span-78-2"><a id="__codelineno-78-2" name="__codelineno-78-2" href="#__codelineno-78-2"></a><span class="c1"># Should show: gh version 2.0.0 or higher</span>
+</span><span id="__span-78-3"><a id="__codelineno-78-3" name="__codelineno-78-3" href="#__codelineno-78-3"></a>
+</span><span id="__span-78-4"><a id="__codelineno-78-4" name="__codelineno-78-4" href="#__codelineno-78-4"></a>gh<span class="w"> </span>auth<span class="w"> </span>status
+</span><span id="__span-78-5"><a id="__codelineno-78-5" name="__codelineno-78-5" href="#__codelineno-78-5"></a><span class="c1"># Should show: Logged in to github.com as &lt;username&gt;</span>
 </span></code></pre></div>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
 <h3 id="basic-release-creation">Basic Release Creation<a class="headerlink" href="#basic-release-creation" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-77-1"><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a><span class="c1"># After mkrelease.sh completes:</span>
-</span><span id="__span-77-2"><a id="__codelineno-77-2" name="__codelineno-77-2" href="#__codelineno-77-2"></a>./scripts/mkghrelease.sh
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-79-1"><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="c1"># After mkrelease.sh completes:</span>
+</span><span id="__span-79-2"><a id="__codelineno-79-2" name="__codelineno-79-2" href="#__codelineno-79-2"></a>./scripts/mkghrelease.sh
 </span></code></pre></div>
 <p>This will:
 1. Check prerequisites
@@ -5648,35 +5687,35 @@ Every PR must include tests that cover:
 5. Create GitHub release with artifacts
 6. Upload wheel and sdist files</p>
 <h3 id="pre-release-creation">Pre-release Creation<a class="headerlink" href="#pre-release-creation" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-78-1"><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a><span class="c1"># For release candidates (auto-detected from tag):</span>
-</span><span id="__span-78-2"><a id="__codelineno-78-2" name="__codelineno-78-2" href="#__codelineno-78-2"></a>./scripts/mkghrelease.sh
-</span><span id="__span-78-3"><a id="__codelineno-78-3" name="__codelineno-78-3" href="#__codelineno-78-3"></a><span class="c1"># Tag v1.0.0-rc1 → automatically marked as pre-release</span>
-</span><span id="__span-78-4"><a id="__codelineno-78-4" name="__codelineno-78-4" href="#__codelineno-78-4"></a>
-</span><span id="__span-78-5"><a id="__codelineno-78-5" name="__codelineno-78-5" href="#__codelineno-78-5"></a><span class="c1"># Force pre-release regardless of tag:</span>
-</span><span id="__span-78-6"><a id="__codelineno-78-6" name="__codelineno-78-6" href="#__codelineno-78-6"></a>./scripts/mkghrelease.sh<span class="w"> </span>--pre-release
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-80-1"><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="c1"># For release candidates (auto-detected from tag):</span>
+</span><span id="__span-80-2"><a id="__codelineno-80-2" name="__codelineno-80-2" href="#__codelineno-80-2"></a>./scripts/mkghrelease.sh
+</span><span id="__span-80-3"><a id="__codelineno-80-3" name="__codelineno-80-3" href="#__codelineno-80-3"></a><span class="c1"># Tag v1.0.0-rc1 → automatically marked as pre-release</span>
+</span><span id="__span-80-4"><a id="__codelineno-80-4" name="__codelineno-80-4" href="#__codelineno-80-4"></a>
+</span><span id="__span-80-5"><a id="__codelineno-80-5" name="__codelineno-80-5" href="#__codelineno-80-5"></a><span class="c1"># Force pre-release regardless of tag:</span>
+</span><span id="__span-80-6"><a id="__codelineno-80-6" name="__codelineno-80-6" href="#__codelineno-80-6"></a>./scripts/mkghrelease.sh<span class="w"> </span>--pre-release
 </span></code></pre></div>
 <h3 id="dry-run-preview">Dry Run (Preview)<a class="headerlink" href="#dry-run-preview" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-79-1"><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="c1"># See what would be done without executing:</span>
-</span><span id="__span-79-2"><a id="__codelineno-79-2" name="__codelineno-79-2" href="#__codelineno-79-2"></a>./scripts/mkghrelease.sh<span class="w"> </span>--dry-run
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-81-1"><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a><span class="c1"># See what would be done without executing:</span>
+</span><span id="__span-81-2"><a id="__codelineno-81-2" name="__codelineno-81-2" href="#__codelineno-81-2"></a>./scripts/mkghrelease.sh<span class="w"> </span>--dry-run
 </span></code></pre></div>
 <h2 id="complete-workflow-example">Complete Workflow Example<a class="headerlink" href="#complete-workflow-example" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-80-1"><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="c1"># Step 1: Create release on local/GitHub</span>
-</span><span id="__span-80-2"><a id="__codelineno-80-2" name="__codelineno-80-2" href="#__codelineno-80-2"></a>./scripts/mkrelease.sh<span class="w"> </span>v1.0.0<span class="w"> </span>major
-</span><span id="__span-80-3"><a id="__codelineno-80-3" name="__codelineno-80-3" href="#__codelineno-80-3"></a>
-</span><span id="__span-80-4"><a id="__codelineno-80-4" name="__codelineno-80-4" href="#__codelineno-80-4"></a><span class="c1"># Step 2: Wait for CI to complete</span>
-</span><span id="__span-80-5"><a id="__codelineno-80-5" name="__codelineno-80-5" href="#__codelineno-80-5"></a>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--branch<span class="w"> </span>main
-</span><span id="__span-80-6"><a id="__codelineno-80-6" name="__codelineno-80-6" href="#__codelineno-80-6"></a><span class="c1"># Or watch in real-time:</span>
-</span><span id="__span-80-7"><a id="__codelineno-80-7" name="__codelineno-80-7" href="#__codelineno-80-7"></a>gh<span class="w"> </span>run<span class="w"> </span>watch
-</span><span id="__span-80-8"><a id="__codelineno-80-8" name="__codelineno-80-8" href="#__codelineno-80-8"></a>
-</span><span id="__span-80-9"><a id="__codelineno-80-9" name="__codelineno-80-9" href="#__codelineno-80-9"></a><span class="c1"># Step 3: Verify CI passed</span>
-</span><span id="__span-80-10"><a id="__codelineno-80-10" name="__codelineno-80-10" href="#__codelineno-80-10"></a>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--branch<span class="w"> </span>main<span class="w"> </span>--limit<span class="w"> </span><span class="m">1</span>
-</span><span id="__span-80-11"><a id="__codelineno-80-11" name="__codelineno-80-11" href="#__codelineno-80-11"></a>
-</span><span id="__span-80-12"><a id="__codelineno-80-12" name="__codelineno-80-12" href="#__codelineno-80-12"></a><span class="c1"># Step 4: Create GitHub release</span>
-</span><span id="__span-80-13"><a id="__codelineno-80-13" name="__codelineno-80-13" href="#__codelineno-80-13"></a>./scripts/mkghrelease.sh
-</span><span id="__span-80-14"><a id="__codelineno-80-14" name="__codelineno-80-14" href="#__codelineno-80-14"></a>
-</span><span id="__span-80-15"><a id="__codelineno-80-15" name="__codelineno-80-15" href="#__codelineno-80-15"></a><span class="c1"># Step 5: Verify release</span>
-</span><span id="__span-80-16"><a id="__codelineno-80-16" name="__codelineno-80-16" href="#__codelineno-80-16"></a>gh<span class="w"> </span>release<span class="w"> </span>view<span class="w"> </span>v1.0.0
-</span><span id="__span-80-17"><a id="__codelineno-80-17" name="__codelineno-80-17" href="#__codelineno-80-17"></a><span class="c1"># Or visit: https://github.com/johan162/bayescalc2/releases/tag/v1.0.0</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-82-1"><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a><span class="c1"># Step 1: Create release on local/GitHub</span>
+</span><span id="__span-82-2"><a id="__codelineno-82-2" name="__codelineno-82-2" href="#__codelineno-82-2"></a>./scripts/mkrelease.sh<span class="w"> </span>v1.0.0<span class="w"> </span>major
+</span><span id="__span-82-3"><a id="__codelineno-82-3" name="__codelineno-82-3" href="#__codelineno-82-3"></a>
+</span><span id="__span-82-4"><a id="__codelineno-82-4" name="__codelineno-82-4" href="#__codelineno-82-4"></a><span class="c1"># Step 2: Wait for CI to complete</span>
+</span><span id="__span-82-5"><a id="__codelineno-82-5" name="__codelineno-82-5" href="#__codelineno-82-5"></a>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--branch<span class="w"> </span>main
+</span><span id="__span-82-6"><a id="__codelineno-82-6" name="__codelineno-82-6" href="#__codelineno-82-6"></a><span class="c1"># Or watch in real-time:</span>
+</span><span id="__span-82-7"><a id="__codelineno-82-7" name="__codelineno-82-7" href="#__codelineno-82-7"></a>gh<span class="w"> </span>run<span class="w"> </span>watch
+</span><span id="__span-82-8"><a id="__codelineno-82-8" name="__codelineno-82-8" href="#__codelineno-82-8"></a>
+</span><span id="__span-82-9"><a id="__codelineno-82-9" name="__codelineno-82-9" href="#__codelineno-82-9"></a><span class="c1"># Step 3: Verify CI passed</span>
+</span><span id="__span-82-10"><a id="__codelineno-82-10" name="__codelineno-82-10" href="#__codelineno-82-10"></a>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--branch<span class="w"> </span>main<span class="w"> </span>--limit<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-82-11"><a id="__codelineno-82-11" name="__codelineno-82-11" href="#__codelineno-82-11"></a>
+</span><span id="__span-82-12"><a id="__codelineno-82-12" name="__codelineno-82-12" href="#__codelineno-82-12"></a><span class="c1"># Step 4: Create GitHub release</span>
+</span><span id="__span-82-13"><a id="__codelineno-82-13" name="__codelineno-82-13" href="#__codelineno-82-13"></a>./scripts/mkghrelease.sh
+</span><span id="__span-82-14"><a id="__codelineno-82-14" name="__codelineno-82-14" href="#__codelineno-82-14"></a>
+</span><span id="__span-82-15"><a id="__codelineno-82-15" name="__codelineno-82-15" href="#__codelineno-82-15"></a><span class="c1"># Step 5: Verify release</span>
+</span><span id="__span-82-16"><a id="__codelineno-82-16" name="__codelineno-82-16" href="#__codelineno-82-16"></a>gh<span class="w"> </span>release<span class="w"> </span>view<span class="w"> </span>v1.0.0
+</span><span id="__span-82-17"><a id="__codelineno-82-17" name="__codelineno-82-17" href="#__codelineno-82-17"></a><span class="c1"># Or visit: https://github.com/johan162/bayescalc2/releases/tag/v1.0.0</span>
 </span></code></pre></div>
 <h2 id="release-notes-editing">Release Notes Editing<a class="headerlink" href="#release-notes-editing" title="Permanent link">&para;</a></h2>
 <p>The script extracts release notes from CHANGELOG.md and opens your editor:</p>
@@ -5687,74 +5726,74 @@ Every PR must include tests that cover:
 <li><code>nano</code> (fallback)</li>
 </ol>
 <h3 id="set-your-preferred-editor">Set Your Preferred Editor<a class="headerlink" href="#set-your-preferred-editor" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-81-1"><a id="__codelineno-81-1" name="__codelineno-81-1" href="#__codelineno-81-1"></a><span class="c1"># In ~/.bashrc or ~/.zshrc</span>
-</span><span id="__span-81-2"><a id="__codelineno-81-2" name="__codelineno-81-2" href="#__codelineno-81-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">EDITOR</span><span class="o">=</span>vim
-</span><span id="__span-81-3"><a id="__codelineno-81-3" name="__codelineno-81-3" href="#__codelineno-81-3"></a><span class="c1"># or</span>
-</span><span id="__span-81-4"><a id="__codelineno-81-4" name="__codelineno-81-4" href="#__codelineno-81-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">EDITOR</span><span class="o">=</span>code<span class="w">  </span><span class="c1"># VS Code</span>
-</span><span id="__span-81-5"><a id="__codelineno-81-5" name="__codelineno-81-5" href="#__codelineno-81-5"></a><span class="c1"># or</span>
-</span><span id="__span-81-6"><a id="__codelineno-81-6" name="__codelineno-81-6" href="#__codelineno-81-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">EDITOR</span><span class="o">=</span>nano
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-83-1"><a id="__codelineno-83-1" name="__codelineno-83-1" href="#__codelineno-83-1"></a><span class="c1"># In ~/.bashrc or ~/.zshrc</span>
+</span><span id="__span-83-2"><a id="__codelineno-83-2" name="__codelineno-83-2" href="#__codelineno-83-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">EDITOR</span><span class="o">=</span>vim
+</span><span id="__span-83-3"><a id="__codelineno-83-3" name="__codelineno-83-3" href="#__codelineno-83-3"></a><span class="c1"># or</span>
+</span><span id="__span-83-4"><a id="__codelineno-83-4" name="__codelineno-83-4" href="#__codelineno-83-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">EDITOR</span><span class="o">=</span>code<span class="w">  </span><span class="c1"># VS Code</span>
+</span><span id="__span-83-5"><a id="__codelineno-83-5" name="__codelineno-83-5" href="#__codelineno-83-5"></a><span class="c1"># or</span>
+</span><span id="__span-83-6"><a id="__codelineno-83-6" name="__codelineno-83-6" href="#__codelineno-83-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">EDITOR</span><span class="o">=</span>nano
 </span></code></pre></div>
 <h3 id="release-notes-format">Release Notes Format<a class="headerlink" href="#release-notes-format" title="Permanent link">&para;</a></h3>
 <p>The script extracts the section matching your tag from CHANGELOG.md:</p>
-<div class="language-markdown highlight"><pre><span></span><code><span id="__span-82-1"><a id="__codelineno-82-1" name="__codelineno-82-1" href="#__codelineno-82-1"></a><span class="gu">## [v1.0.0] - 2025-10-10</span>
-</span><span id="__span-82-2"><a id="__codelineno-82-2" name="__codelineno-82-2" href="#__codelineno-82-2"></a>
-</span><span id="__span-82-3"><a id="__codelineno-82-3" name="__codelineno-82-3" href="#__codelineno-82-3"></a><span class="gu">### 📋 Summary</span>
-</span><span id="__span-82-4"><a id="__codelineno-82-4" name="__codelineno-82-4" href="#__codelineno-82-4"></a>Major refactor with new inference algorithm...
-</span><span id="__span-82-5"><a id="__codelineno-82-5" name="__codelineno-82-5" href="#__codelineno-82-5"></a>
-</span><span id="__span-82-6"><a id="__codelineno-82-6" name="__codelineno-82-6" href="#__codelineno-82-6"></a><span class="gu">### ✨ Additions</span>
-</span><span id="__span-82-7"><a id="__codelineno-82-7" name="__codelineno-82-7" href="#__codelineno-82-7"></a><span class="k">-</span><span class="w"> </span>New load() command
-</span><span id="__span-82-8"><a id="__codelineno-82-8" name="__codelineno-82-8" href="#__codelineno-82-8"></a><span class="k">-</span><span class="w"> </span>Graph visualization
-</span><span id="__span-82-9"><a id="__codelineno-82-9" name="__codelineno-82-9" href="#__codelineno-82-9"></a>
-</span><span id="__span-82-10"><a id="__codelineno-82-10" name="__codelineno-82-10" href="#__codelineno-82-10"></a><span class="gu">### 🚀 Improvements</span>
-</span><span id="__span-82-11"><a id="__codelineno-82-11" name="__codelineno-82-11" href="#__codelineno-82-11"></a><span class="k">-</span><span class="w"> </span>Faster inference engine
-</span><span id="__span-82-12"><a id="__codelineno-82-12" name="__codelineno-82-12" href="#__codelineno-82-12"></a><span class="k">-</span><span class="w"> </span>Better error messages
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-84-1"><a id="__codelineno-84-1" name="__codelineno-84-1" href="#__codelineno-84-1"></a><span class="gu">## [v1.0.0] - 2025-10-10</span>
+</span><span id="__span-84-2"><a id="__codelineno-84-2" name="__codelineno-84-2" href="#__codelineno-84-2"></a>
+</span><span id="__span-84-3"><a id="__codelineno-84-3" name="__codelineno-84-3" href="#__codelineno-84-3"></a><span class="gu">### 📋 Summary</span>
+</span><span id="__span-84-4"><a id="__codelineno-84-4" name="__codelineno-84-4" href="#__codelineno-84-4"></a>Major refactor with new inference algorithm...
+</span><span id="__span-84-5"><a id="__codelineno-84-5" name="__codelineno-84-5" href="#__codelineno-84-5"></a>
+</span><span id="__span-84-6"><a id="__codelineno-84-6" name="__codelineno-84-6" href="#__codelineno-84-6"></a><span class="gu">### ✨ Additions</span>
+</span><span id="__span-84-7"><a id="__codelineno-84-7" name="__codelineno-84-7" href="#__codelineno-84-7"></a><span class="k">-</span><span class="w"> </span>New load() command
+</span><span id="__span-84-8"><a id="__codelineno-84-8" name="__codelineno-84-8" href="#__codelineno-84-8"></a><span class="k">-</span><span class="w"> </span>Graph visualization
+</span><span id="__span-84-9"><a id="__codelineno-84-9" name="__codelineno-84-9" href="#__codelineno-84-9"></a>
+</span><span id="__span-84-10"><a id="__codelineno-84-10" name="__codelineno-84-10" href="#__codelineno-84-10"></a><span class="gu">### 🚀 Improvements</span>
+</span><span id="__span-84-11"><a id="__codelineno-84-11" name="__codelineno-84-11" href="#__codelineno-84-11"></a><span class="k">-</span><span class="w"> </span>Faster inference engine
+</span><span id="__span-84-12"><a id="__codelineno-84-12" name="__codelineno-84-12" href="#__codelineno-84-12"></a><span class="k">-</span><span class="w"> </span>Better error messages
 </span></code></pre></div>
 <p>You can edit this before the release is created.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <h3 id="error-gh-is-not-installed">Error: "gh is not installed"<a class="headerlink" href="#error-gh-is-not-installed" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-83-1"><a id="__codelineno-83-1" name="__codelineno-83-1" href="#__codelineno-83-1"></a><span class="c1"># Install gh CLI (see Installation Prerequisites above)</span>
-</span><span id="__span-83-2"><a id="__codelineno-83-2" name="__codelineno-83-2" href="#__codelineno-83-2"></a>brew<span class="w"> </span>install<span class="w"> </span>gh<span class="w">  </span><span class="c1"># macOS</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-85-1"><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a><span class="c1"># Install gh CLI (see Installation Prerequisites above)</span>
+</span><span id="__span-85-2"><a id="__codelineno-85-2" name="__codelineno-85-2" href="#__codelineno-85-2"></a>brew<span class="w"> </span>install<span class="w"> </span>gh<span class="w">  </span><span class="c1"># macOS</span>
 </span></code></pre></div>
 <h3 id="error-not-authenticated-with-github">Error: "Not authenticated with GitHub"<a class="headerlink" href="#error-not-authenticated-with-github" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-84-1"><a id="__codelineno-84-1" name="__codelineno-84-1" href="#__codelineno-84-1"></a>gh<span class="w"> </span>auth<span class="w"> </span>login
-</span><span id="__span-84-2"><a id="__codelineno-84-2" name="__codelineno-84-2" href="#__codelineno-84-2"></a><span class="c1"># Follow the prompts</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-86-1"><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a>gh<span class="w"> </span>auth<span class="w"> </span>login
+</span><span id="__span-86-2"><a id="__codelineno-86-2" name="__codelineno-86-2" href="#__codelineno-86-2"></a><span class="c1"># Follow the prompts</span>
 </span></code></pre></div>
 <h3 id="error-there-are-n-workflows-currently-running">Error: "There are N workflow(s) currently running"<a class="headerlink" href="#error-there-are-n-workflows-currently-running" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-85-1"><a id="__codelineno-85-1" name="__codelineno-85-1" href="#__codelineno-85-1"></a><span class="c1"># Wait for workflows to complete</span>
-</span><span id="__span-85-2"><a id="__codelineno-85-2" name="__codelineno-85-2" href="#__codelineno-85-2"></a>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--branch<span class="w"> </span>main
-</span><span id="__span-85-3"><a id="__codelineno-85-3" name="__codelineno-85-3" href="#__codelineno-85-3"></a>
-</span><span id="__span-85-4"><a id="__codelineno-85-4" name="__codelineno-85-4" href="#__codelineno-85-4"></a><span class="c1"># Watch in real-time</span>
-</span><span id="__span-85-5"><a id="__codelineno-85-5" name="__codelineno-85-5" href="#__codelineno-85-5"></a>gh<span class="w"> </span>run<span class="w"> </span>watch
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-87-1"><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a><span class="c1"># Wait for workflows to complete</span>
+</span><span id="__span-87-2"><a id="__codelineno-87-2" name="__codelineno-87-2" href="#__codelineno-87-2"></a>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--branch<span class="w"> </span>main
+</span><span id="__span-87-3"><a id="__codelineno-87-3" name="__codelineno-87-3" href="#__codelineno-87-3"></a>
+</span><span id="__span-87-4"><a id="__codelineno-87-4" name="__codelineno-87-4" href="#__codelineno-87-4"></a><span class="c1"># Watch in real-time</span>
+</span><span id="__span-87-5"><a id="__codelineno-87-5" name="__codelineno-87-5" href="#__codelineno-87-5"></a>gh<span class="w"> </span>run<span class="w"> </span>watch
 </span></code></pre></div>
 <h3 id="error-latest-workflow-did-not-succeed">Error: "Latest workflow did not succeed"<a class="headerlink" href="#error-latest-workflow-did-not-succeed" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-86-1"><a id="__codelineno-86-1" name="__codelineno-86-1" href="#__codelineno-86-1"></a><span class="c1"># Check workflow status</span>
-</span><span id="__span-86-2"><a id="__codelineno-86-2" name="__codelineno-86-2" href="#__codelineno-86-2"></a>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--branch<span class="w"> </span>main<span class="w"> </span>--limit<span class="w"> </span><span class="m">5</span>
-</span><span id="__span-86-3"><a id="__codelineno-86-3" name="__codelineno-86-3" href="#__codelineno-86-3"></a>
-</span><span id="__span-86-4"><a id="__codelineno-86-4" name="__codelineno-86-4" href="#__codelineno-86-4"></a><span class="c1"># View specific run details</span>
-</span><span id="__span-86-5"><a id="__codelineno-86-5" name="__codelineno-86-5" href="#__codelineno-86-5"></a>gh<span class="w"> </span>run<span class="w"> </span>view<span class="w"> </span>&lt;run-id&gt;
-</span><span id="__span-86-6"><a id="__codelineno-86-6" name="__codelineno-86-6" href="#__codelineno-86-6"></a>
-</span><span id="__span-86-7"><a id="__codelineno-86-7" name="__codelineno-86-7" href="#__codelineno-86-7"></a><span class="c1"># Fix the issue and re-run workflows</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-88-1"><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a><span class="c1"># Check workflow status</span>
+</span><span id="__span-88-2"><a id="__codelineno-88-2" name="__codelineno-88-2" href="#__codelineno-88-2"></a>gh<span class="w"> </span>run<span class="w"> </span>list<span class="w"> </span>--branch<span class="w"> </span>main<span class="w"> </span>--limit<span class="w"> </span><span class="m">5</span>
+</span><span id="__span-88-3"><a id="__codelineno-88-3" name="__codelineno-88-3" href="#__codelineno-88-3"></a>
+</span><span id="__span-88-4"><a id="__codelineno-88-4" name="__codelineno-88-4" href="#__codelineno-88-4"></a><span class="c1"># View specific run details</span>
+</span><span id="__span-88-5"><a id="__codelineno-88-5" name="__codelineno-88-5" href="#__codelineno-88-5"></a>gh<span class="w"> </span>run<span class="w"> </span>view<span class="w"> </span>&lt;run-id&gt;
+</span><span id="__span-88-6"><a id="__codelineno-88-6" name="__codelineno-88-6" href="#__codelineno-88-6"></a>
+</span><span id="__span-88-7"><a id="__codelineno-88-7" name="__codelineno-88-7" href="#__codelineno-88-7"></a><span class="c1"># Fix the issue and re-run workflows</span>
 </span></code></pre></div>
 <h3 id="error-release-v100-already-exists">Error: "Release v1.0.0 already exists"<a class="headerlink" href="#error-release-v100-already-exists" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-87-1"><a id="__codelineno-87-1" name="__codelineno-87-1" href="#__codelineno-87-1"></a><span class="c1"># Option 1: Delete and recreate</span>
-</span><span id="__span-87-2"><a id="__codelineno-87-2" name="__codelineno-87-2" href="#__codelineno-87-2"></a>gh<span class="w"> </span>release<span class="w"> </span>delete<span class="w"> </span>v1.0.0
-</span><span id="__span-87-3"><a id="__codelineno-87-3" name="__codelineno-87-3" href="#__codelineno-87-3"></a>./scripts/mkghrelease.sh
-</span><span id="__span-87-4"><a id="__codelineno-87-4" name="__codelineno-87-4" href="#__codelineno-87-4"></a>
-</span><span id="__span-87-5"><a id="__codelineno-87-5" name="__codelineno-87-5" href="#__codelineno-87-5"></a><span class="c1"># Option 2: Create new version</span>
-</span><span id="__span-87-6"><a id="__codelineno-87-6" name="__codelineno-87-6" href="#__codelineno-87-6"></a>./scripts/mkrelease.sh<span class="w"> </span>v1.0.1<span class="w"> </span>patch
-</span><span id="__span-87-7"><a id="__codelineno-87-7" name="__codelineno-87-7" href="#__codelineno-87-7"></a>./scripts/mkghrelease.sh
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-89-1"><a id="__codelineno-89-1" name="__codelineno-89-1" href="#__codelineno-89-1"></a><span class="c1"># Option 1: Delete and recreate</span>
+</span><span id="__span-89-2"><a id="__codelineno-89-2" name="__codelineno-89-2" href="#__codelineno-89-2"></a>gh<span class="w"> </span>release<span class="w"> </span>delete<span class="w"> </span>v1.0.0
+</span><span id="__span-89-3"><a id="__codelineno-89-3" name="__codelineno-89-3" href="#__codelineno-89-3"></a>./scripts/mkghrelease.sh
+</span><span id="__span-89-4"><a id="__codelineno-89-4" name="__codelineno-89-4" href="#__codelineno-89-4"></a>
+</span><span id="__span-89-5"><a id="__codelineno-89-5" name="__codelineno-89-5" href="#__codelineno-89-5"></a><span class="c1"># Option 2: Create new version</span>
+</span><span id="__span-89-6"><a id="__codelineno-89-6" name="__codelineno-89-6" href="#__codelineno-89-6"></a>./scripts/mkrelease.sh<span class="w"> </span>v1.0.1<span class="w"> </span>patch
+</span><span id="__span-89-7"><a id="__codelineno-89-7" name="__codelineno-89-7" href="#__codelineno-89-7"></a>./scripts/mkghrelease.sh
 </span></code></pre></div>
 <h3 id="error-wheel-file-not-found-for-version-xyz">Error: "Wheel file not found for version X.Y.Z"<a class="headerlink" href="#error-wheel-file-not-found-for-version-xyz" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-88-1"><a id="__codelineno-88-1" name="__codelineno-88-1" href="#__codelineno-88-1"></a><span class="c1"># Rebuild the package</span>
-</span><span id="__span-88-2"><a id="__codelineno-88-2" name="__codelineno-88-2" href="#__codelineno-88-2"></a>./scripts/mkbld.sh
-</span><span id="__span-88-3"><a id="__codelineno-88-3" name="__codelineno-88-3" href="#__codelineno-88-3"></a>
-</span><span id="__span-88-4"><a id="__codelineno-88-4" name="__codelineno-88-4" href="#__codelineno-88-4"></a><span class="c1"># Or re-run release script</span>
-</span><span id="__span-88-5"><a id="__codelineno-88-5" name="__codelineno-88-5" href="#__codelineno-88-5"></a>./scripts/mkrelease.sh<span class="w"> </span>v1.0.0<span class="w"> </span>major
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-90-1"><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a><span class="c1"># Rebuild the package</span>
+</span><span id="__span-90-2"><a id="__codelineno-90-2" name="__codelineno-90-2" href="#__codelineno-90-2"></a>./scripts/mkbld.sh
+</span><span id="__span-90-3"><a id="__codelineno-90-3" name="__codelineno-90-3" href="#__codelineno-90-3"></a>
+</span><span id="__span-90-4"><a id="__codelineno-90-4" name="__codelineno-90-4" href="#__codelineno-90-4"></a><span class="c1"># Or re-run release script</span>
+</span><span id="__span-90-5"><a id="__codelineno-90-5" name="__codelineno-90-5" href="#__codelineno-90-5"></a>./scripts/mkrelease.sh<span class="w"> </span>v1.0.0<span class="w"> </span>major
 </span></code></pre></div>
 <h3 id="error-must-be-on-main-branch">Error: "Must be on 'main' branch"<a class="headerlink" href="#error-must-be-on-main-branch" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-89-1"><a id="__codelineno-89-1" name="__codelineno-89-1" href="#__codelineno-89-1"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
-</span><span id="__span-89-2"><a id="__codelineno-89-2" name="__codelineno-89-2" href="#__codelineno-89-2"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
-</span><span id="__span-89-3"><a id="__codelineno-89-3" name="__codelineno-89-3" href="#__codelineno-89-3"></a>./scripts/mkghrelease.sh
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-91-1"><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a>git<span class="w"> </span>checkout<span class="w"> </span>main
+</span><span id="__span-91-2"><a id="__codelineno-91-2" name="__codelineno-91-2" href="#__codelineno-91-2"></a>git<span class="w"> </span>pull<span class="w"> </span>origin<span class="w"> </span>main
+</span><span id="__span-91-3"><a id="__codelineno-91-3" name="__codelineno-91-3" href="#__codelineno-91-3"></a>./scripts/mkghrelease.sh
 </span></code></pre></div>
 <h2 id="pre-release-vs-stable-release">Pre-release vs Stable Release<a class="headerlink" href="#pre-release-vs-stable-release" title="Permanent link">&para;</a></h2>
 <h3 id="automatic-detection">Automatic Detection<a class="headerlink" href="#automatic-detection" title="Permanent link">&para;</a></h3>
@@ -5781,9 +5820,9 @@ Every PR must include tests that cover:
 </tbody>
 </table>
 <h3 id="force-pre-release">Force Pre-release<a class="headerlink" href="#force-pre-release" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-90-1"><a id="__codelineno-90-1" name="__codelineno-90-1" href="#__codelineno-90-1"></a><span class="c1"># Override automatic detection</span>
-</span><span id="__span-90-2"><a id="__codelineno-90-2" name="__codelineno-90-2" href="#__codelineno-90-2"></a>./scripts/mkghrelease.sh<span class="w"> </span>--pre-release
-</span><span id="__span-90-3"><a id="__codelineno-90-3" name="__codelineno-90-3" href="#__codelineno-90-3"></a><span class="c1"># Even v1.0.0 will be marked as pre-release</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-92-1"><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a><span class="c1"># Override automatic detection</span>
+</span><span id="__span-92-2"><a id="__codelineno-92-2" name="__codelineno-92-2" href="#__codelineno-92-2"></a>./scripts/mkghrelease.sh<span class="w"> </span>--pre-release
+</span><span id="__span-92-3"><a id="__codelineno-92-3" name="__codelineno-92-3" href="#__codelineno-92-3"></a><span class="c1"># Even v1.0.0 will be marked as pre-release</span>
 </span></code></pre></div>
 <h2 id="artifacts-uploaded">Artifacts Uploaded<a class="headerlink" href="#artifacts-uploaded" title="Permanent link">&para;</a></h2>
 <p>For each release, the script uploads:</p>
@@ -5807,11 +5846,11 @@ Every PR must include tests that cover:
 - Existence in <code>dist/</code> directory</p>
 <h2 id="integration-with-pypi">Integration with PyPI<a class="headerlink" href="#integration-with-pypi" title="Permanent link">&para;</a></h2>
 <p>After creating GitHub release, optionally upload to PyPI:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-91-1"><a id="__codelineno-91-1" name="__codelineno-91-1" href="#__codelineno-91-1"></a><span class="c1"># Test PyPI first (recommended)</span>
-</span><span id="__span-91-2"><a id="__codelineno-91-2" name="__codelineno-91-2" href="#__codelineno-91-2"></a>python<span class="w"> </span>-m<span class="w"> </span>twine<span class="w"> </span>upload<span class="w"> </span>--repository<span class="w"> </span>testpypi<span class="w"> </span>dist/*
-</span><span id="__span-91-3"><a id="__codelineno-91-3" name="__codelineno-91-3" href="#__codelineno-91-3"></a>
-</span><span id="__span-91-4"><a id="__codelineno-91-4" name="__codelineno-91-4" href="#__codelineno-91-4"></a><span class="c1"># Production PyPI</span>
-</span><span id="__span-91-5"><a id="__codelineno-91-5" name="__codelineno-91-5" href="#__codelineno-91-5"></a>python<span class="w"> </span>-m<span class="w"> </span>twine<span class="w"> </span>upload<span class="w"> </span>dist/*
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-93-1"><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a><span class="c1"># Test PyPI first (recommended)</span>
+</span><span id="__span-93-2"><a id="__codelineno-93-2" name="__codelineno-93-2" href="#__codelineno-93-2"></a>python<span class="w"> </span>-m<span class="w"> </span>twine<span class="w"> </span>upload<span class="w"> </span>--repository<span class="w"> </span>testpypi<span class="w"> </span>dist/*
+</span><span id="__span-93-3"><a id="__codelineno-93-3" name="__codelineno-93-3" href="#__codelineno-93-3"></a>
+</span><span id="__span-93-4"><a id="__codelineno-93-4" name="__codelineno-93-4" href="#__codelineno-93-4"></a><span class="c1"># Production PyPI</span>
+</span><span id="__span-93-5"><a id="__codelineno-93-5" name="__codelineno-93-5" href="#__codelineno-93-5"></a>python<span class="w"> </span>-m<span class="w"> </span>twine<span class="w"> </span>upload<span class="w"> </span>dist/*
 </span></code></pre></div>
 <h2 id="script-exit-codes">Script Exit Codes<a class="headerlink" href="#script-exit-codes" title="Permanent link">&para;</a></h2>
 <ul>
@@ -5846,22 +5885,22 @@ Every PR must include tests that cover:
 <ol>
 <li>
 <p><strong>Always run mkrelease.sh first</strong>
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-92-1"><a id="__codelineno-92-1" name="__codelineno-92-1" href="#__codelineno-92-1"></a>./scripts/mkrelease.sh<span class="w"> </span>v1.0.0<span class="w"> </span>major
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-94-1"><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a>./scripts/mkrelease.sh<span class="w"> </span>v1.0.0<span class="w"> </span>major
 </span></code></pre></div></p>
 </li>
 <li>
 <p><strong>Wait for CI to complete</strong>
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-93-1"><a id="__codelineno-93-1" name="__codelineno-93-1" href="#__codelineno-93-1"></a>gh<span class="w"> </span>run<span class="w"> </span>watch
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-95-1"><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a>gh<span class="w"> </span>run<span class="w"> </span>watch
 </span></code></pre></div></p>
 </li>
 <li>
 <p><strong>Review artifacts before release</strong>
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-94-1"><a id="__codelineno-94-1" name="__codelineno-94-1" href="#__codelineno-94-1"></a>ls<span class="w"> </span>-lh<span class="w"> </span>dist/
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-96-1"><a id="__codelineno-96-1" name="__codelineno-96-1" href="#__codelineno-96-1"></a>ls<span class="w"> </span>-lh<span class="w"> </span>dist/
 </span></code></pre></div></p>
 </li>
 <li>
 <p><strong>Use dry-run for first-time releases</strong>
-   <div class="language-bash highlight"><pre><span></span><code><span id="__span-95-1"><a id="__codelineno-95-1" name="__codelineno-95-1" href="#__codelineno-95-1"></a>./scripts/mkghrelease.sh<span class="w"> </span>--dry-run
+   <div class="language-bash highlight"><pre><span></span><code><span id="__span-97-1"><a id="__codelineno-97-1" name="__codelineno-97-1" href="#__codelineno-97-1"></a>./scripts/mkghrelease.sh<span class="w"> </span>--dry-run
 </span></code></pre></div></p>
 </li>
 <li>
@@ -5871,10 +5910,14 @@ Every PR must include tests that cover:
 <li>Better notes = better release documentation</li>
 </ol>
 <h2 id="see-also">See Also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
+<p>In the <code>scripts/</code> directory:</p>
 <ul>
-<li><a href="mkrelease.sh">../scripts/mkrelease.sh</a> - Create the release (run first)</li>
-<li><a href="mkbld.sh">../scripts/mkbld.sh</a> - Build and test the package</li>
-<li><a href="README.md">../scripts/README.md</a> - Complete scripts documentation</li>
+<li><code>mkrelease.sh</code> - Create the release (run first)</li>
+<li><code>mkbld.sh</code> - Build and test the package</li>
+<li><code>README.md</code> - Complete scripts documentation</li>
+</ul>
+<p>For using <code>gh</code> CLI:</p>
+<ul>
 <li><a href="https://cli.github.com/manual/">GitHub CLI documentation</a></li>
 </ul>
 
