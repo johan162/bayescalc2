@@ -132,6 +132,7 @@ bayescalc --help
 ---
 
 ### Usage
+
 ```txt
 usage: main.py [-h] [-b BATCH_FILE | --cmd CMD_STRING] network_file
 
@@ -146,6 +147,7 @@ options:
                         Path to a file with commands to execute in batch mode.
   --cmd CMD_STRING      A string of commands to execute, separated by semicolons.
 ```
+
 ---
 
 ## Network File Format
